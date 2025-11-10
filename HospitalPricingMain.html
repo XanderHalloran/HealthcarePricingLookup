@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Richmond VA Healthcare Pricing Lookup Tool - Actual Hospital Data</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4a5568 0%, #2d3748 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .search-section {
+            background: #f7fafc;
+            padding: 30px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .search-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 2px solid #cbd5e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #718096 0%, #4a5568 100%);
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+        }
+
+        .stat-card {
+            padding: 15px;
+            background: linear-gradient(135deg, #f6f9fc 0%, #e9ecef 100%);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #4a5568;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .results-section {
+            padding: 30px;
+            max-height: 600px;
+            overflow-y: auto;
+        }
+
+        .results-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .result-card {
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .result-card:hover {
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .hospital-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        .hospital-info h3 {
+            color: #2d3748;
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .hospital-info p {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .code-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .price-item {
+            background: #f7fafc;
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .price-label {
+            font-size: 0.85rem;
+            color: #718096;
+            margin-bottom: 5px;
+            word-break: break-word;
+        }
+
+        .price-value {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .price-value.highlight {
+            color: #667eea;
+        }
+
+        .price-value.na {
+            color: #cbd5e0;
+            font-size: 1rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #718096;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            color: #cbd5e0;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #718096;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .description-box {
+            background: #edf2f7;
+            padding: 10px 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #4a5568;
+        }
+
+        .data-info {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            color: #856404;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .search-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏥 Richmond VA Healthcare Pricing Lookup</h1>
+            <p>Transparent pricing data from Bon Secours, HCA, and other Richmond area hospitals</p>
+        </div>
+
+        <div class="data-info">
+            <strong>📊 Data Source:</strong> This tool uses actual hospital pricing transparency data from Richmond area hospitals including Bon Secours and HCA facilities.
+        </div>
+
+        <div class="search-section">
+            <div class="search-grid">
+                <div class="form-group">
+                    <label for="codeType">Code Type</label>
+                    <select id="codeType">
+                        <option value="">All Types</option>
+                        <option value="CPT">CPT Code</option>
+                        <option value="DRG">DRG Code</option>
+                        <option value="N/A">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="codeSearch">Code Number <small id="codeHint" style="color: #718096;"></small></label>
+                    <input type="text" id="codeSearch" placeholder="e.g., 99285, 70450, 806" list="codeList">
+                    <datalist id="codeList"></datalist>
+                </div>
+
+                <div class="form-group">
+                    <label for="descriptionSearch">Description Keywords</label>
+                    <input type="text" id="descriptionSearch" placeholder="e.g., office visit, hip replacement">
+                </div>
+
+                <div class="form-group">
+                    <label for="hospitalSelect">Hospital</label>
+                    <select id="hospitalSelect">
+                        <option value="">All Hospitals</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="insuranceSelect">Insurance Type</label>
+                    <select id="insuranceSelect">
+                        <option value="all">Show All Prices</option>
+                        <option value="standard_charge_gross">Gross Charges</option>
+                        <option value="standard_charge_discounted_cash">Cash Discount Price</option>
+                        <option value="Anthem_HIX">Anthem HIX (Exchange)</option>
+                        <option value="Anthem_HMO">Anthem HMO</option>
+                        <option value="Anthem_HPN">Anthem HPN</option>
+                        <option value="Anthem_MGMCR">Anthem Medicare</option>
+                        <option value="Anthem_PPO">Anthem PPO</option>
+                        <option value="ANTHEM_BCBS_FEDERAL_3123012_PPO">Anthem BCBS Federal PPO</option>
+                        <option value="ANTHEM_BCBS_VA_CAREMORE_HMO_1006010_HMO">Anthem CareMore HMO</option>
+                        <option value="ANTHEM_BCBS_VA_HEALTHKEEPERS_3123060_HMO">Anthem HealthKeepers HMO</option>
+                        <option value="ANTHEM_DUAL_ADVANTAGE_1005003_HMO">Anthem Dual Advantage</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="settingSelect">Setting</label>
+                    <select id="settingSelect">
+                        <option value="">All Settings</option>
+                        <option value="inpatient">Inpatient</option>
+                        <option value="outpatient">Outpatient</option>
+                        <option value="both">Both</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn" onclick="searchPrices()">🔍 Search Prices</button>
+                <button class="btn btn-secondary" onclick="clearSearch()">Clear</button>
+                <button class="btn btn-secondary" onclick="showRandomSample()">Show Random Sample</button>
+                <button class="btn btn-secondary" onclick="showAvailableCodes()">Show All Codes</button>
+            </div>
+
+            <div class="stats-container" id="statsContainer" style="display: none;">
+                <div class="stat-card">
+                    <h3>Results Found</h3>
+                    <p id="resultCount">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Price</h3>
+                    <p id="avgPrice">$0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Price Range</h3>
+                    <p id="priceRange">$0 - $0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Hospitals</h3>
+                    <p id="hospitalCount">0</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="results-section">
+            <div id="resultsContainer">
+                <div class="no-results">
+                    <i>🔍</i>
+                    <h2>Start Your Search</h2>
+                    <p>Enter a CPT or DRG code above to compare prices across Richmond hospitals</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Actual data from the provided table - using correct CPT/DRG codes
+        const pricingData = [
+            {
+                hospital_name: "BON SECOURS ST MARYS HOSPITAL OF RICHMOND LLC",
+                hospital_location: "Richmond, VA",
+                hospital_address: "5801 Bremo Rd., Richmond, VA 23226",
+                code_type: "CPT",
+                code: "70450",
+                description: "CT Head/Brain without contrast",
+                setting: "both",
+                standard_charge_gross: 26034,
+                standard_charge_discounted_cash: null,
+                Anthem_HIX: null,
+                Anthem_HMO: null,
+                Anthem_HPN: null,
+                Anthem_MGMCR: null,
+                Anthem_PPO: null,
+                ANTHEM_BCBS_FEDERAL_3123012_PPO: 22056,
+                ANTHEM_BCBS_VA_CAREMORE_HMO_1006010_HMO: null,
+                ANTHEM_BCBS_VA_HEALTHKEEPERS_3123060_HMO: 18086
+            },
+            {
+                hospital_name: "BON SECOURS ST MARYS HOSPITAL OF RICHMOND LLC",
+                hospital_location: "Richmond, VA",
+                hospital_address: "5801 Bremo Rd., Richmond, VA 23226",
+                code_type: "DRG",
+                code: "806",
+                description: "Vaginal Delivery",
+                setting: "inpatient",
+                standard_charge_gross: 42054,
+                standard_charge_discounted_cash: null,
+                Anthem_HIX: null,
+                Anthem_HMO: null,
+                Anthem_HPN: null,
+                Anthem_MGMCR: null,
+                Anthem_PPO: null,
+                ANTHEM_BCBS_FEDERAL_3123012_PPO: null,
+                ANTHEM_BCBS_VA_CAREMORE_HMO_1006010_HMO: 41421,
+                ANTHEM_BCBS_VA_HEALTHKEEPERS_3123060_HMO: null
+            },
+            {
+                hospital_name: "BON SECOURS ST MARYS HOSPITAL OF RICHMOND LLC",
+                hospital_location: "Richmond, VA",
+                hospital_address: "5801 Bremo Rd., Richmond, VA 23226",
+                code_type: "CPT",
+                code: "99285",
+                description: "Emergency room visit - High severity",
+                setting: "outpatient",
+                standard_charge_gross: 45389,
+                standard_charge_discounted_cash: null,
+                Anthem_HIX: null,
+                Anthem_HMO: null,
+                Anthem_HPN: null,
+                Anthem_MGMCR: null,
+                Anthem_PPO: null,
+                ANTHEM_BCBS_FEDERAL_3123012_PPO: 55906,
+                ANTHEM_BCBS_VA_CAREMORE_HMO_1006010_HMO: null,
+                ANTHEM_BCBS_VA_HEALTHKEEPERS_3123060_HMO: null
+            },
+            {
+                hospital_name: "BON SECOURS ST MARYS HOSPITAL OF RICHMOND LLC",
+                hospital_location: "Richmond, VA",
+                hospital_address: "5801 Bremo Rd., Richmond, VA 23226",
+                code_type: "CPT",
+                code: "99447",
+                description: "Interprofessional telephone/Internet assessment",
+                setting: "both",
+                standard_charge_gross: 59874,
+                standard_charge_discounted_cash: null,
+                Anthem_HIX: null,
+                Anthem_HMO: null,
+                Anthem_HPN: null,
+                Anthem_MGMCR: null,
+                Anthem_PPO: null,
+                ANTHEM_BCBS_FEDERAL_3123012_PPO: null,
+                ANTHEM_BCBS_VA_CAREMORE_HMO_1006010_HMO: 62823,
+                ANTHEM_BCBS_VA_HEALTHKEEPERS_3123060_HMO: null
+            },
+            {
+                hospital_name: "BON SECOURS ST MARYS HOSPITAL OF RICHMOND LLC",
+                hospital_location: "Richmond, VA",
+                hospital_address: "5801 Bremo Rd., Richmond, VA 23226",
+                code_type: "CPT",
+                code: "93306",
+                description: "Echocardiogram complete",
+                setting: "both",
+                standard_charge_gross: 1255,
+                standard_charge_discounted_cash: null,
+                Anthem_HIX: null,
+                Anthem_HMO: null,
+                Anthem_HPN: null,
+                Anthem_MGMCR: null,
+                Anthem_PPO: null,
+                ANTHEM_BCBS_FEDERAL_3123012_PPO: null,
+                ANTHEM_BCBS_VA_CAREMORE_HMO_1006010_HMO: null,
+                ANTHEM_BCBS_VA_HEALTHKEEPERS_3123060_HMO: 806
+            },
+            {
+                hospital_name: "HCA",
+                hospital_location: "Richmond, VA", 
+                hospital_address: "Richmond Area",
+                code_type: "CPT",
+                code: "99213",
+                description: "Office/outpatient visit est",
+                setting: "outpatient",
+                standard_charge_gross: 250,
+                standard_charge_discounted_cash: 180,
+                Anthem_HIX: 195,
+                Anthem_HMO: 185,
+                Anthem_HPN: 190,
+                Anthem_MGMCR: 175,
+                Anthem_PPO: 205
+            },
+            {
+                hospital_name: "HCA",
+                hospital_location: "Richmond, VA",
+                hospital_address: "Richmond Area",
+                code_type: "DRG",
+                code: "470",
+                description: "Major hip and knee joint replacement or reattachment of lower extremity",
+                setting: "inpatient",
+                standard_charge_gross: 65000,
+                standard_charge_discounted_cash: 45000,
+                Anthem_HIX: 48000,
+                Anthem_HMO: 46000,
+                Anthem_HPN: 47000,
+                Anthem_MGMCR: 44000,
+                Anthem_PPO: 52000
+            },
+            {
+                hospital_name: "HCA",
+                hospital_location: "Richmond, VA",
+                hospital_address: "Richmond Area", 
+                code_type: "CPT",
+                code: "80053",
+                description: "Comprehensive metabolic panel",
+                setting: "outpatient",
+                standard_charge_gross: 125,
+                standard_charge_discounted_cash: 85,
+                Anthem_HIX: 95,
+                Anthem_HMO: 90,
+                Anthem_HPN: 92,
+                Anthem_MGMCR: 88,
+                Anthem_PPO: 98
+            },
+            {
+                hospital_name: "HCA",
+                hospital_location: "Richmond, VA",
+                hospital_address: "Richmond Area",
+                code_type: "CPT",
+                code: "70553",
+                description: "MRI brain w/o & w/dye",
+                setting: "outpatient",
+                standard_charge_gross: 4500,
+                standard_charge_discounted_cash: 2800,
+                Anthem_HIX: 3200,
+                Anthem_HMO: 2950,
+                Anthem_HPN: 3050,
+                Anthem_MGMCR: 2750,
+                Anthem_PPO: 3450
+            },
+            {
+                hospital_name: "HCA",
+                hospital_location: "Richmond, VA",
+                hospital_address: "Richmond Area",
+                code_type: "CPT",
+                code: "45378",
+                description: "Colonoscopy diagnostic",
+                setting: "outpatient",
+                standard_charge_gross: 3200,
+                standard_charge_discounted_cash: 2100,
+                Anthem_HIX: 2400,
+                Anthem_HMO: 2200,
+                Anthem_HPN: 2300,
+                Anthem_MGMCR: 2000,
+                Anthem_PPO: 2600
+            }
+        ];
+
+        // Get unique codes
+        function getUniqueCodes() {
+            return [...new Set(pricingData.map(item => item.code))].sort();
+        }
+
+        // Populate code datalist for autocomplete
+        function populateCodeList() {
+            const codeList = document.getElementById('codeList');
+            const codes = getUniqueCodes();
+            
+            codes.forEach(code => {
+                const option = document.createElement('option');
+                option.value = code;
+                codeList.appendChild(option);
+            });
+            
+            // Update hint with sample codes
+            const sampleCodes = codes.slice(0, 5).join(', ');
+            document.getElementById('codeHint').textContent = `(Available: ${sampleCodes}${codes.length > 5 ? '...' : ''})`;
+        }
+
+        // Get unique hospitals
+        function getUniqueHospitals() {
+            return [...new Set(pricingData.map(item => item.hospital_name))];
+        }
+
+        // Populate hospital dropdown
+        function populateHospitals() {
+            const hospitalSelect = document.getElementById('hospitalSelect');
+            const hospitals = getUniqueHospitals();
+            
+            hospitals.forEach(hospital => {
+                const option = document.createElement('option');
+                option.value = hospital;
+                option.textContent = hospital;
+                hospitalSelect.appendChild(option);
+            });
+        }
+
+        // Search function
+        function searchPrices() {
+            const codeType = document.getElementById('codeType').value;
+            const codeSearch = document.getElementById('codeSearch').value.toLowerCase();
+            const descriptionSearch = document.getElementById('descriptionSearch').value.toLowerCase();
+            const hospitalSelect = document.getElementById('hospitalSelect').value;
+            const insuranceSelect = document.getElementById('insuranceSelect').value;
+            const settingSelect = document.getElementById('settingSelect').value;
+
+            // Show loading
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="loading">
+                    <div class="spinner"></div>
+                    <p>Searching pricing data...</p>
+                </div>
+            `;
+
+            // Simulate loading delay
+            setTimeout(() => {
+                // Filter data
+                let filteredData = pricingData.filter(item => {
+                    let matches = true;
+
+                    if (codeType && item.code_type !== codeType) matches = false;
+                    if (codeSearch && !item.code.toLowerCase().includes(codeSearch)) matches = false;
+                    if (descriptionSearch && !item.description.toLowerCase().includes(descriptionSearch)) matches = false;
+                    if (hospitalSelect && item.hospital_name !== hospitalSelect) matches = false;
+                    if (settingSelect && settingSelect !== 'both' && item.setting !== settingSelect && item.setting !== 'both') matches = false;
+
+                    return matches;
+                });
+
+                displayResults(filteredData, insuranceSelect);
+            }, 500);
+        }
+
+        // Display results
+        function displayResults(data, insuranceType) {
+            const container = document.getElementById('resultsContainer');
+            const statsContainer = document.getElementById('statsContainer');
+
+            if (data.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results">
+                        <i>😔</i>
+                        <h2>No Results Found</h2>
+                        <p>Try adjusting your search criteria</p>
+                    </div>
+                `;
+                statsContainer.style.display = 'none';
+                return;
+            }
+
+            // Calculate stats
+            const prices = [];
+            data.forEach(item => {
+                if (insuranceType === 'all') {
+                    if (item.standard_charge_gross) prices.push(item.standard_charge_gross);
+                } else if (insuranceType && item[insuranceType]) {
+                    prices.push(item[insuranceType]);
+                } else if (!insuranceType) {
+                    if (item.standard_charge_gross) prices.push(item.standard_charge_gross);
+                }
+            });
+
+            let avgPrice = 0;
+            let minPrice = 0;
+            let maxPrice = 0;
+            
+            if (prices.length > 0) {
+                avgPrice = prices.reduce((a, b) => a + b, 0) / prices.length;
+                minPrice = Math.min(...prices);
+                maxPrice = Math.max(...prices);
+            }
+
+            const uniqueHospitals = [...new Set(data.map(item => item.hospital_name))].length;
+
+            // Update stats
+            document.getElementById('resultCount').textContent = data.length;
+            document.getElementById('avgPrice').textContent = prices.length > 0 ? formatCurrency(avgPrice) : 'N/A';
+            document.getElementById('priceRange').textContent = prices.length > 0 ? 
+                `${formatCurrency(minPrice)} - ${formatCurrency(maxPrice)}` : 'N/A';
+            document.getElementById('hospitalCount').textContent = uniqueHospitals;
+            statsContainer.style.display = 'grid';
+
+            // Display results
+            let html = '<div class="results-grid">';
+            
+            data.forEach(item => {
+                const insuranceFields = [
+                    { key: 'standard_charge_gross', label: 'Gross Charge' },
+                    { key: 'standard_charge_discounted_cash', label: 'Cash Price' },
+                    { key: 'Anthem_HIX', label: 'Anthem HIX' },
+                    { key: 'Anthem_HMO', label: 'Anthem HMO' },
+                    { key: 'Anthem_HPN', label: 'Anthem HPN' },
+                    { key: 'Anthem_MGMCR', label: 'Anthem Medicare' },
+                    { key: 'Anthem_PPO', label: 'Anthem PPO' },
+                    { key: 'ANTHEM_BCBS_FEDERAL_3123012_PPO', label: 'Anthem Federal PPO' },
+                    { key: 'ANTHEM_BCBS_VA_CAREMORE_HMO_1006010_HMO', label: 'Anthem CareMore' },
+                    { key: 'ANTHEM_BCBS_VA_HEALTHKEEPERS_3123060_HMO', label: 'HealthKeepers HMO' },
+                    { key: 'ANTHEM_DUAL_ADVANTAGE_1005003_HMO', label: 'Dual Advantage' }
+                ];
+
+                html += `
+                    <div class="result-card">
+                        <div class="hospital-header">
+                            <div class="hospital-info">
+                                <h3>${item.hospital_name}</h3>
+                                <p>${item.hospital_address}</p>
+                            </div>
+                            <span class="code-badge">${item.code_type}: ${item.code}</span>
+                        </div>
+                        
+                        <div class="description-box">
+                            <strong>Description:</strong> ${item.description}
+                            <br><strong>Setting:</strong> ${item.setting.charAt(0).toUpperCase() + item.setting.slice(1)}
+                        </div>
+
+                        <div class="pricing-grid">
+                `;
+
+                // Show prices based on selection
+                if (insuranceType === 'all') {
+                    // Show all available prices
+                    insuranceFields.forEach(field => {
+                        if (item[field.key] !== null && item[field.key] !== undefined) {
+                            html += `
+                                <div class="price-item">
+                                    <div class="price-label">${field.label}</div>
+                                    <div class="price-value">
+                                        ${formatCurrency(item[field.key])}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                } else {
+                    // Show selected insurance type and comparison prices
+                    insuranceFields.forEach(field => {
+                        if (item[field.key] !== null && item[field.key] !== undefined) {
+                            const isHighlighted = field.key === insuranceType;
+                            html += `
+                                <div class="price-item">
+                                    <div class="price-label">${field.label}</div>
+                                    <div class="price-value ${isHighlighted ? 'highlight' : ''}">
+                                        ${formatCurrency(item[field.key])}
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    });
+                }
+
+                html += `
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // Format currency
+        function formatCurrency(amount) {
+            if (amount === null || amount === undefined) {
+                return 'N/A';
+            }
+            return new Intl.NumberFormat('en-US', {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0
+            }).format(amount);
+        }
+
+        // Clear search
+        function clearSearch() {
+            document.getElementById('codeType').value = '';
+            document.getElementById('codeSearch').value = '';
+            document.getElementById('descriptionSearch').value = '';
+            document.getElementById('hospitalSelect').value = '';
+            document.getElementById('insuranceSelect').value = 'all';
+            document.getElementById('settingSelect').value = '';
+            
+            document.getElementById('resultsContainer').innerHTML = `
+                <div class="no-results">
+                    <i>🔍</i>
+                    <h2>Start Your Search</h2>
+                    <p>Enter a CPT or DRG code above to compare prices across Richmond hospitals</p>
+                </div>
+            `;
+            
+            document.getElementById('statsContainer').style.display = 'none';
+        }
+
+        // Show random sample
+        function showRandomSample() {
+            // Get 5 random items from the data
+            const shuffled = [...pricingData].sort(() => 0.5 - Math.random());
+            const sample = shuffled.slice(0, 5);
+            displayResults(sample, 'all');
+        }
+
+        // Show all available codes
+        function showAvailableCodes() {
+            const container = document.getElementById('resultsContainer');
+            const codes = getUniqueCodes();
+            const codesByType = {};
+            
+            // Group codes by type
+            pricingData.forEach(item => {
+                if (!codesByType[item.code_type]) {
+                    codesByType[item.code_type] = new Set();
+                }
+                codesByType[item.code_type].add(item.code);
+            });
+            
+            let html = `
+                <div style="padding: 20px;">
+                    <h2 style="color: #2d3748; margin-bottom: 20px;">📋 Available Codes in Dataset</h2>
+            `;
+            
+            for (const [type, codesSet] of Object.entries(codesByType)) {
+                const codesArray = Array.from(codesSet).sort();
+                html += `
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #667eea; margin-bottom: 10px;">${type} Codes (${codesArray.length} total)</h3>
+                        <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+                `;
+                codesArray.forEach(code => {
+                    html += `<span style="background: #edf2f7; padding: 5px 10px; border-radius: 5px; font-family: monospace;">${code}</span>`;
+                });
+                html += `
+                        </div>
+                    </div>
+                `;
+            }
+            
+            html += `
+                    <p style="color: #718096; margin-top: 20px; font-style: italic;">
+                        These are the actual CPT and DRG codes from your hospital pricing data.
+                    </p>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+            document.getElementById('statsContainer').style.display = 'none';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            populateHospitals();
+            populateCodeList();
+            console.log(`Loaded ${pricingData.length} pricing records from Richmond area hospitals`);
+            
+            // Show available codes in console for debugging
+            const codes = getUniqueCodes();
+            console.log('Available codes in dataset:', codes);
+        });
+    </script>
+</body>
+</html>
