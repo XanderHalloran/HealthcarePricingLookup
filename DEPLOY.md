@@ -55,7 +55,7 @@ the question at 1000 chars and `/eob` at a 12 MB file.
 - **Container**: `ortho-app` from `docker-compose.ortho.yml` in `/root/ortho`, volume `ortho_data`,
   same Caddy network. Redeploy: build the tarball as for healthcare, scp to `/root/ortho.tgz`,
   `ssh ... 'bash -s' < ~/ortho-redeploy.sh`. Ingest: `docker exec -d ortho-app sh -c 'python -u src/pipeline.py > data/ingest.log 2>&1'`
-  (APP_CONFIG is in the container env, so the pipeline reads config-ortho; Arizona only, ~1 h).
+  (APP_CONFIG is in the container env, so the pipeline reads config-ortho). Ortho states: AZ, VA, NV, MI, FL (289 hospitals); a full rebuild is several hours, so refresh one state at a time with `--state XX` (FL alone is ~2.5 h because of 48 HCA files).
 - **Analysis pages** (all behind Caddy basic_auth `@internal`, creds `/root/ortho/basic_auth.txt`):
   `/rates` payer matrix, `/site-of-care`, `/position` (own facility vs market), `/payers` scorecard,
   `/bundles` episode pricing (config-ortho/bundles.yaml), `/map` facilities within a radius of an
