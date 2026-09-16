@@ -12,6 +12,7 @@
   .sc-t td.r, .sc-t th.r { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
   .sc-t td.sel, .sc-t th.sel { background:var(--green-pale); }
   .sc-t .x { font-weight:700; color:var(--forest); } .sc-t .n { color:var(--mute); font-size:11px; }
+  .sc-t td.thin { color:var(--mute); } .sc-t td.thin .x { color:var(--mute); font-weight:600; }
   .rank { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:8px; }
   .rank a { display:block; background:var(--sage); border:1px solid var(--line); border-radius:10px; padding:10px 12px; text-decoration:none; color:var(--body); }
   .rank a.sel { border-color:var(--green); background:var(--green-pale); }
@@ -42,9 +43,9 @@
   </form>
 
   <div class="card" style="margin-top:16px">
-    <div class="fac-h">Ranking <span class="mute">(median across procedures of the payer's market median ÷ Medicare; click to highlight)</span></div>
+    <div class="fac-h">Ranking <span class="mute">(median across procedures of the payer's market median ÷ Medicare, counting only procedures priced by at least {{ min_fac }} facilities; click to highlight)</span></div>
     <div class="rank">
-      {% for r in ranking %}<a href="/payers?payer={{ r.payer }}&metro={{ metro }}" class="{{ 'sel' if r.payer == sel }}"><b>{{ r.mult }}×</b><span>{{ r.payer }} · {{ r.codes }} procedures</span></a>{% endfor %}
+      {% for r in ranking %}<a href="/payers?payer={{ r.payer }}&metro={{ metro }}" class="{{ 'sel' if r.payer == sel }}"><b>{{ r.mult }}×</b><span>{{ r.payer }} · {{ r.codes }} procedures with ≥{{ min_fac }} facilities{% if r.thin %} · {{ r.thin }} thin excluded{% endif %}</span></a>{% endfor %}
     </div>
   </div>
 
@@ -57,7 +58,7 @@
         <tr><td>{{ row.desc }} <span class="mute">{{ row.type }} {{ row.code }}</span></td>
           <td class="r">{% if row.medicare %}${{ '{:,.0f}'.format(row.medicare) }}{% else %}—{% endif %}</td>
           {% for p in payers %}{% set c = row.cells.get(p) %}
-            <td class="r {{ 'sel' if p == sel }}">{% if c %}${{ '{:,.0f}'.format(c.median) }}{% if row.medicare %} <span class="x">{{ (c.median / row.medicare)|round(2) }}×</span>{% endif %} <span class="n">({{ c.n }})</span>{% else %}—{% endif %}</td>
+            <td class="r {{ 'sel' if p == sel }}{{ ' thin' if c and c.n < min_fac }}"{% if c and c.n < min_fac %} title="Only {{ c.n }} facilit{{ 'y' if c.n == 1 else 'ies' }} publish this payer for this procedure; not counted in the ranking"{% endif %}>{% if c %}${{ '{:,.0f}'.format(c.median) }}{% if row.medicare %} <span class="x">{{ (c.median / row.medicare)|round(2) }}×</span>{% endif %} <span class="n">({{ c.n }})</span>{% else %}—{% endif %}</td>
           {% endfor %}
           {% if sel and own_label %}<td class="r sel">{% if row.own is not none %}${{ '{:,.0f}'.format(row.own) }}{% if row.medicare %} <span class="x">{{ (row.own / row.medicare)|round(2) }}×</span>{% endif %}{% else %}—{% endif %}</td>{% endif %}
         </tr>

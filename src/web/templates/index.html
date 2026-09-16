@@ -549,6 +549,7 @@
     try {
       const r = await fetch('/email', { method: 'POST', body: fd });
       out.textContent = await r.text();
+      if (window.umami) umami.track('email-capture', { kind: kind, ok: r.ok });
       if (r.ok) { box.querySelector('form').hidden = true; }
     } catch(e) { out.textContent = 'Could not send — use the download button instead.'; }
     btn.disabled = false;

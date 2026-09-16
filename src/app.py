@@ -614,6 +614,9 @@ def _payer_rows(state, metro):
     return rows
 
 
+MIN_FAC = 3   # facilities a (code, payer) cell needs before it counts toward the payer ranking
+
+
 @app.get("/payers", response_class=HTMLResponse)
 def payer_scorecard(request: Request, payer: str = "", metro: str = ""):
     """Payer scorecard: each insurer's market median as a multiple of Medicare, per procedure."""
@@ -624,15 +627,19 @@ def payer_scorecard(request: Request, payer: str = "", metro: str = ""):
     payers = [p for p in PAYER_LIST if any(p in r["cells"] for r in rows)]
     ranking = []
     for p in payers:
-        mults = [r["cells"][p]["median"] / r["medicare"] for r in rows if p in r["cells"] and r["medicare"]]
+        # ponytail: a payer published by 2-4 files (e.g. UVA's ~$1.3k "Tricare" surgery rows) can drive a
+        # statewide multiple; only cells backed by >= MIN_FAC facilities count toward the ranking.
+        mults = [r["cells"][p]["median"] / r["medicare"] for r in rows
+                 if p in r["cells"] and r["medicare"] and r["cells"][p]["n"] >= MIN_FAC]
+        thin = sum(1 for r in rows if p in r["cells"] and r["cells"][p]["n"] < MIN_FAC)
         if mults:
-            ranking.append({"payer": p, "mult": round(statistics.median(mults), 2), "codes": len(mults)})
+            ranking.append({"payer": p, "mult": round(statistics.median(mults), 2), "codes": len(mults), "thin": thin})
     ranking.sort(key=lambda x: x["mult"])
     for r in rows:
         r["own"] = r["owns"].get(sel) if sel else None
     return templates.TemplateResponse(request, "payers.html", {
         "brand": BRAND, "nav": "payers", **_area_ctx(state, metro),
-        "rows": rows, "payers": payers, "sel": sel, "ranking": ranking, "own_label": (BRAND.get("own") or {}).get("label") if OWN_IDS else "",
+        "rows": rows, "payers": payers, "sel": sel, "ranking": ranking, "min_fac": MIN_FAC, "own_label": (BRAND.get("own") or {}).get("label") if OWN_IDS else "",
         "data_refreshed": DATA_REFRESHED})
 
 

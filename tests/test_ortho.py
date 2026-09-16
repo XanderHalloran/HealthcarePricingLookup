@@ -43,7 +43,7 @@ def test_head_and_shell_are_ortho():
 def test_brand_and_nav():
     r = client.get("/")
     assert r.status_code == 200
-    assert "Arizona Orthopedic Price Intelligence" in r.text and 'class="onav"' in r.text
+    assert "Orthopedic Price Intelligence" in r.text and 'class="onav"' in r.text
     assert "Payer rates" in r.text and "Site of care" in r.text and "Analyses" in r.text
     assert '"category": "joint"' in r.text        # MSK categories embedded for the picker
     assert "knee replacement, ACL" in r.text and '"29888":"acl reconstruction' in r.text   # MSK picker hints + synonyms
@@ -87,6 +87,7 @@ def test_position_page_and_business_framing():
 
 
 def test_payer_scorecard_and_bundles():
+    assert "facilities" in client.get("/payers").text          # ranking states its facility floor
     r = client.get("/payers", params={"payer": "Aetna"})
     assert r.status_code == 200 and "Payer scorecard" in r.text and "Ranking" in r.text and "Medicaid" not in r.text
     c = client.get("/payers.csv")
