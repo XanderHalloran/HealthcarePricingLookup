@@ -51,7 +51,7 @@ def test_brand_and_nav():
 
 
 def test_only_arizona_market():
-    assert [s["code"] for s in webapp.MARKETS.values()] == ["AZ", "VA"]
+    assert [s["code"] for s in webapp.MARKETS.values()] == ["AZ", "VA", "NV", "MI"]
     assert webapp.BASE_URL == "https://ortho.traqqit.com"
 
 

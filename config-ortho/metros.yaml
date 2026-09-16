@@ -2,6 +2,8 @@
 states:
   - { code: AZ, name: Arizona, slug: arizona }
   - { code: VA, name: Virginia, slug: virginia }
+  - { code: NV, name: Nevada, slug: nevada }
+  - { code: MI, name: Michigan, slug: michigan }
 
 metros:
   - key: phoenix
@@ -192,3 +194,150 @@ metros:
       - AUGUSTA-HEALTH
       - VALLEY-WINCHESTER
       - VALLEY-WARREN
+
+  # ===== Nevada =====
+  - key: las-vegas
+    state: NV
+    label: "Las Vegas"
+    slug_city: "las-vegas"
+    ids:
+      - HCA-SUNRISE
+      - HCA-MOUNTAINVIEW
+      - HCA-SOUTHERN-HILLS
+      - DIGNITY-SIENA
+      - DIGNITY-SAN-MARTIN
+      - DIGNITY-ROSE-DE-LIMA
+      - UMC-LAS-VEGAS
+      - VHS-VALLEY
+      - VHS-SUMMERLIN
+      - VHS-SPRING-VALLEY
+      - VHS-CENTENNIAL-HILLS
+      - VHS-HENDERSON
+      - VHS-WEST-HENDERSON
+      - PRIME-NORTH-VISTA
+      - BOULDER-CITY
+
+  - key: reno
+    state: NV
+    label: "Reno / Carson City"
+    slug_city: "reno"
+    ids:
+      - RENOWN-REGIONAL
+      - RENOWN-SOUTH-MEADOWS
+      - PRIME-SAINT-MARYS
+      - UHS-NNMC
+      - UHS-NN-SIERRA
+      - CARSON-TAHOE-REGIONAL
+      - CARSON-VALLEY-HEALTH
+      - TFHS-INCLINE-VILLAGE
+
+  - key: rural-nevada
+    state: NV
+    label: "Rural Nevada"
+    slug_city: "rural-nevada"
+    ids:
+      - LIFEPOINT-NNRH-ELKO
+      - MESA-VIEW-MESQUITE
+      - BANNER-CHURCHILL
+      - UHS-DESERT-VIEW
+      - HUMBOLDT-GENERAL
+
+  # ===== Michigan =====
+  - key: detroit
+    state: MI
+    label: "Metro Detroit"
+    slug_city: "detroit"
+    ids:
+      - HENRYFORD-DETROIT
+      - HENRYFORD-WESTBLOOMFIELD
+      - HENRYFORD-MACOMB
+      - HENRYFORD-WYANDOTTE
+      - HENRYFORD-PROVIDENCE-SOUTHFIELD
+      - HENRYFORD-PROVIDENCE-NOVI
+      - HENRYFORD-STJOHN
+      - HENRYFORD-ROCHESTER
+      - HENRYFORD-WARREN
+      - COREWELL-ROYALOAK
+      - COREWELL-TROY
+      - COREWELL-DEARBORN
+      - COREWELL-FARMINGTONHILLS
+      - COREWELL-GROSSEPOINTE
+      - COREWELL-TAYLOR
+      - COREWELL-TRENTON
+      - COREWELL-WAYNE
+      - DMC-RECEIVING
+      - DMC-HARPER
+      - DMC-SINAIGRACE
+      - DMC-HURONVALLEY
+      - TRINITY-OAKLAND
+      - TRINITY-LIVONIA
+      - TRINITY-LIVINGSTON
+      - MCLAREN-MACOMB
+      - MCLAREN-OAKLAND
+      - MCLAREN-PORTHURON
+      - LAKEHURON-PORTHURON
+      - STRAITH-SOUTHFIELD
+      - SURGEONSCHOICE-SOUTHFIELD
+      - INSIGHT-SURGICAL-WARREN
+
+  - key: ann-arbor
+    state: MI
+    label: "Ann Arbor"
+    slug_city: "ann-arbor"
+    ids:
+      - UMICH-MAIN
+      - TRINITY-ANNARBOR
+      - TRINITY-CHELSEA
+      - HENRYFORD-JACKSON
+      - FORESTHEALTH-YPSILANTI
+
+  - key: grand-rapids
+    state: MI
+    label: "Grand Rapids / West Michigan"
+    slug_city: "grand-rapids"
+    ids:
+      - COREWELL-BUTTERWORTH
+      - COREWELL-BLODGETT
+      - TRINITY-GRANDRAPIDS
+      - UMHEALTH-WEST
+      - HOLLAND
+      - TRINITY-MUSKEGON
+      - COREWELL-ZEELAND
+
+  - key: lansing
+    state: MI
+    label: "Lansing"
+    slug_city: "lansing"
+    ids:
+      - SPARROW-LANSING
+      - MCLAREN-LANSING
+
+  - key: flint-saginaw
+    state: MI
+    label: "Flint / Saginaw / Bay City"
+    slug_city: "flint"
+    ids:
+      - HURLEY-FLINT
+      - MCLAREN-FLINT
+      - HENRYFORD-GENESYS
+      - COVENANT-SAGINAW
+      - MCLAREN-BAY
+
+  - key: kalamazoo
+    state: MI
+    label: "Kalamazoo"
+    slug_city: "kalamazoo"
+    ids:
+      - BRONSON-METHODIST
+      - BEACON-BORGESS
+      - BRONSON-BATTLECREEK
+      - COREWELL-LAKELAND-STJOSEPH
+
+  - key: northern-michigan
+    state: MI
+    label: "Northern Michigan / U.P."
+    slug_city: "northern-michigan"
+    ids:
+      - MUNSON-TRAVERSECITY
+      - MCLAREN-NORTHERN
+      - UPHS-MARQUETTE

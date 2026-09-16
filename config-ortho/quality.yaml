@@ -89,6 +89,84 @@ ratings:
   CENTRA-VIRGINIA-BAPTIST: 3
   VALLEY-WINCHESTER: 4
   VALLEY-WARREN: 2
+  # Nevada (added)
+  HCA-SUNRISE: 2
+  HCA-MOUNTAINVIEW: 4
+  HCA-SOUTHERN-HILLS: 4
+  DIGNITY-SIENA: 3
+  DIGNITY-SAN-MARTIN: 4
+  UMC-LAS-VEGAS: 2
+  VHS-VALLEY: 2
+  VHS-SUMMERLIN: 3
+  VHS-SPRING-VALLEY: 3
+  VHS-CENTENNIAL-HILLS: 2
+  VHS-HENDERSON: 2
+  PRIME-NORTH-VISTA: 3
+  RENOWN-REGIONAL: 3
+  RENOWN-SOUTH-MEADOWS: 3
+  PRIME-SAINT-MARYS: 4
+  UHS-NNMC: 3
+  CARSON-TAHOE-REGIONAL: 2
+  CARSON-VALLEY-HEALTH: 5
+  LIFEPOINT-NNRH-ELKO: 3
+  MESA-VIEW-MESQUITE: 2
+  BANNER-CHURCHILL: 2
+  UHS-DESERT-VIEW: 2
+  HUMBOLDT-GENERAL: 2
+  # Michigan (added)
+  HENRYFORD-DETROIT: 3
+  HENRYFORD-WESTBLOOMFIELD: 3
+  HENRYFORD-MACOMB: 3
+  HENRYFORD-WYANDOTTE: 2
+  HENRYFORD-PROVIDENCE-SOUTHFIELD: 4
+  HENRYFORD-PROVIDENCE-NOVI: 4
+  HENRYFORD-STJOHN: 1
+  HENRYFORD-ROCHESTER: 3
+  HENRYFORD-WARREN: 1
+  COREWELL-ROYALOAK: 3
+  COREWELL-TROY: 4
+  COREWELL-DEARBORN: 2
+  COREWELL-FARMINGTONHILLS: 3
+  COREWELL-GROSSEPOINTE: 4
+  COREWELL-TAYLOR: 2
+  COREWELL-TRENTON: 3
+  COREWELL-WAYNE: 2
+  DMC-RECEIVING: 1
+  DMC-HARPER: 1
+  DMC-SINAIGRACE: 1
+  DMC-HURONVALLEY: 3
+  TRINITY-OAKLAND: 2
+  TRINITY-LIVONIA: 2
+  TRINITY-LIVINGSTON: 4
+  MCLAREN-MACOMB: 1
+  MCLAREN-OAKLAND: 2
+  MCLAREN-PORTHURON: 2
+  LAKEHURON-PORTHURON: 4
+  UMICH-MAIN: 4
+  TRINITY-ANNARBOR: 4
+  TRINITY-CHELSEA: 4
+  HENRYFORD-JACKSON: 3
+  COREWELL-BUTTERWORTH: 4
+  COREWELL-BLODGETT: 4
+  TRINITY-GRANDRAPIDS: 3
+  UMHEALTH-WEST: 4
+  HOLLAND: 5
+  TRINITY-MUSKEGON: 3
+  COREWELL-ZEELAND: 5
+  SPARROW-LANSING: 3
+  MCLAREN-LANSING: 3
+  HURLEY-FLINT: 2
+  MCLAREN-FLINT: 2
+  HENRYFORD-GENESYS: 3
+  COVENANT-SAGINAW: 2
+  MCLAREN-BAY: 1
+  BRONSON-METHODIST: 4
+  BEACON-BORGESS: 3
+  BRONSON-BATTLECREEK: 3
+  COREWELL-LAKELAND-STJOSEPH: 4
+  MUNSON-TRAVERSECITY: 4
+  MCLAREN-NORTHERN: 3
+  UPHS-MARQUETTE: 3
 hip_knee:
   BANNER-DESERT:
     rate: 4.6
@@ -289,4 +367,162 @@ hip_knee:
     compare: No Different
   VALLEY-WARREN:
     rate: 3.8
+    compare: No Different
+  # Nevada hip/knee (added)
+  HCA-SUNRISE:
+    rate: 4.4
+    compare: No Different
+  HCA-MOUNTAINVIEW:
+    rate: 3.2
+    compare: No Different
+  HCA-SOUTHERN-HILLS:
+    rate: 4.7
+    compare: No Different
+  DIGNITY-SIENA:
+    rate: 4.2
+    compare: No Different
+  UMC-LAS-VEGAS:
+    rate: 3.8
+    compare: No Different
+  VHS-VALLEY:
+    rate: 3.9
+    compare: No Different
+  VHS-SPRING-VALLEY:
+    rate: 5.2
+    compare: No Different
+  VHS-CENTENNIAL-HILLS:
+    rate: 3.7
+    compare: No Different
+  VHS-HENDERSON:
+    rate: 6.2
+    compare: No Different
+  RENOWN-SOUTH-MEADOWS:
+    rate: 4.8
+    compare: No Different
+  UHS-NNMC:
+    rate: 3.7
+    compare: No Different
+  # Michigan hip/knee (added)
+  HENRYFORD-WESTBLOOMFIELD:
+    rate: 3.3
+    compare: No Different
+  HENRYFORD-MACOMB:
+    rate: 5.6
+    compare: No Different
+  HENRYFORD-PROVIDENCE-SOUTHFIELD:
+    rate: 4.8
+    compare: No Different
+  HENRYFORD-PROVIDENCE-NOVI:
+    rate: 4.8
+    compare: No Different
+  HENRYFORD-STJOHN:
+    rate: 3.8
+    compare: No Different
+  HENRYFORD-ROCHESTER:
+    rate: 3.6
+    compare: No Different
+  HENRYFORD-WARREN:
+    rate: 3.5
+    compare: No Different
+  COREWELL-ROYALOAK:
+    rate: 4.1
+    compare: No Different
+  COREWELL-TROY:
+    rate: 4.1
+    compare: No Different
+  COREWELL-DEARBORN:
+    rate: 4.6
+    compare: No Different
+  COREWELL-FARMINGTONHILLS:
+    rate: 4
+    compare: No Different
+  COREWELL-GROSSEPOINTE:
+    rate: 3.7
+    compare: No Different
+  COREWELL-TAYLOR:
+    rate: 3.7
+    compare: No Different
+  DMC-HARPER:
+    rate: 3.3
+    compare: No Different
+  DMC-HURONVALLEY:
+    rate: 5
+    compare: No Different
+  TRINITY-OAKLAND:
+    rate: 6.7
+    compare: No Different
+  TRINITY-LIVONIA:
+    rate: 4.6
+    compare: No Different
+  TRINITY-LIVINGSTON:
+    rate: 3.5
+    compare: No Different
+  MCLAREN-PORTHURON:
+    rate: 4.7
+    compare: No Different
+  LAKEHURON-PORTHURON:
+    rate: 4
+    compare: No Different
+  UMICH-MAIN:
+    rate: 4.9
+    compare: No Different
+  TRINITY-ANNARBOR:
+    rate: 3.3
+    compare: No Different
+  TRINITY-CHELSEA:
+    rate: 3.5
+    compare: No Different
+  HENRYFORD-JACKSON:
+    rate: 3.8
+    compare: No Different
+  COREWELL-BUTTERWORTH:
+    rate: 4.5
+    compare: No Different
+  COREWELL-BLODGETT:
+    rate: 4.5
+    compare: No Different
+  TRINITY-GRANDRAPIDS:
+    rate: 3.4
+    compare: No Different
+  UMHEALTH-WEST:
+    rate: 4.3
+    compare: No Different
+  TRINITY-MUSKEGON:
+    rate: 4.4
+    compare: No Different
+  MCLAREN-LANSING:
+    rate: 3.3
+    compare: No Different
+  MCLAREN-FLINT:
+    rate: 5.6
+    compare: No Different
+  HENRYFORD-GENESYS:
+    rate: 4.3
+    compare: No Different
+  COVENANT-SAGINAW:
+    rate: 4.5
+    compare: No Different
+  MCLAREN-BAY:
+    rate: 4.2
+    compare: No Different
+  BRONSON-METHODIST:
+    rate: 4.4
+    compare: No Different
+  BEACON-BORGESS:
+    rate: 3.8
+    compare: No Different
+  BRONSON-BATTLECREEK:
+    rate: 4.2
+    compare: No Different
+  COREWELL-LAKELAND-STJOSEPH:
+    rate: 3.4
+    compare: No Different
+  MUNSON-TRAVERSECITY:
+    rate: 4.4
+    compare: No Different
+  MCLAREN-NORTHERN:
+    rate: 4.3
+    compare: No Different
+  UPHS-MARQUETTE:
+    rate: 4.7
     compare: No Different
