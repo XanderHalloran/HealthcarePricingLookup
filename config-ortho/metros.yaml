@@ -123,6 +123,7 @@ metros:
       - MARYWASH-STAFFORD
       - HCA-SPOTSYLVANIA
       - LIFEPOINT-FAUQUIER
+      - VHC-ARLINGTON
 
   - key: hampton-roads
     state: VA
@@ -163,6 +164,8 @@ metros:
       - HCA-LEWISGALE-MONTGOMERY
       - HCA-LEWISGALE-PULASKI
       - HCA-LEWISGALE-ALLEGHANY
+      - CENTRA-LYNCHBURG
+      - CENTRA-VIRGINIA-BAPTIST
 
   - key: southwest-virginia
     state: VA
@@ -187,3 +190,5 @@ metros:
     ids:
       - SENTARA-RMH
       - AUGUSTA-HEALTH
+      - VALLEY-WINCHESTER
+      - VALLEY-WARREN

@@ -83,6 +83,12 @@ ratings:
   SENTARA-HALIFAX: 3
   SENTARA-RMH: 5
   AUGUSTA-HEALTH: 4
+  # Virginia (blocked sites)
+  VHC-ARLINGTON: 4
+  CENTRA-LYNCHBURG: 3
+  CENTRA-VIRGINIA-BAPTIST: 3
+  VALLEY-WINCHESTER: 4
+  VALLEY-WARREN: 2
 hip_knee:
   BANNER-DESERT:
     rate: 4.6
@@ -267,4 +273,20 @@ hip_knee:
     compare: No Different
   AUGUSTA-HEALTH:
     rate: 4.3
+    compare: No Different
+  # Virginia (blocked sites)
+  VHC-ARLINGTON:
+    rate: 4.4
+    compare: No Different
+  CENTRA-LYNCHBURG:
+    rate: 3.3
+    compare: No Different
+  CENTRA-VIRGINIA-BAPTIST:
+    rate: 3.3
+    compare: No Different
+  VALLEY-WINCHESTER:
+    rate: 2.6
+    compare: No Different
+  VALLEY-WARREN:
+    rate: 3.8
     compare: No Different

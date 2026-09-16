@@ -66,6 +66,14 @@ the question at 1000 chars and `/eob` at a 12 MB file.
   report through it with CFG pointed at config-ortho or append by hand), redeploy, then
   `docker exec -d ortho-app sh -c 'python -u src/pipeline.py --state XX > data/ingest-XX.log 2>&1'`.
 - Weekly refresh: host `ortho-ingest.timer` (Tue 02:00 UTC).
+- **Bot-blocked MRFs (both sites).** Some hosts (Akamai: vhchealth.org, centrahealth.com, valleyhealthlink.com;
+  Cloudflare: marywashingtonhealthcare.com; IP-range blocks: memorialhermann.org, mrfs.hyvehealthcare.com) refuse
+  the VPS. Their manifest entries use `file: data/raw/<ID>.<ext>` instead of `url:`; the file is fetched
+  off-box (a browser session works), copied in with `docker cp <file> <container>:/app/data/raw/`, then
+  ingested with `--only <ID,...>`. `--only` APPENDS, so to refresh an id that already has rows delete its
+  parquet files first (one hospital per file: query `read_parquet(..., filename=true) WHERE hospital_id IN (...)`
+  and `os.remove` them). Files with `file:` are never auto-deleted by the raw-cache bound. The weekly timers
+  re-read the local copies, so a stale `file:` stays stale until replaced by hand.
 - **Internal pages** (`noindex`, basic-auth'd in the Caddy block): `/rates?code=&metro=&mine=`
   facility x payer contracted-rate matrix with market percentiles + `/rates.csv`; `/site-of-care?code=&metro=`
   HOPD vs ASC with Medicare's own differential and per-case shift savings. Quality overlay: `quality.yaml`

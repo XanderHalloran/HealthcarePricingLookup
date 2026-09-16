@@ -121,3 +121,9 @@ hospitals:
   - { id: SENTARA-HALIFAX, name: "Sentara Halifax Regional Hospital (South Boston)", state: VA, ccn: "490013", url: "https://www.sentara.com/Documents/s/sentarahalifaxregionalhospitalstandardchargesxlsx-1395297" }
   - { id: SENTARA-RMH, name: "Sentara RMH Medical Center (Harrisonburg)", state: VA, ccn: "490004", url: "https://www.sentara.com/Documents/s/sentararmhmedicalcenterstandardchargesxlsx-1395259" }
   - { id: AUGUSTA-HEALTH, name: "Augusta Health (Fishersville)", state: VA, ccn: "490018", format: json, url: "https://hospitalpricedisclosure.com/Download.aspx?pxi=d6jdJrXuX3vgSYRgOlRq3w*-*&f=iFd*_*cEPwhQHJy3lVvHy9uQ*-*" }
+  # ===== VIRGINIA (VA) — Akamai-blocked sites, files fetched off-box 2026-09-15 (see DEPLOY.md) =====
+  - { id: VHC-ARLINGTON, name: "VHC Health, Virginia Hospital Center (Arlington)", state: VA, ccn: "490050", file: data/raw/VHC-ARLINGTON.csv }
+  - { id: CENTRA-LYNCHBURG, name: "Centra Lynchburg General Hospital (Lynchburg)", state: VA, ccn: "490021", file: data/raw/CENTRA-LYNCHBURG.csv }
+  - { id: CENTRA-VIRGINIA-BAPTIST, name: "Centra Virginia Baptist Hospital (Lynchburg)", state: VA, ccn: "490021", file: data/raw/CENTRA-VIRGINIA-BAPTIST.csv }
+  - { id: VALLEY-WINCHESTER, name: "Valley Health Winchester Medical Center (Winchester)", state: VA, ccn: "490005", file: data/raw/VALLEY-WINCHESTER.csv }
+  - { id: VALLEY-WARREN, name: "Valley Health Warren Memorial Hospital (Front Royal)", state: VA, ccn: "490033", file: data/raw/VALLEY-WARREN.csv }
