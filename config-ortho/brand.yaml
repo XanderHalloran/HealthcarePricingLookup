@@ -1,0 +1,14 @@
+# Site identity for this profile (loaded by app.py; config/ has no brand.yaml -> consumer defaults).
+profile: ortho
+name: "Orthopedic Price Intelligence: Arizona and Virginia"
+short: "Ortho Price Intel"
+tagline: "What every Arizona and Virginia hospital publishes for orthopedic and spine care: by procedure, by payer, and by site of care, benchmarked to Medicare and to our own facilities."
+audience: "Built for contracting, network strategy, and ASC development at HOPCo."
+# Our own facilities: badged in every table and compared against the market on /position.
+# Payers hidden from this site (dropdown, rates matrix, CSV, position page). Data still ingests.
+exclude_payers: [Medicaid]
+own:
+  label: "HOPCo"
+  ids: [CORE-SPECIALTY-PHX]
+  notes:
+    CORE-SPECIALTY-PHX: "CORE's file publishes whole-CASE rates (methodology: Case Rate, implant included) on its CPT rows and lists its cash price equal to the gross charge. Many competitors' CPT rows are the procedure line only, so the like-for-like comparison is the inpatient DRG rows (470 / 469), where CORE prices one case rate regardless of complications."

@@ -1,0 +1,3 @@
+# Pricing / target-ask parameters.
+target_multiplier: 2.0          # ask = LOWER of (medicare_rate * this) OR local cash price
+multiplier_range: [1.5, 2.5]    # 150-250% of Medicare, shown as context for facilities

@@ -1,0 +1,48 @@
+# Freestanding (non-hospital) imaging centers & ASCs — the cheaper alternative
+# to a hospital for the same scan/scope. Published self-pay/cash prices (MDsave
+# prepay, RadiologyAssist, and published ASC bundles), June 2026, Phoenix metro.
+#
+# These have no MRF; prices are inline and merged into the facility list at query
+# time (no re-ingest). MDsave MRI/CT prices are "any one body part" bundles, so the
+# same figure maps to several CPTs in that contrast tier (per the published source).
+# type: imaging | asc.
+facilities:
+  - id: SIMONMED
+    name: SimonMed Imaging
+    type: imaging
+    city: Phoenix metro
+    prices: { "73721": 458, "72148": 458, "70551": 458, "70553": 642,
+              "70450": 293, "74176": 293, "71250": 293,
+              "77067": 191, "93880": 239, "71046": 74 }
+
+  - id: DIAGIMAGING
+    name: Diagnostic Imaging Center
+    type: imaging
+    city: Phoenix
+    prices: { "72148": 267, "72141": 266, "73721": 281, "70551": 274 }
+
+  - id: OPENMRI
+    name: Open MRI Solutions
+    type: imaging
+    city: Phoenix
+    prices: { "70551": 425, "72148": 425, "73721": 425, "71046": 90 }
+
+  - id: MRIOFAZ
+    name: MRI of Arizona
+    type: imaging
+    city: Phoenix
+    prices: { "70551": 526, "72148": 526, "73721": 526, "70553": 676 }
+
+  - id: SUNRAD
+    name: Sun Radiology
+    type: imaging
+    city: Glendale
+    prices: { "77067": 244, "77066": 284, "77065": 231,
+              "76700": 181, "76856": 181, "76830": 181,
+              "93880": 295, "71046": 83 }
+
+  - id: COLONOSCOPYASSIST
+    name: ColonoscopyAssist (partner ASC)
+    type: asc
+    city: Phoenix metro
+    prices: { "45378": 1295, "45380": 1295, "45385": 1295, "43235": 975, "43239": 975 }

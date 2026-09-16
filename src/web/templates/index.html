@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% if brand.profile == 'ortho' %}
+<title>{{ brand.name }}</title>
+<meta name="description" content="Published prices for orthopedic and spine procedures at every Arizona and Virginia hospital — by procedure, by payer, and by site of care — benchmarked to Medicare OPPS, IPPS and ASC rates. Contracting and network intelligence for HOPCo.">
+<link rel="canonical" href="{{ base }}/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ brand.name }}">
+<meta property="og:description" content="Arizona and Virginia orthopedic and spine prices by procedure, payer, and site of care, benchmarked to Medicare. Contracting and network intelligence for HOPCo.">
+<meta property="og:url" content="{{ base }}/">
+<meta property="og:site_name" content="{{ brand.short }}">
+<meta property="og:image" content="{{ base }}/static/og-ortho.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{{ brand.name }}: Arizona and Virginia orthopedic prices by procedure, payer, and site of care.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ brand.name }}">
+<meta name="twitter:description" content="Arizona and Virginia orthopedic and spine prices by procedure, payer, and site of care, benchmarked to Medicare.">
+<meta name="twitter:image" content="{{ base }}/static/og-ortho.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"{{ brand.name }}","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"{{ base }}/","description":"Arizona and Virginia orthopedic and spine procedure prices by facility, payer, and site of care, benchmarked to Medicare."}</script>
+{% else %}
+<title>{{ state_name }} Medical Price Compare &amp; Bill Negotiation Coach — Free</title>
+<meta name="description" content="Compare hospital prices across {{ state_name }}, find the fair cash price for any procedure (MRI, CT, colonoscopy, ER, labs), and get an AI coach + appeal letter to negotiate your medical bill. Free, no signup.">
+<link rel="canonical" href="{{ base }}/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ state_name }} Medical Price Compare & Bill Negotiation Coach">
+<meta property="og:description" content="Find the fair price for any procedure across {{ state_name }} hospitals and negotiate your bill down — with an AI coach and a ready-to-send appeal letter. Free.">
+<meta property="og:url" content="{{ base }}/">
+<meta property="og:site_name" content="Medical Price & Bill Coach">
+<meta property="og:image" content="{{ base }}/static/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Compare {{ state_name }} hospital prices and find the fair price for any procedure.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ state_name }} Medical Price Compare & Bill Negotiation Coach">
+<meta name="twitter:description" content="Compare {{ state_name }} hospital prices and negotiate your medical bill — free, no signup.">
+<meta name="twitter:image" content="{{ base }}/static/og.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"{{ state_name }} Medical Price & Bill Coach","applicationCategory":"HealthApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"Compare hospital prices across {{ state_name }} and negotiate your medical bill with an AI coach and appeal letter."}</script>
+{% endif %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+</head>
+{% import "_card.html" as c with context %}
+{% macro capture(kind, what) %}{% if capture_on %}
+<div class="card capture" data-kind="{{ kind }}" style="margin-top:16px" {% if kind == 'compare' %}hidden{% endif %}>
+  <b>📧 Email me this {{ what }}</b>
+  <span style="color:var(--body);font-size:14px"> — optional; everything above is already yours.</span>
+  <form class="actions" style="margin-top:8px" onsubmit="return sendCapture(event, '{{ kind }}')">
+    <input type="email" name="email" required maxlength="254" placeholder="you@example.com" aria-label="Your email address" style="flex:1;min-width:200px">
+    <button class="btn btn-primary" type="submit">Send</button>
+    <button class="btn btn-ghost" type="button" onclick="dismissCapture()">No thanks</button>
+  </form>
+  <label style="display:block;margin-top:8px;font-size:13px"><input type="checkbox" name="optin"> Also send occasional tips on negotiating medical bills (optional)</label>
+  <div style="color:var(--mute);font-size:12px;margin-top:4px">One email with this {{ what }}, nothing else unless you tick the box. We never sell or share your address.</div>
+  <div class="cap-out" role="status" style="margin-top:8px;font-size:14px"></div>
+</div>
+{% endif %}{% endmacro %}
+<body class="{{ 'ortho' if brand.profile == 'ortho' }}">
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    {% if brand.profile == 'ortho' %}
+    <h1>{{ brand.name }}</h1>
+    <p class="sub">{{ brand.tagline }} {{ brand.audience }}</p>
+    {% else %}
+    <h1>What should your care cost in {{ state_name }}?</h1>
+    <p class="sub">Compare hospital prices near you and negotiate your bill — with an AI coach and a ready-to-send appeal letter.</p>
+    {% endif %}
+    {% set _ml = (metro_list|selectattr('key','equalto',metro)|list) %}
+    <span class="market" id="market">📍 {{ _ml[0].label if _ml else 'All ' ~ state_name }} — {{ n_hosp }} hospitals statewide</span>
+    <div class="trust">
+      {% if brand.profile == 'ortho' %}
+      <span>📊 {{ payer_list|length }} payers' contracted rates</span>
+      <span>🎯 Medicare OPPS · IPPS · ASC benchmarks</span>
+      <span>🟢 {{ brand.own.label if brand.own else 'Our' }} facilities flagged</span>
+      {% else %}
+      <span>🔒 Free &amp; no signup</span>
+      <span>🏥 {{ n_hosp }} {{ state_name }} hospitals</span>
+      <span>📊 Official CMS + hospital price files</span>
+      <span>💬 AI negotiation coach</span>
+      {% endif %}
+    </div>
+  </div>
+  {% if brand.profile == 'ortho' %}
+  <div class="disclaimer"><strong>Benchmarking data.</strong> Facility-published rates from CMS machine-readable files and
+    Medicare fee schedules; a payer figure is a facility's median across that insurer's plans, not a specific contract.
+    Verify before relying on a number. <a href="/methodology">How it's built →</a></div>
+
+  {% else %}
+  <div class="disclaimer"><strong>Estimates only.</strong> Educational estimates from public Medicare benchmarks
+    and hospital-published prices — <strong>not a guarantee</strong>, and not legal, medical, or financial advice.</div>
+
+  <div class="how">
+    <div class="how-step"><span class="how-n">1</span><div><b>Search a price or paste your bill</b>
+      <p>Enter a procedure (MRI, colonoscopy, ER…) or paste the codes from your itemized bill.</p></div></div>
+    <div class="how-step"><span class="how-n">2</span><div><b>See the fair price near you</b>
+      <p>Compare every local hospital against the Medicare benchmark — pick your metro for an apples-to-apples view.</p></div></div>
+    <div class="how-step"><span class="how-n">3</span><div><b>Negotiate it down</b>
+      <p>Get the exact numbers to cite, a ready-to-send appeal letter, and an AI coach for your situation.</p></div></div>
+  </div>
+  {% endif %}
+
+  {# Ortho: the 1-2-3 block moves BELOW the tool so search + a price sit in the first viewport #}
+  {% if brand.profile == 'ortho' %}{% set how_ortho %}
+  <div class="how">
+    <div class="how-step"><span class="how-n">1</span><div><b>Pick the procedures</b>
+      <p>Search by name or CPT/DRG above, or paste a whole code list — a case, a bundle, a contract exhibit.</p></div></div>
+    <div class="how-step"><span class="how-n">2</span><div><b>See the market</b>
+      <p>Every facility's published price, cheapest first, as a multiple of Medicare, with quality. {{ brand.own.label if brand.own else 'Our' }} sites are flagged.</p></div></div>
+    <div class="how-step"><span class="how-n">3</span><div><b>Then open Analyses</b>
+      <p>For the procedures you picked: <a href="/rates">Payer rates →</a> <a href="/site-of-care">Site of care →</a>{% if brand.own %} <a href="/position">{{ brand.own.label }} vs market →</a>{% endif %} <a href="/payers">Payer scorecard →</a> <a href="/bundles">Episode pricing →</a></p></div></div>
+  </div>
+  {% endset %}{% endif %}
+
+  <div class="payerbar card" role="group" aria-label="{% if brand.profile == 'ortho' %}Market filters{% else %}Refine prices for your area and plan{% endif %}">
+    {% if state_list|length > 1 %}<label class="pb-lab" for="state"><b>Your state</b></label>{% endif %}
+    <select id="state" aria-label="Choose your state" onchange="onStateChange()" {% if state_list|length == 1 %}hidden{% endif %}>
+      {% for s in state_list %}<option value="{{ s.code }}" {% if s.code == state %}selected{% endif %}>{{ s.name }}</option>{% endfor %}
+    </select>
+    <label class="pb-lab" for="metro"><b>Area</b></label>
+    <select id="metro" aria-label="Choose your area of {{ state_name }}" onchange="onMetroChange()">
+      <option value="">All {{ state_name }}</option>
+      {% for m in metro_list %}<option value="{{ m.key }}" {% if m.key == metro %}selected{% endif %}>{{ m.label }}</option>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="payer"><b>{% if brand.profile == 'ortho' %}Payer{% else %}Insurance{% endif %}</b> {% if brand.profile == 'ortho' %}(show that insurer's contracted rates){% else %}(price it for your plan){% endif %}</label>
+    <select id="payer" aria-label="Choose an insurer" onchange="onPayerChange()">
+      <option value="">{% if brand.profile == 'ortho' %}— cash / self-pay basis —{% else %}— self-pay / none —{% endif %}</option>
+      {% for p in payer_list %}<option value="{{ p }}" {% if p == payer %}selected{% endif %}>{{ p }}</option>{% endfor %}
+    </select>
+    {% if brand.profile == 'ortho' %}<details class="cost-share"><summary>Patient cost-share &amp; distance (optional)</summary><div class="cs-body">{% endif %}
+    <label><input type="checkbox" id="metded" onchange="applyDeductible()"> I've met my deductible this year</label>
+    <label class="coins" title="Your share of the cost after the deductible is met">coinsurance
+      <input type="text" id="coins" value="20" size="2" inputmode="numeric" aria-label="Coinsurance percent — your share after deductible" oninput="applyDeductible()">%</label>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="zip"><b>Near you</b></label>
+    <input type="text" id="zip" inputmode="numeric" size="6" placeholder="ZIP" aria-label="Your ZIP code"
+           onkeydown="if(event.key==='Enter'){event.preventDefault();setZip()}">
+    <button class="btn-mini" type="button" onclick="setZip()">Go</button>
+    <button class="btn-mini" type="button" onclick="useMyLocation()">📍 Use my location</button>
+    <span id="loc-status" class="loc-status"></span>
+    {% if brand.profile == 'ortho' %}</div></details>{% endif %}
+  </div>
+
+  <div class="tabs">
+    <input type="radio" name="tab" id="tab-shop" {% if mode != 'bill' %}checked{% endif %}>
+    <input type="radio" name="tab" id="tab-bill" {% if mode == 'bill' %}checked{% endif %}>
+    <div class="seg">
+      <label for="tab-shop">{% if brand.profile == 'ortho' %}🔎 Market view{% else %}🔎 Shop a price{% endif %}</label>
+      <label for="tab-bill">{% if brand.profile == 'ortho' %}🧾 Price a code list{% else %}🧾 Analyze my bill{% endif %}</label>
+    </div>
+
+    <div class="panel" id="panel-shop">
+      <div class="shop">
+        <aside class="picker">
+          <label class="fld" for="svc-search">Add a procedure to your list</label>
+          <input type="text" id="svc-search" autocomplete="off" spellcheck="false"
+                 placeholder="{% if brand.profile == 'ortho' %}Code or name — 27447, knee replacement, ACL, spinal fusion…{% else %}Code or name — 73721, MRI, blood test…{% endif %}"
+                 oninput="onSearch()" onkeydown="onKey(event)">
+          <div id="results" class="results"></div>
+          <div id="mylist" class="mylist"></div>
+          <div id="hint" class="hint">{% if brand.profile == 'ortho' %}Type a CPT or DRG code, or a plain word like <b>knee replacement</b>, <b>rotator cuff</b>,
+            <b>spinal fusion</b>, <b>epidural</b>, <b>carpal tunnel</b>, or <b>MRI knee</b>.{% else %}Type a CPT code or a plain word like <b>MRI</b>, <b>ER</b>,
+            <b>colonoscopy</b>, or <b>blood test</b>.{% endif %}</div>
+        </aside>
+        <section class="ranges">
+          <div id="ph" class="placeholder">{% if brand.profile == 'ortho' %}
+            <div class="ph-title">Start with a common procedure</div>
+            <div class="linkgrid">{% for s in popular %}<button type="button" class="chip" onclick="add('{{ s.code }}')">{{ s.desc }}</button>{% endfor %}</div>
+            <div class="mute" style="margin-top:8px;font-size:13px">or search by name or CPT/DRG on the left.</div>
+          {% else %}← Search and add a procedure to see the fair price and every hospital's price near you.{% endif %}</div>
+          <div id="cards" aria-live="polite" aria-atomic="false"></div>
+          {% if brand.profile != 'ortho' %}{{ capture('compare', 'comparison') }}{% endif %}
+        </section>
+      </div>
+    </div>
+
+    <div class="panel" id="panel-bill">
+      <div class="card billform">
+        <form method="post" action="/analyze">
+          <input type="hidden" name="payer" id="bill-payer" value="{{ payer }}">
+          <input type="hidden" name="metro" id="bill-metro" value="{{ metro }}">
+          <input type="hidden" name="lat" id="bill-lat" value=""><input type="hidden" name="lon" id="bill-lon" value="">
+          <label class="fld" for="codes">{% if brand.profile == 'ortho' %}Paste CPT / HCPCS / DRG codes, one per line — a case, a bundle, or a contract exhibit. Amounts are optional (add a rate to see where it sits).{% else %}Paste billing codes from your itemized bill — one per line, with the
+            charged amount, and the plan-allowed amount from your EOB if you have it
+            (e.g. <code>73721 MRI $2,400 $900</code>). Include modifiers like <code>99213-25</code>.
+            <span style="color:var(--mute)">Tip: format dollar amounts with a $ or decimals so the allowed amount is read.</span>{% endif %}</label>
+          <textarea id="codes" name="codes" placeholder="73721 MRI lower extremity  $2,400  $900&#10;99213-25 office visit  $350&#10;80053 metabolic panel  $450">{% if mode == 'bill' %}{{ codes }}{% endif %}</textarea>
+          <div class="actions">
+            <input type="hidden" name="state" id="state-b" value="{{ state }}">
+            <div {% if brand.profile == 'ortho' %}hidden{% endif %}><label class="fld" for="gfe">Estimate the hospital gave you beforehand <span style="font-weight:400;color:var(--mute)">(optional)</span></label>
+                 <input type="text" id="gfe" name="gfe" size="10" value="{{ gfe }}" placeholder="$3,500" inputmode="numeric" aria-label="Good-faith estimate total in dollars, if you got one"></div>
+            <button class="btn btn-primary" type="submit">{% if brand.profile == 'ortho' %}Price these codes{% else %}Analyze my bill{% endif %}</button>
+            <input type="file" id="eobfile" accept="image/*,application/pdf" style="display:none" onchange="uploadEob()">
+            {% if brand.profile != 'ortho' %}<button class="btn btn-ghost" type="button" onclick="document.getElementById('eobfile').click()">📷 Upload bill / EOB</button>{% endif %}
+            <button class="btn btn-ghost" type="button" onclick="loadExample()">Load example</button>
+          </div>
+        </form>
+      </div>
+
+      {% if rows is not none %}
+        {% if not rows %}
+          <div class="card" style="margin-top:16px;color:var(--body)">No billing codes found in your input. Type one code per line above
+            (the grey example text is just a placeholder and isn't submitted), or use <strong>🔎 Shop a price</strong>.</div>
+        {% endif %}
+
+        {% if savings and brand.profile != 'ortho' %}
+          <div class="card savings" style="margin-top:16px">
+            <div class="sv-row">
+              <div class="sv-cell"><div class="sv-lab">You were billed</div><div class="sv-big">${{ '{:,}'.format(savings.charged) }}</div></div>
+              <div class="sv-arrow">→</div>
+              <div class="sv-cell"><div class="sv-lab">Fair target · {{ savings.n }} charge{{ 's' if savings.n != 1 }}</div><div class="sv-big">${{ '{:,}'.format(savings.target) }}</div></div>
+              {% if savings.savings > 0 %}
+                <div class="sv-cell sv-save"><div class="sv-lab">Room to negotiate</div><div class="sv-big">${{ '{:,}'.format(savings.savings) }}</div></div>
+              {% endif %}
+            </div>
+            <div class="sv-note">Estimates from Medicare + local hospital prices — a negotiation floor, not a guarantee of what you'll pay.</div>
+          </div>
+        {% endif %}
+
+        {% if issues and brand.profile != 'ortho' %}
+          <div class="card issues" style="margin-top:16px">
+            <div class="issues-h">⚑ {{ issues|length }} thing{{ 's' if issues|length != 1 }} to check on this bill</div>
+            {% for it in issues %}
+              <div class="issue {{ it.level }}"><b>{{ it.title }}</b><div>{{ it.detail }}</div></div>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% for r in rows %}
+          {% if not r.resolved %}
+            <div class="card" style="margin-top:16px"><span class="unresolved">Couldn't read a billing code from:</span>
+              <code>{{ r.input }}</code> <span style="color:var(--mute)">({{ r.note }})</span></div>
+          {% else %}
+            <div style="margin-top:16px">{{ c.card(r, loop.index0) }}</div>
+          {% endif %}
+        {% endfor %}
+
+        {% if rows and brand.profile != 'ortho' %}
+          <form class="card" method="post" action="/letter" style="margin-top:16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+            <input type="hidden" name="codes" value="{{ codes }}"><input type="hidden" name="state" value="{{ state }}"><input type="hidden" name="gfe" value="{{ gfe }}">
+            <div style="flex:1;min-width:200px"><b>Negotiation letter</b><div style="color:var(--body);font-size:14px">A ready-to-send appeal with these numbers + your rights.</div></div>
+            <button class="btn btn-primary" type="submit">⬇ Download letter</button>
+          </form>
+          {{ capture('letter', 'letter') }}
+
+          <div class="card coach" style="margin-top:16px">
+            <input type="hidden" id="ask-codes" value="{{ codes }}"><input type="hidden" id="ask-state" value="{{ state }}"><input type="hidden" id="ask-payer" value="{{ payer }}"><input type="hidden" id="ask-gfe" value="{{ gfe }}"><input type="hidden" id="ask-metro" value="{{ metro }}">
+            <b>💬 Ask about this bill</b>
+            <div style="color:var(--body);font-size:14px;margin:4px 0 10px">An AI coach answers using the numbers above — the specifics of <em>your</em> bill, not generic advice.</div>
+            <div class="actions" style="margin-top:0">
+              <input type="text" id="askq" placeholder="e.g. What should my opening offer be?" maxlength="1000" style="flex:1;min-width:220px"
+                     onkeydown="if(event.key==='Enter'){event.preventDefault();askCoach()}">
+              <button class="btn btn-primary" type="button" onclick="askCoach()">Ask</button>
+            </div>
+            <div class="ask-chips">
+              <button type="button" class="chip" onclick="askCoach('What should my opening offer be, and exactly what do I say on the phone?')">Opening-offer script</button>
+              <button type="button" class="chip" onclick="askCoach('What do I say if they refuse to lower the bill?')">If they refuse</button>
+              <button type="button" class="chip" onclick="askCoach('Which of these charges look the most overpriced, and why?')">Most overpriced?</button>
+            </div>
+            <div id="ask-out"></div>
+          </div>
+
+          {# Charity care surfaced as a recommended NEXT STEP after analysis — often a bigger
+             lever than negotiating (can zero out the bill). Client-side FPL estimate. #}
+          <div class="card next-step" style="margin-top:16px">
+            <div class="ns-tag">Recommended next step</div>
+            <b>See if this bill can be reduced or waived</b>
+            <div style="color:var(--body);font-size:14px;margin:4px 0 10px">Nonprofit hospitals must offer
+              financial assistance — often called <em>charity care</em> — under IRS rule 501(r). It can cut or even
+              <b>zero out</b> your bill, and usually beats negotiating. Quick check by household size and income:</div>
+            <div class="actions" style="margin-top:0">
+              <div><label class="fld" for="hh">Household size</label>
+                <input type="text" id="hh" inputmode="numeric" size="4" value="1" aria-label="Household size"></div>
+              <div><label class="fld" for="inc">Annual household income ($)</label>
+                <input type="text" id="inc" inputmode="numeric" size="10" placeholder="45,000" aria-label="Annual household income in dollars"></div>
+              <button class="btn btn-ghost" type="button" onclick="charity()">Check eligibility</button>
+            </div>
+            <div id="charity-out" style="margin-top:12px"></div>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+
+  {% if brand.profile == 'ortho' %}{{ how_ortho }}
+  {{ capture('compare', 'comparison') }}{% endif %}
+
+  <footer class="seo-footer">
+    <div class="sf-intro">
+      {% if brand.profile == 'ortho' %}
+      <h2>{{ state_name }} orthopedic and spine prices, facility by facility</h2>
+      <p>Hospitals publish their prices under the federal Hospital Price Transparency rule. This site turns those
+        machine-readable files into a market view of {{ n_hosp }} {{ state_name }} facilities —
+        {{ metro_list|map(attribute='label')|join(', ') }} — for the procedures that drive MSK spend, refreshed weekly.</p>
+      {% else %}
+      <h2>Compare {{ state_name }} hospital prices for common procedures</h2>
+      <p>Hospitals publish their prices under the federal Hospital Price Transparency rule.
+        We turn those machine-readable files into a plain price comparison across {{ n_hosp }}
+        {{ state_name }} hospitals — {{ metro_list|map(attribute='label')|join(', ') }} — so you can see the
+        fair cash price, compare facilities, and negotiate your bill down. Free, no signup.</p>
+      {% endif %}
+    </div>
+    <div class="sf-cols">
+      <div class="sf-col">
+        <h3>Popular prices statewide</h3>
+        {% for s in popular %}<a href="{{ state_path }}/procedure/{{ s.code }}">{{ s.desc }} cost in {{ state_name }}</a>{% endfor %}
+      </div>
+      {% for m in promoted %}
+      <div class="sf-col">
+        <h3>{{ m.label }} prices</h3>
+        {% for s in popular[:8] %}<a href="/{{ m.key }}/procedure/{{ s.code }}">{{ s.desc }} in {{ m.city.split(',')[0] }}</a>{% endfor %}
+      </div>
+      {% endfor %}
+      {% if state_list|length > 1 %}<div class="sf-col">
+        <h3>Other states</h3>
+        {% for st in state_list if st.code != state %}<a href="/?state={{ st.code }}">{{ st.name }} hospital prices</a>{% endfor %}
+      </div>{% endif %}
+    </div>
+    <p class="refreshed">Hospital prices last refreshed {{ data_refreshed }} from official CMS machine-readable files. Medicare rates: CY2025 OPPS/PFS/CLFS. <a href="/methodology">How these numbers are built →</a></p>
+  </footer>
+</main>
+<script type="application/json" id="svc-data">{{ services|tojson }}</script>
+<script>
+  const SERVICES = JSON.parse(document.getElementById('svc-data').textContent);
+  // natural-language aliases so plain words find the right CPT code
+  const SYN = {
+    // ortho / MSK plain-language aliases (codes absent from a profile simply never match)
+    "27130":"hip replacement total hip arthroplasty tha joint surgery",
+    "27446":"partial knee replacement unicompartmental uni knee",
+    "23472":"shoulder replacement total shoulder arthroplasty tsa reverse",
+    "27487":"revision knee replacement redo knee",
+    "27134":"revision hip replacement redo hip",
+    "470":"drg joint replacement inpatient hip knee",
+    "469":"drg joint replacement inpatient hip knee complications mcc",
+    "468":"drg revision hip knee inpatient",
+    "29881":"knee scope arthroscopy meniscus meniscectomy torn cartilage",
+    "29880":"knee scope arthroscopy meniscus both medial lateral",
+    "29888":"acl reconstruction anterior cruciate ligament knee scope",
+    "29827":"rotator cuff repair shoulder scope arthroscopy",
+    "29826":"shoulder scope subacromial decompression impingement",
+    "29824":"shoulder scope distal clavicle excision ac joint",
+    "29823":"shoulder scope debridement",
+    "29806":"shoulder scope labrum labral repair instability bankart",
+    "29914":"hip scope arthroscopy femoroplasty fai impingement",
+    "29891":"ankle scope arthroscopy osteochondral",
+    "22551":"acdf neck fusion cervical fusion discectomy anterior",
+    "22612":"lumbar fusion back fusion spinal fusion posterior",
+    "22633":"tlif plif lumbar interbody fusion spinal fusion",
+    "63030":"discectomy microdiscectomy herniated disc laminotomy back surgery",
+    "63047":"laminectomy decompression stenosis back surgery",
+    "62323":"epidural steroid injection esi back shot spine injection",
+    "64483":"transforaminal epidural injection nerve block",
+    "64493":"facet injection facet block",
+    "64635":"radiofrequency ablation rfa rhizotomy facet",
+    "22514":"kyphoplasty vertebroplasty compression fracture",
+    "451":"drg spinal fusion inpatient single level",
+    "448":"drg spinal fusion inpatient multi level",
+    "473":"drg cervical fusion inpatient neck",
+    "27236":"hip fracture femoral neck hemiarthroplasty broken hip",
+    "27245":"hip fracture intertrochanteric nail rod broken hip",
+    "25608":"wrist fracture distal radius orif broken wrist plate",
+    "27792":"ankle fracture orif broken ankle fibula",
+    "23615":"shoulder fracture proximal humerus orif broken arm",
+    "27814":"bimalleolar ankle fracture orif",
+    "481":"drg hip fracture femur inpatient",
+    "64721":"carpal tunnel release wrist surgery",
+    "26055":"trigger finger release",
+    "25000":"de quervain release wrist tendon",
+    "24359":"tennis elbow lateral epicondylitis release",
+    "64718":"cubital tunnel ulnar nerve transposition elbow",
+    "28296":"bunion bunionectomy hallux valgus foot surgery",
+    "27650":"achilles tendon repair rupture",
+    "28285":"hammertoe correction toe surgery",
+    "28060":"plantar fascia release heel pain fasciotomy",
+    "27870":"ankle fusion arthrodesis",
+    "73221":"mri shoulder upper extremity joint scan",
+    "72148":"mri lumbar spine low back scan",
+    "72141":"mri cervical spine neck scan",
+    "73718":"mri leg lower extremity non joint scan",
+    "73700":"ct leg lower extremity",
+    "72131":"ct lumbar spine back",
+    "73560":"knee x-ray xray radiograph",
+    "73030":"shoulder x-ray xray radiograph",
+    "72110":"lumbar spine x-ray xray back radiograph",
+    "73502":"hip x-ray xray radiograph",
+    "77080":"dexa bone density scan osteoporosis",
+    "20610":"joint injection cortisone shot steroid injection knee hip shoulder aspiration",
+    "20611":"joint injection ultrasound guided cortisone shot",
+    "20605":"joint injection wrist elbow ankle cortisone",
+    "20550":"tendon injection trigger point cortisone",
+    "J7325":"synvisc gel shot hyaluronic acid viscosupplementation knee",
+    "J7321":"hyalgan supartz gel shot hyaluronic acid knee",
+    "99203":"new patient office visit consult low",
+    "99204":"new patient office visit consult moderate",
+    "99214":"office visit follow up established moderate",
+    "97110":"physical therapy pt therapeutic exercise",
+    "97140":"physical therapy pt manual therapy",
+    "97161":"physical therapy evaluation pt eval",
+    "97162":"physical therapy evaluation pt eval moderate",
+    "29125":"splint arm wrist",
+    "29405":"cast leg walking cast",
+    "L1832":"knee brace orthosis",
+    "L1833":"knee brace hinged custom fit",
+    "L0650":"back brace lumbar orthosis lso",
+    "L3908":"wrist brace splint orthosis",
+    "E0143":"walker wheeled",
+    "73721":"mri knee leg lower extremity joint scan",
+    "74178":"ct cat scan abdomen stomach belly pelvis",
+    "70450":"ct cat scan head brain",
+    "77067":"mammogram mammography breast screening",
+    "45378":"colonoscopy colon scope bowel",
+    "44970":"appendectomy appendix appendicitis surgery laparoscopic",
+    "27447":"knee replacement arthroplasty joint surgery",
+    "59510":"c-section cesarean delivery birth baby",
+    "59400":"vaginal delivery birth baby labor",
+    "80053":"cmp comprehensive metabolic panel blood test bloodwork labs",
+    "85027":"cbc complete blood count blood test bloodwork labs",
+    "99285":"er emergency room visit level 5 severe",
+    "99284":"er emergency room visit level 4",
+    "99381":"preventive wellness checkup physical annual new patient",
+    "99213":"office visit checkup established follow up",
+    "99203":"office visit checkup new patient",
+  };
+  const added = new Set();
+  let SHOP_STATE = "{{ state }}", N_HOSP = {{ n_hosp }};
+  const ORTHO = {{ 'true' if brand.profile == 'ortho' else 'false' }}, DEFAULT_CODE = "27447";
+  const METROS = {{ all_metros|tojson }}, MARKET_N = {{ market_n|tojson }}, MARKET_NAME = {{ market_names|tojson }};
+  let SHOP_METRO = "{{ metro }}";
+  let SHOP_LAT = "", SHOP_LON = "";
+  const $ = id => document.getElementById(id);
+  function cardURL(code){
+    return '/card?code=' + encodeURIComponent(code)
+         + '&state=' + encodeURIComponent(SHOP_STATE)
+         + '&payer=' + encodeURIComponent($('payer').value)
+         + '&metro=' + encodeURIComponent(SHOP_METRO)
+         + '&lat=' + encodeURIComponent(SHOP_LAT) + '&lon=' + encodeURIComponent(SHOP_LON);
+  }
+  function setLoc(lat, lon, label){
+    SHOP_LAT = lat; SHOP_LON = lon;
+    $('loc-status').textContent = label;
+    ['bill-lat','bill-lon'].forEach((id,i)=>{ const e=$(id); if(e) e.value = i? lon : lat; });
+    refetchShop().then(()=>{ if(window.__facSort) sortFac(window.__facSort); applyDeductible(); });
+  }
+  async function setZip(){
+    const z = ($('zip').value||'').replace(/\D/g,'').slice(0,5);
+    if (z.length !== 5){ $('loc-status').textContent = 'Enter a 5-digit ZIP'; return; }
+    $('loc-status').textContent = 'Locating…';
+    try { const r = await fetch('/geo?zip='+z); const d = await r.json();
+      if (d.lat){ setLoc(d.lat, d.lon, '📍 near ' + z); } else { $('loc-status').textContent = 'ZIP not found'; }
+    } catch(e){ $('loc-status').textContent = 'Could not look up that ZIP'; }
+  }
+  function useMyLocation(){
+    if (!navigator.geolocation){ $('loc-status').textContent = 'Location not supported'; return; }
+    $('loc-status').textContent = 'Locating…';
+    navigator.geolocation.getCurrentPosition(
+      p => setLoc(p.coords.latitude.toFixed(4), p.coords.longitude.toFixed(4), '📍 using your location'),
+      () => $('loc-status').textContent = 'Location permission denied — enter a ZIP');
+  }
+  function applyCap(fac){
+    const expanded = fac.classList.contains('expanded');
+    [...fac.querySelectorAll('tbody tr')].forEach((r,i)=>{ const extra=i>=12; r.classList.toggle('fac-extra',extra); r.hidden = extra && !expanded; });
+    const btn = fac.querySelector('.more-btn'); if (btn) btn.textContent = expanded ? btn.dataset.less : btn.dataset.more;
+  }
+  function sortFac(key, btn){
+    document.querySelectorAll('.facilities').forEach(fac=>{
+      const tb = fac.querySelector('tbody'); if (!tb) return;
+      [...tb.children].sort((a,b)=>{
+        const av=parseFloat(a.dataset[key]), bv=parseFloat(b.dataset[key]);
+        const an=isNaN(av), bn=isNaN(bv);
+        return an&&bn ? 0 : an ? 1 : bn ? -1 : av-bv;
+      }).forEach(r=>tb.appendChild(r));
+      applyCap(fac);
+      fac.querySelectorAll('.sortbtn').forEach(b=>b.classList.toggle('on', b.textContent.toLowerCase().startsWith(key==='dist'?'closest':'cheapest')));
+    });
+    window.__facSort = key;
+  }
+
+  function onSearch(){
+    const q = $('svc-search').value.trim().toLowerCase();
+    const box = $('results');
+    if (!q){ box.innerHTML=''; return; }
+    const m = SERVICES.filter(s =>
+      (s.code + ' ' + s.desc + ' ' + (SYN[s.code]||'')).toLowerCase().includes(q) && !added.has(s.code));
+    box.innerHTML = m.length
+      ? m.map(s => `<button type="button" class="res" onclick="add('${s.code}')">`
+          + `<span>${s.desc}</span><span class="cd">${s.code}</span></button>`).join('')
+      : `<div class="nores">No shoppable match for “${q}”. Try a CPT code or a word like “MRI”, “ER”, “blood test”.</div>`;
+  }
+  function onKey(e){
+    if (e.key === 'Enter'){
+      e.preventDefault();
+      const first = $('results').querySelector('.res');
+      if (first) first.click();
+    }
+  }
+  function add(code){
+    if (added.has(code)) return;
+    added.add(code);
+    $('svc-search').value=''; $('results').innerHTML=''; $('svc-search').focus();
+    renderList(); updatePlaceholder();
+    const el = document.createElement('div'); el.className='rc'; el.dataset.code=code;
+    el.innerHTML='<div class="card" style="color:var(--mute)">Loading…</div>';
+    $('cards').appendChild(el);
+    fetch(cardURL(code))
+      .then(r => r.text()).then(html => { el.innerHTML = html; if(window.__facSort) sortFac(window.__facSort); applyDeductible(); })
+      .catch(() => { el.innerHTML = '<div class="card">Couldn’t load this price.</div>'; });
+  }
+  function remove(code){
+    added.delete(code);
+    const el = $('cards').querySelector('.rc[data-code="'+code+'"]'); if (el) el.remove();
+    renderList(); updatePlaceholder();
+  }
+  function renderList(){
+    $('mylist').innerHTML = [...added].map(code => {
+      const s = SERVICES.find(x => x.code === code);
+      return `<span class="mlchip">${s ? s.desc : code}`
+        + `<button type="button" aria-label="Remove" onclick="remove('${code}')">×</button></span>`;
+    }).join('');
+  }
+  // Ortho: a first visit shows a real price without scrolling — auto-load the marquee procedure.
+  window.addEventListener('DOMContentLoaded', () => {
+    if (ORTHO && added.size === 0 && SERVICES.some(s => s.code === DEFAULT_CODE)) add(DEFAULT_CODE);
+  });
+  function updatePlaceholder(){
+    $('ph').style.display = added.size ? 'none' : '';
+    const cap = document.querySelector('.capture[data-kind="compare"]');
+    if (cap && !localStorage.getItem('capture-dismissed')) cap.hidden = !added.size;   // offer only once there's a compare
+  }
+  // Soft capture: optional "email me this" — never gates anything on the page.
+  function dismissCapture(){ try { localStorage.setItem('capture-dismissed', '1'); } catch(e){} document.querySelectorAll('.capture').forEach(c => c.hidden = true); }
+  try { if (localStorage.getItem('capture-dismissed')) document.querySelectorAll('.capture').forEach(c => c.hidden = true); } catch(e){}
+  async function sendCapture(ev, kind){
+    ev.preventDefault();
+    const box = ev.target.closest('.capture'), out = box.querySelector('.cap-out'), btn = box.querySelector('button[type=submit]');
+    const fd = new FormData();
+    fd.append('email', box.querySelector('input[name=email]').value);
+    fd.append('kind', kind);
+    fd.append('optin', box.querySelector('input[name=optin]').checked ? 'on' : '');
+    fd.append('codes', kind === 'compare' ? [...added].join('\n') : ($('ask-codes') ? $('ask-codes').value : $('codes').value));
+    fd.append('state', SHOP_STATE); fd.append('metro', SHOP_METRO); fd.append('payer', $('payer').value);
+    fd.append('gfe', $('ask-gfe') ? $('ask-gfe').value : '');
+    btn.disabled = true; out.textContent = 'Sending…';
+    try {
+      const r = await fetch('/email', { method: 'POST', body: fd });
+      out.textContent = await r.text();
+      if (r.ok) { box.querySelector('form').hidden = true; }
+    } catch(e) { out.textContent = 'Could not send — use the download button instead.'; }
+    btn.disabled = false;
+    return false;
+  }
+
+  function togglePts(id, btn){
+    const ul = document.getElementById(id), cp = document.getElementById('cp-'+id);
+    const show = ul.hidden; ul.hidden = !show; if (cp) cp.hidden = !show;
+    btn.textContent = (show ? '💬 Hide negotiation scripts' : '💬 Show negotiation scripts (' + ul.children.length + ')');
+  }
+  function flash(btn, msg){ if(!btn) return; const t=btn.textContent; btn.textContent=msg; setTimeout(()=>btn.textContent=t, 1400); }
+  function copyText(text, btn){ navigator.clipboard.writeText('$'+Number(text).toLocaleString()); flash(btn, 'Copied ✓'); }
+  function copyPts(id, btn){
+    const items=[...document.querySelectorAll('#'+id+' li')].map(li=>'• '+li.textContent.trim());
+    navigator.clipboard.writeText(items.join('\n')); flash(btn, 'Copied ✓');
+  }
+  function toggleMore(btn){ const fac = btn.closest('.facilities'); fac.classList.toggle('expanded'); applyCap(fac); }
+  function pfmt(n){ return '$' + Math.round(n).toLocaleString(); }
+
+  // Payer selection RE-FETCHES cards so the prices themselves reflect the insurer
+  // (server-side, via payer_rates). The deductible/coinsurance is a client-side
+  // adjustment on top of the now-payer-specific median.
+  async function refetchShop(){
+    await Promise.all([...added].map(async code => {
+      const el = document.querySelector('#cards .rc[data-code="' + code + '"]'); if (!el) return;
+      try { el.innerHTML = await (await fetch(cardURL(code))).text(); } catch(e){}
+    }));
+  }
+  function onPayerChange(){
+    const bp = $('bill-payer'); if (bp) bp.value = $('payer').value;   // keep bill form in sync
+    refetchShop().then(applyDeductible);
+  }
+  function onStateChange(){
+    // Switch markets in place: rebuild the Area list for this state, reset the metro, sync every
+    // hidden field + label, refetch the cards. No reload, so the two selects can never disagree.
+    SHOP_STATE = $('state').value; SHOP_METRO = ''; N_HOSP = MARKET_N[SHOP_STATE] || 0;
+    const name = MARKET_NAME[SHOP_STATE] || SHOP_STATE, sel = $('metro');
+    sel.innerHTML = '<option value="">All ' + name + '</option>'
+      + METROS.filter(m => m.state === SHOP_STATE).map(m => `<option value="${m.key}">${m.label}</option>`).join('');
+    sel.setAttribute('aria-label', 'Choose your area of ' + name);
+    ['state-b', 'ask-state'].forEach(id => { const e = $(id); if (e) e.value = SHOP_STATE; });
+    ['bill-metro', 'ask-metro'].forEach(id => { const e = $(id); if (e) e.value = ''; });
+    const h1 = document.querySelector('.hero h1'); if (h1) h1.textContent = 'What should your care cost in ' + name + '?';
+    const mk = $('market'); if (mk) mk.textContent = '📍 All ' + name + ' — ' + N_HOSP + ' hospitals statewide';
+    try { history.replaceState(null, '', '/?state=' + encodeURIComponent(SHOP_STATE)); } catch(e){}
+    refetchShop().then(applyDeductible);
+  }
+  function onMetroChange(){
+    SHOP_METRO = $('metro').value;
+    const sel = $('metro'), label = sel.options[sel.selectedIndex].text;
+    const mk = $('market'); if (mk) mk.textContent = '📍 ' + label + (SHOP_METRO ? ' — comparing local hospitals' : ' — ' + N_HOSP + ' hospitals statewide');
+    ['bill-metro', 'ask-metro'].forEach(id => { const e = $(id); if (e) e.value = SHOP_METRO; });
+    refetchShop().then(applyDeductible);
+  }
+  function applyDeductible(){
+    const met = $('metded').checked;
+    const coins = Math.max(0, Math.min(100, parseFloat($('coins').value) || 20));
+    document.querySelectorAll('.card[data-payer]').forEach(card => {
+      const line = card.querySelector('.payer-line'); if (!line) return;
+      const payer = card.dataset.payer;
+      if (!payer){ line.innerHTML = ''; return; }
+      const R = card.dataset.payerRate ? parseFloat(card.dataset.payerRate) : null;
+      const cash = card.dataset.cash ? parseFloat(card.dataset.cash) : null;
+      if (R == null){ line.innerHTML = `<div class="payer-out none">No ${payer} rate on file — see the prices below.</div>`; return; }
+      let pay, cls, note;
+      if (!met){
+        const cheaper = (cash != null && cash < R);
+        pay = (cash != null) ? Math.min(R, cash) : R;
+        cls = cheaper ? 'good' : 'mid';
+        note = (cheaper ? `cash beats your plan (${payer} median ${pfmt(R)})`
+                        : `${payer} median${cash != null ? `, vs cash ${pfmt(cash)}` : ''}`);
+        note = `Under your deductible — ${note}.`;
+      } else {
+        pay = R * coins / 100; cls = 'good';
+        note = `After your deductible — ~${coins}% of the ${pfmt(R)} ${payer} median${cash != null ? `, vs cash ${pfmt(cash)}` : ''}.`;
+      }
+      line.innerHTML = `<div class="payer-out ${cls}"><span class="po-amt">${pfmt(pay)}</span>`
+                     + `<span class="po-lbl">est. with ${payer}</span><div class="po-note">${note}</div></div>`;
+    });
+  }
+  window.addEventListener('DOMContentLoaded', applyDeductible);
+  function charity(){
+    const hh = Math.max(1, parseInt($('hh').value) || 1);
+    const inc = parseFloat(($('inc').value || '').replace(/[^0-9.]/g, ''));
+    const out = $('charity-out');
+    if (!(inc >= 0)){ out.innerHTML = '<div class="charity-tier none">Enter your annual household income.</div>'; return; }
+    const fpl = 15650 + (hh - 1) * 5500;            // 2025 HHS poverty guideline (48 states)
+    const pct = Math.round(inc / fpl * 100);
+    let cls, msg;
+    if (pct <= 200){ cls='good'; msg=`At ~${pct}% of the federal poverty level, you very likely qualify for FREE or near-free care at most nonprofit hospitals. Ask for the charity care / financial assistance application.`; }
+    else if (pct <= 400){ cls='mid'; msg=`At ~${pct}% of the federal poverty level, you likely qualify for a SLIDING-SCALE discount. Request the financial assistance application and the discount tiers.`; }
+    else { cls='none'; msg=`At ~${pct}% of the federal poverty level, you may be above many hospitals' thresholds — but limits vary and some go higher. Always ask, and you can still negotiate the cash price.`; }
+    out.innerHTML = `<div class="charity-tier ${cls}">${msg}</div>`;
+  }
+  async function uploadEob(){
+    const inp = document.getElementById('eobfile'), f = inp.files[0]; if (!f) return;
+    const ta = document.getElementById('codes'), prev = ta.value;
+    ta.value = 'Reading your bill…';
+    const fd = new FormData(); fd.append('file', f);
+    try {
+      const r = await fetch('/eob', {method:'POST', body: fd});
+      const t = (await r.text()).trim();
+      ta.value = t || prev;
+    } catch (e) { ta.value = prev; alert('Could not read that file.'); }
+    inp.value = '';
+  }
+  function loadExample(){
+    document.getElementById('codes').value="73721 MRI lower extremity 2,400.00\n99284 ER visit 1,800\n80053 metabolic panel 450";
+  }
+  async function askCoach(preset){
+    const box = document.getElementById('askq');
+    const q = (preset || box.value).trim(); if (!q) return;
+    if (preset) box.value = q;
+    const out = document.getElementById('ask-out');
+    out.className = 'thinking'; out.textContent = 'Thinking…';
+    const fd = new FormData();
+    fd.append('question', q);
+    ['codes','state','payer','gfe','metro'].forEach(k => fd.append(k, document.getElementById('ask-'+k).value));
+    try {
+      const r = await fetch('/ask', {method:'POST', body: fd});
+      out.className = 'answer'; out.textContent = (await r.text()).trim();
+    } catch (e) { out.className = 'answer'; out.textContent = 'Something went wrong — try again.'; }
+  }
+</script>
+</body>
+</html>

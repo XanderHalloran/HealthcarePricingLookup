@@ -1,0 +1,8 @@
+hospital_name,last_updated_on,version,hospital_location,hospital_address,license_number|MA
+General Hospital,2024-01-01,3.0.0,Boston Main Campus,"123 Main St, Boston, MA 02118",LIC-001
+description,code|1,code|1|type,setting,standard_charge|gross,standard_charge|discounted_cash,payer_name,plan_name,standard_charge|negotiated_dollar,standard_charge|min,standard_charge|max
+MRI lower extremity joint w/o contrast,73721,CPT,outpatient,2000,1000,Aetna,PPO,900,900,1300
+MRI lower extremity joint w/o contrast,73721,CPT,outpatient,2000,1000,BCBS,HMO,1100,900,1300
+MRI lower extremity joint w/o contrast,73721,CPT,outpatient,2000,1000,Cigna,PPO,1300,900,1300
+Complete blood count with differential,85025,CPT,outpatient,50,20,Aetna,PPO,18,15,25
+Some unlisted boutique service,12345,CPT,outpatient,500,200,Aetna,PPO,150,100,300

@@ -1,0 +1,16 @@
+# Medicare benchmark parameters. Update yearly/quarterly from CMS.
+# (ponytail: national, GPCI=1.0 simplification — see medicare.py for the upgrade
+#  path to locality-adjusted PFS rates. Phoenix = AZ PFS locality if refined.)
+year: 2025
+pfs_conversion_factor: 32.3465      # CY2025 PFS conversion factor, $/RVU
+
+# Reference files (relative to repo root), baked into the image. Real CMS data:
+#   opps = CY2025 Oct Addendum B (national outpatient payment rate) — primary anchor
+#   pfs  = CY2025 PPRRVU (non-facility total RVU * CF) — fills office/mammo/delivery
+#   clfs = CY2025 Clinical Lab Fee Schedule — lab benchmarks
+# DRGs currently have no Medicare benchmark (IPPS not wired); they still show
+# hospital prices.
+sources:
+  opps: reference/opps_addendum_b.csv
+  pfs: reference/pprvu_2025.csv
+  clfs: reference/clfs_2025.csv     # Clinical Lab Fee Schedule — benchmark for lab tests

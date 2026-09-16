@@ -1,0 +1,139 @@
+# Filter-before-store allowlist — the CORE of what is retained at ingest.
+# Only codes here are kept; everything else is dropped at parse time and logged.
+# Curated to the most common SHOPPABLE services a consumer price-compares
+# (imaging, labs, E&M/ER, common procedures, women's health, cardiac, therapy)
+# plus a focused set of high-volume inpatient DRGs. Expand from reports/ as needed.
+
+codes:
+  # ===== Preventive / screening =====
+  - { code: "77067", type: CPT, desc: "Screening mammogram, bilateral",            category: preventive, slug: mammogram }
+  - { code: "77065", type: CPT, desc: "Diagnostic mammogram, unilateral",          category: preventive }
+  - { code: "77066", type: CPT, desc: "Diagnostic mammogram, bilateral",           category: preventive }
+  - { code: "77080", type: CPT, desc: "DEXA bone density scan",                    category: preventive }
+  - { code: "45378", type: CPT, desc: "Colonoscopy, diagnostic",                   category: preventive, slug: colonoscopy }
+  - { code: "G0121", type: HCPCS, desc: "Screening colonoscopy (average risk)",    category: preventive }
+
+  # ===== Imaging — X-ray =====
+  - { code: "71046", type: CPT, desc: "Chest X-ray, 2 views",                      category: imaging }
+  - { code: "71045", type: CPT, desc: "Chest X-ray, 1 view",                       category: imaging }
+  - { code: "72110", type: CPT, desc: "Lumbar spine X-ray, 3+ views",              category: imaging }
+  - { code: "73130", type: CPT, desc: "Hand X-ray, 3+ views",                      category: imaging }
+  - { code: "73610", type: CPT, desc: "Ankle X-ray, 3+ views",                     category: imaging }
+  - { code: "73562", type: CPT, desc: "Knee X-ray, 3 views",                       category: imaging }
+
+  # ===== Imaging — CT =====
+  - { code: "70450", type: CPT, desc: "CT head/brain, without contrast",           category: imaging }
+  - { code: "70486", type: CPT, desc: "CT maxillofacial / sinus, without contrast", category: imaging }
+  - { code: "71250", type: CPT, desc: "CT chest, without contrast",                category: imaging }
+  - { code: "71260", type: CPT, desc: "CT chest, with contrast",                   category: imaging }
+  - { code: "72125", type: CPT, desc: "CT cervical spine, without contrast",       category: imaging }
+  - { code: "72131", type: CPT, desc: "CT lumbar spine, without contrast",         category: imaging }
+  - { code: "74176", type: CPT, desc: "CT abdomen & pelvis, without contrast",     category: imaging }
+  - { code: "74177", type: CPT, desc: "CT abdomen & pelvis, with contrast",        category: imaging, slug: ct-abdomen-pelvis }
+  - { code: "74178", type: CPT, desc: "CT abdomen & pelvis, with & without contrast", category: imaging }
+
+  # ===== Imaging — MRI =====
+  - { code: "70551", type: CPT, desc: "MRI brain, without contrast",               category: imaging, slug: mri-brain }
+  - { code: "70553", type: CPT, desc: "MRI brain, with & without contrast",        category: imaging }
+  - { code: "72141", type: CPT, desc: "MRI cervical spine, without contrast",      category: imaging }
+  - { code: "72148", type: CPT, desc: "MRI lumbar spine, without contrast",        category: imaging, slug: mri-lumbar-spine }
+  - { code: "73221", type: CPT, desc: "MRI upper extremity joint, without contrast", category: imaging }
+  - { code: "73721", type: CPT, desc: "MRI lower extremity joint, without contrast", category: imaging }
+
+  # ===== Imaging — Ultrasound =====
+  - { code: "76700", type: CPT, desc: "Ultrasound abdomen, complete",              category: imaging, slug: ultrasound-abdomen }
+  - { code: "76705", type: CPT, desc: "Ultrasound abdomen, limited",               category: imaging }
+  - { code: "76856", type: CPT, desc: "Ultrasound pelvic (non-OB), complete",      category: imaging }
+  - { code: "76830", type: CPT, desc: "Ultrasound transvaginal",                   category: imaging }
+  - { code: "76805", type: CPT, desc: "OB ultrasound, ≥14 weeks",                  category: imaging }
+  - { code: "93880", type: CPT, desc: "Carotid duplex ultrasound",                 category: imaging }
+
+  # ===== Labs =====
+  - { code: "80053", type: CPT, desc: "Comprehensive metabolic panel (CMP)",       category: lab }
+  - { code: "80048", type: CPT, desc: "Basic metabolic panel (BMP)",               category: lab }
+  - { code: "80061", type: CPT, desc: "Lipid panel",                               category: lab }
+  - { code: "85025", type: CPT, desc: "Complete blood count (CBC) with differential", category: lab }
+  - { code: "85027", type: CPT, desc: "Complete blood count (CBC), automated",     category: lab }
+  - { code: "84443", type: CPT, desc: "TSH (thyroid)",                             category: lab }
+  - { code: "83036", type: CPT, desc: "Hemoglobin A1c",                            category: lab }
+  - { code: "81001", type: CPT, desc: "Urinalysis, automated with microscopy",     category: lab }
+  - { code: "87635", type: CPT, desc: "SARS-CoV-2 (COVID) PCR",                    category: lab }
+  - { code: "80050", type: CPT, desc: "General health panel",                      category: lab }
+  - { code: "84153", type: CPT, desc: "PSA (prostate), total",                     category: lab }
+  - { code: "80076", type: CPT, desc: "Hepatic function panel",                    category: lab }
+  - { code: "85610", type: CPT, desc: "Prothrombin time (PT/INR)",                 category: lab }
+  - { code: "86140", type: CPT, desc: "C-reactive protein (CRP)",                  category: lab }
+  - { code: "82306", type: CPT, desc: "Vitamin D, 25-hydroxy",                     category: lab }
+  - { code: "88305", type: CPT, desc: "Tissue pathology exam (biopsy), level IV",  category: lab }
+
+  # ===== Office visits & ER (E&M) =====
+  - { code: "99203", type: CPT, desc: "Office visit, new patient, level 3",        category: office }
+  - { code: "99204", type: CPT, desc: "Office visit, new patient, level 4",        category: office }
+  - { code: "99205", type: CPT, desc: "Office visit, new patient, level 5",        category: office }
+  - { code: "99213", type: CPT, desc: "Office visit, established, level 3",         category: office }
+  - { code: "99214", type: CPT, desc: "Office visit, established, level 4",         category: office }
+  - { code: "99215", type: CPT, desc: "Office visit, established, level 5",         category: office }
+  - { code: "99385", type: CPT, desc: "Preventive visit, new patient, 18-39",      category: office }
+  - { code: "99386", type: CPT, desc: "Preventive visit, new patient, 40-64",      category: office }
+  - { code: "99395", type: CPT, desc: "Preventive visit, established, 18-39",       category: office }
+  - { code: "99396", type: CPT, desc: "Preventive visit, established, 40-64",       category: office }
+  - { code: "G0463", type: HCPCS, desc: "Hospital outpatient clinic visit",        category: office }
+  - { code: "99282", type: CPT, desc: "ER visit, level 2",                         category: er_em }
+  - { code: "99283", type: CPT, desc: "ER visit, level 3",                         category: er_em }
+  - { code: "99284", type: CPT, desc: "ER visit, level 4",                         category: er_em, slug: er-visit }
+  - { code: "99285", type: CPT, desc: "ER visit, level 5",                         category: er_em }
+
+  # ===== Procedures — GI endoscopy =====
+  - { code: "45380", type: CPT, desc: "Colonoscopy with biopsy",                   category: procedure }
+  - { code: "45385", type: CPT, desc: "Colonoscopy with polyp removal (snare)",    category: procedure }
+  - { code: "43235", type: CPT, desc: "Upper GI endoscopy (EGD), diagnostic",      category: procedure }
+  - { code: "43239", type: CPT, desc: "Upper GI endoscopy (EGD) with biopsy",      category: procedure }
+
+  # ===== Procedures — surgical =====
+  - { code: "44970", type: CPT, desc: "Laparoscopic appendectomy",                 category: procedure }
+  - { code: "47562", type: CPT, desc: "Laparoscopic cholecystectomy (gallbladder)", category: procedure }
+  - { code: "49505", type: CPT, desc: "Inguinal hernia repair (open)",             category: procedure }
+  - { code: "49650", type: CPT, desc: "Laparoscopic inguinal hernia repair",       category: procedure }
+  - { code: "66984", type: CPT, desc: "Cataract surgery with lens implant",        category: procedure, slug: cataract-surgery }
+  - { code: "27447", type: CPT, desc: "Total knee replacement (arthroplasty)",     category: procedure }
+  - { code: "27130", type: CPT, desc: "Total hip replacement (arthroplasty)",      category: procedure }
+  - { code: "29881", type: CPT, desc: "Knee arthroscopy with meniscectomy",        category: procedure, slug: knee-arthroscopy }
+  - { code: "29827", type: CPT, desc: "Shoulder arthroscopy, rotator cuff repair", category: procedure }
+  - { code: "64721", type: CPT, desc: "Carpal tunnel release",                     category: procedure }
+  - { code: "42820", type: CPT, desc: "Tonsillectomy & adenoidectomy, under 12",   category: procedure }
+  - { code: "52000", type: CPT, desc: "Cystoscopy",                                category: procedure }
+  - { code: "55250", type: CPT, desc: "Vasectomy",                                 category: procedure }
+  - { code: "10060", type: CPT, desc: "Incision & drainage of abscess",            category: procedure }
+
+  # ===== Women's health =====
+  - { code: "59400", type: CPT, desc: "Vaginal delivery (global care)",            category: womens_health, slug: vaginal-delivery }
+  - { code: "59510", type: CPT, desc: "Cesarean delivery (global care)",           category: womens_health }
+  - { code: "58571", type: CPT, desc: "Laparoscopic total hysterectomy (≤250g)",   category: womens_health }
+  - { code: "58120", type: CPT, desc: "Dilation & curettage (D&C)",                category: womens_health }
+  - { code: "57454", type: CPT, desc: "Colposcopy with biopsy",                    category: womens_health }
+  - { code: "76801", type: CPT, desc: "OB ultrasound, first trimester",            category: womens_health }
+
+  # ===== Cardiac =====
+  - { code: "93000", type: CPT, desc: "EKG (electrocardiogram) with interpretation", category: cardiac }
+  - { code: "93306", type: CPT, desc: "Echocardiogram, complete with Doppler",     category: cardiac }
+  - { code: "93016", type: CPT, desc: "Cardiac stress test",                       category: cardiac }
+  - { code: "93458", type: CPT, desc: "Left heart catheterization w/ angiography", category: cardiac }
+
+  # ===== Therapy & outpatient =====
+  - { code: "97110", type: CPT, desc: "Physical therapy, therapeutic exercise",    category: therapy }
+  - { code: "97140", type: CPT, desc: "Physical therapy, manual therapy",          category: therapy }
+  - { code: "97162", type: CPT, desc: "Physical therapy evaluation, moderate",     category: therapy }
+  - { code: "95810", type: CPT, desc: "Sleep study (polysomnography)",             category: therapy }
+  - { code: "20610", type: CPT, desc: "Major joint injection / aspiration",        category: therapy }
+  - { code: "62323", type: CPT, desc: "Lumbar epidural steroid injection (w/ imaging)", category: therapy }
+  - { code: "96372", type: CPT, desc: "Therapeutic injection (IM/SubQ)",           category: therapy }
+  - { code: "96365", type: CPT, desc: "IV infusion therapy, first hour",           category: therapy }
+
+  # ===== Inpatient (DRG) — high volume =====
+  - { code: "470", type: DRG, desc: "Major joint replacement, lower extremity, w/o MCC", category: inpatient }
+  - { code: "469", type: DRG, desc: "Major joint replacement, lower extremity, w/ MCC",  category: inpatient }
+  - { code: "871", type: DRG, desc: "Septicemia w/o ventilator >96h, w/ MCC",     category: inpatient }
+  - { code: "291", type: DRG, desc: "Heart failure & shock, w/ MCC",               category: inpatient }
+  - { code: "194", type: DRG, desc: "Simple pneumonia & pleurisy, w/ CC",          category: inpatient }
+  - { code: "788", type: DRG, desc: "Cesarean section w/o sterilization, w/o CC/MCC", category: inpatient }
+  - { code: "807", type: DRG, desc: "Vaginal delivery w/o sterilization, w/o CC/MCC", category: inpatient }

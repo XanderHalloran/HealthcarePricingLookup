@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ ep.label }} episode | {{ brand.short }}</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+<style>
+  .bt td.r, .bt th.r { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .bt tr.total td { font-weight:700; color:var(--forest); border-top:2px solid var(--forest); font-size:15px; }
+  .bt .est { color:var(--mute); font-size:11px; }
+  .gap-pos { color:#1a7f37; font-weight:700; } .gap-neg { color:#b42318; font-weight:700; }
+  .assume { font-size:13px; color:var(--mute); margin-top:8px; }
+</style>
+</head>
+<body class="ortho">
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    <h1>Episode pricing: {{ ep.label }}</h1>
+    <p class="sub">The whole episode, component by component: facility, surgeon, anesthesia, pre-op and rehab. Priced as an all-Medicare episode, a market hospital-based episode, and an ASC-based episode{% if own_col %}, beside one built on {{ own_label }}'s facility rate{% endif %}. Enter your bundle price to see the gap.</p>
+  </div>
+  <div class="disclaimer"><strong>Model, not a quote.</strong> Facility components come from published prices; professional components are Medicare fee-schedule amounts scaled by an editable commercial multiplier ({{ cfg.commercial_multiplier }}×). Implants are inside the facility rate. Adjust assumptions in <code>config-ortho/bundles.yaml</code>.</div>
+
+  <form class="payerbar card" method="get" action="/bundles" role="group" aria-label="Choose episode and area">
+    <label class="pb-lab" for="episode"><b>Episode</b></label>
+    <select id="episode" name="episode" onchange="this.form.submit()">
+      {% for e in episodes %}<option value="{{ e.key }}" {% if e.key == ep.key %}selected{% endif %}>{{ e.label }}</option>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="metro"><b>Area</b></label>
+    <select id="metro" name="metro" onchange="this.form.submit()">
+      {% include "_area_options.html" %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="mine"><b>Your bundle price</b></label>
+    <input type="text" id="mine" name="mine" size="10" inputmode="numeric" placeholder="$" value="{{ mine_raw }}">
+    <button class="btn-mini" type="submit">Compare</button>
+  </form>
+
+  <div class="card savings" style="margin-top:16px">
+    <div class="sv-row">
+      {% for col in cols %}<div class="sv-cell {{ 'sv-save' if col.key == 'asc' }}"><div class="sv-lab">{{ col.label }}</div><div class="sv-big">{% if col.total %}${{ '{:,.0f}'.format(col.total) }}{% else %}—{% endif %}</div>{% if col.note %}<div class="mute" style="font-size:12px">{{ col.note }}</div>{% endif %}</div>{% endfor %}
+      {% if mine %}<div class="sv-cell"><div class="sv-lab">Your bundle</div><div class="sv-big">${{ '{:,.0f}'.format(mine) }}</div>
+        <div style="font-size:12px">{% for col in cols %}{% if col.total %}<div>vs {{ col.short }}: <span class="{{ 'gap-pos' if col.total >= mine else 'gap-neg' }}">{{ '{:+,.0f}'.format(col.total - mine) }}</span></div>{% endif %}{% endfor %}</div></div>{% endif %}
+    </div>
+    <div class="sv-note">Positive gap = your bundle is cheaper than that episode.</div>
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">Components</div>
+    <table class="fac-t bt">
+      <thead><tr><th>Component</th><th>Basis</th>{% for col in cols %}<th class="r">{{ col.short }}</th>{% endfor %}</tr></thead>
+      <tbody>
+      {% for c in comps %}
+        <tr><td>{{ c.label }} <span class="mute">{{ c.code }}</span></td><td class="est">{{ c.basis }}</td>
+          {% for col in cols %}<td class="r">{% if c.vals.get(col.key) is not none %}${{ '{:,.0f}'.format(c.vals[col.key]) }}{% if c.est.get(col.key) %} <span class="est">est.</span>{% endif %}{% else %}—{% endif %}</td>{% endfor %}</tr>
+      {% endfor %}
+      <tr class="total"><td>Episode total</td><td></td>{% for col in cols %}<td class="r">{% if col.total %}${{ '{:,.0f}'.format(col.total) }}{% else %}—{% endif %}</td>{% endfor %}</tr>
+      </tbody>
+    </table>
+    <div class="assume">Assumptions: commercial professional rates = {{ cfg.commercial_multiplier }}× Medicare PFS; anesthesia = (base units + minutes ÷ 15) × ${{ cfg.anesthesia_cf }} per unit{% if ep.anesthesia %} ({{ ep.anesthesia.base_units }} base units, {{ ep.anesthesia.minutes }} min){% endif %}; hospital facility = market typical price (outliers excluded); ASC facility = published site price where one exists, else the hospital typical price × Medicare ASC ÷ OPPS; {% if ep.drg %}inpatient alternative shown for DRG {{ ep.drg }} (market median vs IPPS).{% endif %} A column is blank where a component has no data for that setting.</div>
+  </div>
+  {% if drg_row %}
+  <div class="card" style="margin-top:16px">
+    <div class="fac-h">Inpatient alternative — DRG {{ ep.drg }}</div>
+    <p style="margin:6px 0">If the case is admitted, the facility component becomes a DRG payment: market median <b>{% if drg_row.market %}${{ '{:,.0f}'.format(drg_row.market) }}{% else %}—{% endif %}</b> across {{ drg_row.n }} facilities, Medicare IPPS <b>{% if drg_row.ipps %}${{ '{:,.0f}'.format(drg_row.ipps) }}{% else %}—{% endif %}</b>{% if drg_row.own %}, {{ own_label }} <b>${{ '{:,.0f}'.format(drg_row.own) }}</b>{% endif %}. Professional, anesthesia and rehab components are unchanged.</p>
+  </div>
+  {% endif %}
+  <p class="refreshed">Facility prices from CMS machine-readable files (refreshed {{ data_refreshed }}); Medicare CY2025 PFS/OPPS, January-2026 ASC, FY2026 IPPS. A model for negotiation and network planning, not a quote.</p>
+</main>
+</body>
+</html>

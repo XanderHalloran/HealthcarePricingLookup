@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ fac_name }} vs the market | {{ brand.short }}</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+<style>
+  .pos-t td.r, .pos-t th.r { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .pos-t .us { font-weight:700; color:var(--forest); }
+  .pct-lo { color:#1a7f37; font-weight:700; } .pct-hi { color:#b42318; font-weight:700; }
+  .pair { white-space:nowrap; } .pair .mkt { color:var(--mute); font-size:12px; }
+</style>
+</head>
+<body>
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    <h1>{{ fac_name }} vs the market</h1>
+    <p class="sub">Our published negotiated rates beside every other {{ state_name }} facility's, procedure by procedure and payer by payer. Percentile = share of competing facilities whose negotiated median is lower than ours.</p>
+  </div>
+  <div class="disclaimer"><strong>Benchmarking data.</strong> All figures are facility-published medians from CMS machine-readable files; ours included. A percentile below 50 means we publish below most of the market for that column.</div>
+
+  <form class="payerbar card" method="get" action="/position" role="group" aria-label="Choose facility and area">
+    {% if own_list|length > 1 %}
+    <label class="pb-lab" for="facility"><b>Our facility</b></label>
+    <select id="facility" name="facility" onchange="this.form.submit()">
+      {% for f in own_list %}<option value="{{ f.id }}" {% if f.id == fac_id %}selected{% endif %}>{{ f.name }}</option>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    {% endif %}
+    <label class="pb-lab" for="metro"><b>Compare against</b></label>
+    <select id="metro" name="metro" onchange="this.form.submit()">
+      {% include "_area_options.html" %}
+    </select>
+  </form>
+
+  <div class="card" style="margin-top:16px">
+    <div class="kv" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px">
+      <div style="background:var(--sage);border:1px solid var(--line);border-radius:10px;padding:10px 12px"><b style="display:block;font-size:22px;color:var(--forest)">{{ rows|length }}</b><span style="font-size:12px;color:var(--mute)">tracked procedures we publish a price for</span></div>
+      <div style="background:var(--sage);border:1px solid var(--line);border-radius:10px;padding:10px 12px"><b style="display:block;font-size:22px;color:var(--forest)">{% if med_pct is not none %}{{ med_pct }}th{% else %}—{% endif %}</b><span style="font-size:12px;color:var(--mute)">median percentile of our price vs competitors</span></div>
+      <div style="background:var(--sage);border:1px solid var(--line);border-radius:10px;padding:10px 12px"><b style="display:block;font-size:22px;color:var(--forest)">{{ n_below }}</b><span style="font-size:12px;color:var(--mute)">procedures where we are below the market median</span></div>
+      <div style="background:var(--sage);border:1px solid var(--line);border-radius:10px;padding:10px 12px"><b style="display:block;font-size:22px;color:var(--forest)">{{ n_above }}</b><span style="font-size:12px;color:var(--mute)">procedures where we are above it</span></div>
+    </div>
+    {% if file_note %}<p class="mute" style="margin:10px 0 0;font-size:13px">{{ file_note }}</p>{% endif %}
+    {% if fac_note %}<div class="disclaimer" style="margin-top:10px"><strong>Read before comparing.</strong> {{ fac_note }}</div>{% endif %}
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">Procedure by procedure <span class="mute">(competitors{% if metro %} in {{ metro_label }}{% else %} statewide{% endif %}; our row excluded from market figures)</span></div>
+    {% if rows %}
+    <table class="fac-t pos-t">
+      <thead><tr><th>Procedure</th><th class="r">Ours (negotiated median)</th><th class="r">Our cash</th><th class="r">Market negotiated median</th><th class="r">Competitors</th><th class="r">Ours ×Medicare</th><th class="r">Market ×Medicare</th><th class="r">Our percentile</th>{% for p in payers %}<th class="r">{{ p }}<div class="mkt" style="font-weight:400;font-size:11px;color:var(--mute)">ours / market</div></th>{% endfor %}</tr></thead>
+      <tbody>
+      {% for r in rows %}
+        <tr><td>{{ r.desc }} <span class="mute">{{ r.type }} {{ r.code }}</span></td>
+          <td class="r us">{{ '${:,.0f}'.format(r.ours) }}</td>
+          <td class="r">{% if r.ours_cash is not none %}{{ '${:,.0f}'.format(r.ours_cash) }}{% else %}—{% endif %}</td>
+          <td class="r">{% if r.mkt_median is not none %}{{ '${:,.0f}'.format(r.mkt_median) }}{% else %}—{% endif %}</td>
+          <td class="r">{{ r.n }}</td>
+          <td class="r">{% if r.medicare %}{{ (r.ours / r.medicare)|round(2) }}×{% else %}—{% endif %}</td>
+          <td class="r">{% if r.medicare and r.mkt_median %}{{ (r.mkt_median / r.medicare)|round(2) }}×{% else %}—{% endif %}</td>
+          <td class="r {% if r.pct is not none %}{{ 'pct-lo' if r.pct < 50 else 'pct-hi' }}{% endif %}">{% if r.pct is not none %}{{ r.pct }}th{% else %}—{% endif %}</td>
+          {% for p in payers %}{% set pr = r.payers.get(p) %}
+            <td class="r pair">{% if pr and pr.ours is not none %}<span class="us">{{ '${:,.0f}'.format(pr.ours) }}</span>{% else %}—{% endif %}{% if pr and pr.mkt is not none %} <span class="mkt">/ {{ '${:,.0f}'.format(pr.mkt) }} ({{ pr.n }})</span>{% endif %}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}<div class="mute">No published prices for this facility on the tracked codes yet.</div>{% endif %}
+  </div>
+  <p class="refreshed">"Ours" and the market figure are each facility's median negotiated (contracted) rate across all payer rows — the basis a contracting team cares about. "Our cash" is the file's discounted-cash figure; note CORE's file publishes cash equal to its gross charge, so it is not comparable to competitors' self-pay discounts. payer cells = our facility's median for that insurer vs the median across competitors publishing one. Medicare = OPPS / IPPS / PFS as applicable. Refreshed {{ data_refreshed }}.</p>
+</main>
+</body>
+</html>

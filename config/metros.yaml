@@ -1,0 +1,528 @@
+# Metro/region grouping so users compare apples-to-apples within their area instead
+# of against the whole state. Each hospital_id belongs to exactly one metro; ids must
+# match config/hospitals.yaml. Used for the metro filter AND the SEO landing pages.
+# ponytail: explicit id lists beat guessing metro from city strings.
+#
+# `states` = the markets the app offers (home selector, /<slug>/procedure/<code> statewide
+# SEO pages, sitemap). Add a state here only once its hospitals are in hospitals.yaml.
+# Each metro carries `state:`; `promote: true` puts the metro in the sitemap + home footer.
+states:
+  - { code: AZ, name: Arizona, slug: arizona }
+  - { code: CA, name: California, slug: california }
+  - { code: UT, name: Utah, slug: utah }
+  - { code: NM, name: New Mexico, slug: new-mexico }
+  - { code: CO, name: Colorado, slug: colorado }
+  - { code: TX, name: Texas, slug: texas }
+  - { code: NV, name: Nevada, slug: nevada }     # scaffold: no hospitals yet -> hidden + "coming soon" pages
+
+metros:
+  - key: phoenix
+    state: AZ
+    promote: true
+    label: "Phoenix Metro"
+    slug_city: "Phoenix, AZ"
+    ids:
+      - BANNER-UMC-PHX
+      - BANNER-ESTRELLA
+      - BANNER-DESERT
+      - BANNER-THUNDERBIRD
+      - BANNER-GATEWAY
+      - BANNER-BAYWOOD
+      - BANNER-BOSWELL
+      - BANNER-DELWEBB
+      - BANNER-HEART
+      - BANNER-IRONWOOD
+      - HONOR-SHEA
+      - HONOR-DEERVALLEY
+      - HONOR-JOHNLINCOLN
+      - HONOR-SONORAN
+      - HONOR-OSBORN
+      - HONOR-THOMPSONPEAK
+      - HONOR-FOURPEAKS
+      - HONOR-TEMPE
+      - HONOR-FLORENCE
+      - VALLEYWISE-PHX
+      - PHX-CHILDRENS
+      - DIGNITY-CHANDLER
+      - DIGNITY-MERCYGILBERT
+      - DIGNITY-STJOSEPHS
+      - ABRAZO-ARROWHEAD
+      - ABRAZO-HEART
+      - BANNER-CASA-GRANDE
+      - BANNER-PAYSON
+      - WICKENBURG
+
+  - key: tucson
+    state: AZ
+    promote: true
+    label: "Tucson Metro"
+    slug_city: "Tucson, AZ"
+    ids:
+      - BANNER-UMC-TUCSON
+      - BANNER-UMC-SOUTH
+      - TMC-TUCSON
+      - NORTHWEST-TUCSON
+      - ORO-VALLEY
+      - NORTHWEST-HOUGHTON
+      - CARONDELET-STJOSEPH-TUC
+      - CARONDELET-STMARY-TUC
+      - CARONDELET-HOLYCROSS
+
+  - key: northern
+    state: AZ
+    label: "Northern Arizona"
+    slug_city: "Northern Arizona"
+    ids:
+      - NAH-FLAGSTAFF
+      - NAH-VERDE-VALLEY
+      - YRMC-PRESCOTT
+      - KINGMAN-RMC
+      - HAVASU-RMC
+      - SUMMIT-SHOW-LOW
+      - BANNER-PAGE
+      - LCMC-WINSLOW
+      - WMRMC-SPRINGERVILLE
+
+  - key: southern
+    state: AZ
+    label: "Southern & Western Arizona"
+    slug_city: "Southern Arizona"
+    ids:
+      - YUMA-REGIONAL
+      - CANYON-VISTA
+      - COPPER-QUEEN
+      - MT-GRAHAM
+      - COBRE-VALLEY
+      - LA-PAZ-REGIONAL
+      - NORTHERN-COCHISE
+
+  # ===== California =====
+  - key: los-angeles
+    state: CA
+    promote: true
+    label: "Los Angeles Metro"
+    slug_city: "Los Angeles, CA"
+    ids:
+      - CEDARS-SINAI
+      - UCLA-REAGAN
+      - UCLA-SANTAMONICA
+      - KECK-USC
+      - USC-ARCADIA
+      - MEMCARE-LONGBEACH
+      - PROV-TARZANA
+      - PROV-HOLYCROSS
+      - PROV-LCM-TORRANCE
+      - PROV-STJOSEPH-BURBANK
+      - LAC-GENERAL
+      - LAC-HARBOR-UCLA
+      - DIG-NORTHRIDGE
+      - DIG-CALIFORNIA-HMC
+      - DIG-GLENDALE-MEM
+      - DIG-STMARY-LB
+      - DIG-STJOHNS-OXNARD
+      - ADV-GLENDALE
+      - ADV-WHITEMEMORIAL
+      - ADV-SIMIVALLEY
+      - CENTINELA
+      - HCA-LOSROBLES
+      - UCI-LAKEWOOD
+      - KP-LOSANGELES
+
+  - key: inland-empire
+    state: CA
+    label: "Inland Empire & Orange County"
+    slug_city: "Riverside, CA"
+    ids:
+      - HOAG-NEWPORT
+      - MEMCARE-SADDLEBACK
+      - MEMCARE-ORANGECOAST
+      - UCI-MEDICAL-CENTER
+      - UCI-FOUNTAINVALLEY
+      - UCI-LOSALAMITOS
+      - UCI-PLACENTIA
+      - PROV-MISSION
+      - PROV-STJOSEPH-ORANGE
+      - PROV-STJUDE
+      - PROV-STMARY-AV
+      - RUHS-MORENOVALLEY
+      - HCA-RIVERSIDE-COMM
+      - DIG-STBERNARDINE
+      - LLU-MEDICAL-CENTER
+      - LLU-MURRIETA
+      - POMONA-VALLEY
+      - TENET-DESERT-REGIONAL
+      - TENET-JFK-INDIO
+      - EISENHOWER
+      - KP-FONTANA
+
+  - key: san-diego
+    state: CA
+    label: "San Diego"
+    slug_city: "San Diego, CA"
+    ids:
+      - SCRIPPS-LAJOLLA
+      - SCRIPPS-MERCY-SD
+      - SCRIPPS-ENCINITAS
+      - SCRIPPS-GREEN
+      - SCRIPPS-CHULAVISTA
+      - SHARP-MEMORIAL
+      - SHARP-GROSSMONT
+      - SHARP-CHULAVISTA
+      - SHARP-CORONADO
+      - TRICITY-OCEANSIDE
+      - RADY-CHILDRENS
+      - KP-SANDIEGO-ZION
+      - UCSD-HEALTH
+
+  - key: bay-area
+    state: CA
+    promote: true
+    label: "San Francisco Bay Area"
+    slug_city: "San Francisco, CA"
+    ids:
+      - STANFORD-HEALTH
+      - STANFORD-TRIVALLEY
+      - LPCH-STANFORD
+      - UCSF-MEDICAL-CENTER
+      - SUTTER-CPMC-VANNESS
+      - SUTTER-MILLS-PENINSULA
+      - SUTTER-EDEN
+      - SUTTER-ABSMC-SUMMIT
+      - SUTTER-SANTAROSA
+      - JOHNMUIR-WALNUTCREEK
+      - JOHNMUIR-CONCORD
+      - ALAMEDA-HIGHLAND
+      - HCA-GOODSAM-SANJOSE
+      - DIG-SEQUOIA
+      - DIG-DOMINICAN
+      - PROV-SANTAROSA-MEM
+      - PROV-QUEEN-NAPA
+      - SALINAS-VALLEY
+      - NATIVIDAD-SALINAS
+      - KP-SANFRANCISCO
+
+  - key: sacramento
+    state: CA
+    label: "Sacramento & Central Valley"
+    slug_city: "Sacramento, CA"
+    ids:
+      - UCDAVIS-MEDCENTER
+      - SUTTER-SACRAMENTO
+      - SUTTER-ROSEVILLE
+      - SUTTER-MODESTO
+      - DIG-MERCYGENERAL
+      - DIG-MERCYSANJUAN
+      - DIG-STJOSEPH-STOCKTON
+      - DIG-BAKERSFIELD-MEM
+      - DIG-MERCY-REDDING
+      - KAWEAH-VISALIA
+      - KERN-MEDICAL
+      - ADV-BAKERSFIELD
+      - MARSHALL-PLACERVILLE
+      - KP-SACRAMENTO
+      - KP-FRESNO
+      - COMMUNITY-REGIONAL-FRESNO
+      - CLOVIS-COMMUNITY
+
+  # ===== Utah =====
+  - key: salt-lake
+    state: UT
+    promote: true
+    label: "Salt Lake City Metro"
+    slug_city: "Salt Lake City, UT"
+    ids:
+      - UT-ST-MARKS
+      - UT-HC-SALT-LAKE
+      - UT-HC-JORDAN-VALLEY
+      - UT-LONE-PEAK
+      - UT-LAKEVIEW
+      - UT-MOUNTAIN-WEST
+      - UT-ASHLEY-REGIONAL
+      - UT-IH-IMC
+      - UT-IH-LDS
+      - UT-IH-PRIMARY-CHILDRENS
+      - UT-IH-ALTA-VIEW
+      - UT-IH-RIVERTON
+      - UT-IH-PARK-CITY
+      - UT-UINTAH-BASIN
+      - UT-UOFU-HOSPITAL
+
+  - key: utah-valley
+    state: UT
+    label: "Provo / Utah Valley"
+    slug_city: "Provo, UT"
+    ids:
+      - UT-TIMPANOGOS
+      - UT-MOUNTAIN-VIEW
+      - UT-CASTLEVIEW
+      - UT-IH-UTAH-VALLEY
+      - UT-IH-AMERICAN-FORK
+      - UT-HC-MOUNTAIN-POINT
+      - UT-MOAB
+
+  - key: northern-utah
+    state: UT
+    label: "Ogden & Northern Utah"
+    slug_city: "Ogden, UT"
+    ids:
+      - UT-OGDEN-REGIONAL
+      - UT-HC-DAVIS
+      - UT-CACHE-VALLEY
+      - UT-IH-MCKAY-DEE
+      - UT-IH-LAYTON
+      - UT-IH-LOGAN
+      - UT-BRIGHAM-CITY
+
+  - key: southern-utah
+    state: UT
+    label: "St. George & Southern Utah"
+    slug_city: "St. George, UT"
+    ids:
+      - UT-KANE-COUNTY
+      - UT-BLUE-MOUNTAIN
+      - UT-SAN-JUAN
+      - UT-IH-ST-GEORGE
+      - UT-IH-CEDAR-CITY
+
+  # ===== New Mexico =====
+  - key: albuquerque
+    state: NM
+    promote: true
+    label: "Albuquerque Metro"
+    slug_city: "Albuquerque, NM"
+    ids:
+      - PRES-HOSP
+      - PRES-KASEMAN
+      - PRES-RUST
+      - LOVELACE-MC
+      - LOVELACE-WOMENS
+      - LOVELACE-WESTSIDE
+      - PRES-SOCORRO
+      - CIBOLA-GENERAL
+      - RMCH-GALLUP
+      - UNMH-ALBUQUERQUE
+
+  - key: santa-fe
+    state: NM
+    label: "Santa Fe & Northern New Mexico"
+    slug_city: "Santa Fe, NM"
+    ids:
+      - PRES-SANTAFE
+      - CHRISTUS-STV
+      - PRES-ESPANOLA
+      - LOSALAMOS-MC
+      - HOLYCROSS-TAOS
+      - SANJUAN-REGIONAL
+
+  - key: las-cruces
+    state: NM
+    label: "Las Cruces & Southern New Mexico"
+    slug_city: "Las Cruces, NM"
+    ids:
+      - MMC-LASCRUCES
+      - GERALD-CHAMPION
+      - PRES-LINCOLN
+      - MOUNTAINVIEW-LC
+      - MIMBRES-DEMING
+      - GILA-SILVERCITY
+
+  - key: nm-east
+    state: NM
+    label: "Eastern New Mexico"
+    slug_city: "Roswell, NM"
+    ids:
+      - LOVELACE-ROSWELL
+      - PRES-PLAINS
+      - COVENANT-HOBBS
+      - PRES-TRIGG
+      - ENMMC-ROSWELL
+      - CARLSBAD-MC
+      - ARTESIA-GENERAL
+      - NORLEA-LOVINGTON
+
+  # ===== Colorado =====
+  - key: denver
+    state: CO
+    promote: true
+    label: "Denver Metro"
+    slug_city: "Denver, CO"
+    ids:
+      - UCH-ANSCHUTZ
+      - UCH-HIGHLANDS-RANCH
+      - DENVER-HEALTH
+      - HCA-PSL
+      - CS-ST-ANTHONY
+      - ADV-PORTER
+      - ADV-LITTLETON
+      - ADV-PARKER
+      - ADV-CASTLE-ROCK
+      - IH-SAINT-JOSEPH
+      - IH-LUTHERAN
+      - IH-PLATTE-VALLEY
+      - HCA-ROSE
+      - HCA-SWEDISH
+      - HCA-SKY-RIDGE
+      - CHILDRENS-COLORADO
+
+  - key: colorado-springs
+    state: CO
+    label: "Colorado Springs & Pueblo"
+    slug_city: "Colorado Springs, CO"
+    ids:
+      - UCH-MEMORIAL-CENTRAL
+      - UCH-PIKES-PEAK
+      - CS-PENROSE
+      - PARKVIEW-PUEBLO-WEST
+      - CS-ST-MARY-CORWIN
+
+  - key: northern-colorado
+    state: CO
+    label: "Fort Collins, Greeley & Boulder"
+    slug_city: "Fort Collins, CO"
+    ids:
+      - UCH-POUDRE-VALLEY
+      - UCH-GREELEY
+      - BANNER-NCMC
+      - BANNER-MCKEE
+      - BANNER-FORT-COLLINS
+      - ADV-AVISTA
+      - IH-GOOD-SAMARITAN
+      - CS-LONGMONT-UNITED
+      - UCH-MCR-LOVELAND
+      - UCH-LONGS-PEAK
+      - BANNER-STERLING
+      - BOULDER-COMMUNITY
+
+  - key: western-colorado
+    state: CO
+    label: "Western Slope & Mountains"
+    slug_city: "Grand Junction, CO"
+    ids:
+      - UCH-YAMPA-VALLEY
+      - VAIL-HEALTH
+      - MONTROSE-REGIONAL
+      - ASPEN-VALLEY
+      - IH-ST-MARYS-GJ
+      - COMMUNITY-GJ
+      - VALLEY-VIEW-GLENWOOD
+      - CS-MERCY-DURANGO
+
+  # ===== Texas =====
+  - key: houston
+    state: TX
+    promote: true
+    label: "Houston Metro"
+    slug_city: "Houston, TX"
+    ids:
+      - HM-METHODIST-HOSP
+      - HM-SUGARLAND
+      - HM-WOODLANDS
+      - MH-TMC
+      - MH-MEMORIALCITY
+      - MH-WOODLANDS
+      - STLUKES-BCM
+      - STLUKES-WOODLANDS
+      - HCA-HOU-MEDCENTER
+      - HCA-HOU-CLEARLAKE
+      - HCA-HOU-WEST
+      - HCA-HOU-NORTHWEST
+      - TCH-MAIN
+      - HARRIS-BENTAUB
+      - HARRIS-LBJ
+      - MDANDERSON
+
+  - key: dallas-fort-worth
+    state: TX
+    promote: true
+    label: "Dallas–Fort Worth"
+    slug_city: "Dallas, TX"
+    ids:
+      - BSW-BUMC-DALLAS
+      - BSW-ALLSAINTS-FW
+      - BSW-PLANO
+      - MEDCITY-DALLAS
+      - MEDCITY-FORTWORTH
+      - MEDCITY-FRISCO
+      - MEDCITY-PLANO
+      - METHODIST-DALLAS
+      - UTSW-CLEMENTS
+      - PARKLAND
+      - JPS-FORTWORTH
+      - COOK-CHILDRENS
+      - THR-PRESBY-DALLAS
+      - THR-HARRIS-FW
+      - THR-PRESBY-PLANO
+      - THR-ARLINGTON-MEM
+      - THR-HEB
+      - THR-PRESBY-DENTON
+      - THR-PRESBY-ALLEN
+      - THR-ALLIANCE
+      - THR-SOUTHWEST-FW
+      - THR-FLOWER-MOUND
+      - THR-FRISCO
+      - THR-SOUTHLAKE
+      - THR-ROCKWALL
+      - THR-CLEBURNE
+      - THR-AZLE
+      - THR-KAUFMAN
+      - THR-STEPHENVILLE
+
+  - key: austin
+    state: TX
+    label: "Austin Metro"
+    slug_city: "Austin, TX"
+    ids:
+      - STDAVIDS-MEDCENTER
+      - STDAVIDS-NORTHAUSTIN
+      - STDAVIDS-SOUTHAUSTIN
+      - STDAVIDS-ROUNDROCK
+      - BSW-ROUNDROCK
+      - SETON-MC-AUSTIN
+      - DELL-SETON-AUSTIN
+
+  - key: san-antonio
+    state: TX
+    label: "San Antonio Metro"
+    slug_city: "San Antonio, TX"
+    ids:
+      - METHODIST-SA-MAIN
+      - METHODIST-SA-STONEOAK
+      - METHODIST-SA-METRO
+      - METHODIST-SA-TEXSAN
+      - BAPTIST-MC-SA
+      - BAPTIST-NORTHCENTRAL
+      - BAPTIST-NORTHEAST
+      - BAPTIST-STLUKES
+      - CHRISTUS-SR-WESTOVER
+      - CHRISTUS-SR-ALAMOHEIGHTS
+      - UNIV-HEALTH-SA
+
+  - key: texas-other
+    state: TX
+    label: "El Paso, Lubbock & the rest of Texas"
+    slug_city: "El Paso, TX"
+    ids:
+      - PROV-MEMORIAL-EP
+      - PROV-SIERRA-EP
+      - PROV-TRANSMOUNTAIN-EP
+      - UMC-ELPASO
+      - UMC-LUBBOCK
+      - COVENANT-LUBBOCK
+      - CHRISTUS-SPOHN-SHORELINE
+      - CHRISTUS-SPOHN-SOUTH
+      - CHRISTUS-MOTHERFRANCES-TYLER
+      - HENDRICK-ABILENE
+      - SHANNON-SANANGELO
+      - DHR-EDINBURG
+      - VALLEY-BAPTIST-HARLINGEN
+      - VALLEY-BAPTIST-BROWNSVILLE
+      - BSW-TEMPLE
+      - BSW-COLLEGESTATION
+
+  # ===== Nevada (scaffold: add hospitals to hospitals.yaml + ids here when the MRFs are sourced) =====
+  - key: las-vegas
+    state: NV
+    promote: true
+    label: "Las Vegas Metro"
+    slug_city: "Las Vegas, NV"
+    ids: []

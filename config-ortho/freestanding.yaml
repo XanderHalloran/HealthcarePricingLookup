@@ -1,0 +1,102 @@
+# Freestanding sites (ASC / imaging / office) and PUBLISHED bundles (MDsave hospital-outpatient packages)
+# with cash prices, Arizona. type: asc | imaging | office | bundle. HOPCo ASCs are listed with empty prices —
+# fill in your own sites' rates here and every site-of-care page shifts against them (no re-ingest).
+facilities:
+- id: ELEVATION-ASC-FLAG
+  name: Elevation Surgery Center
+  type: asc
+  city: Flagstaff
+  metro: northern
+  state: AZ
+  prices: {}
+  source: https://elevationasc.com/
+  note: HOPCo-overseen (hopco.com press release); billing page says self-pay patients are contacted with an estimate — no price list
+- id: ORTHOAZ-SC-SCOTTSDALE
+  name: OrthoArizona Scottsdale Surgery Center
+  type: asc
+  city: Scottsdale
+  metro: phoenix
+  state: AZ
+  prices: {}
+  source: https://orthoazsc.com/
+  note: on hopconetworks.com/asc-list; no prices published; orthoarizona.org/cash-pay pages return 404
+- id: ORTHOAZ-SC-GILBERT
+  name: OrthoArizona Surgery Center Gilbert
+  type: asc
+  city: Gilbert
+  metro: phoenix
+  state: AZ
+  prices: {}
+  source: https://hopconetworks.com/asc-list/
+  note: on hopconetworks.com/asc-list; no prices published
+- id: MDSAVE-NORTHWEST-TUCSON
+  name: Northwest Medical Center / Oro Valley Hospital (Northwest Healthcare orthopedic surgeons, Tucson)
+  type: bundle
+  city: Tucson
+  metro: tucson
+  state: AZ
+  prices:
+    '29881': 6738.0
+    '64721': 4319.0
+    '29827': 13066.0
+    '29888': 12821.0
+  source: https://www.mdsave.com/procedures/knee-arthroscopy-with-or-without-meniscectomy/d784fec5/arizona
+- id: MDSAVE-NORTHWEST-HOUGHTON
+  name: Northwest Medical Center Houghton (Tucson)
+  type: bundle
+  city: Tucson
+  metro: tucson
+  state: AZ
+  prices:
+    '29881': 6825.0
+    '29888': 12821.0
+  source: https://www.mdsave.com/procedures/knee-arthroscopy-with-or-without-meniscectomy/d784fec5/arizona
+- id: MDSAVE-SUMMIT-SHOWLOW
+  name: Summit Healthcare Regional Medical Center / Summit Healthcare Pain Clinic
+  type: bundle
+  city: Show Low
+  metro: northern
+  state: AZ
+  prices:
+    '64721': 5343.0
+    '62323': 1500.0
+    '20610': 543.0
+  source: https://www.mdsave.com/procedures/carpal-tunnel-release-surgery/d586f5/arizona
+- id: MDSAVE-SIWEK-PAIN-SCOTTSDALE
+  name: 'Adam J. Siwek DO / Steven Siwek MD, Pain Management (17500 N Perimeter Dr #125)'
+  type: office
+  city: Scottsdale
+  metro: phoenix
+  state: AZ
+  prices:
+    '62323': 1166.0
+  source: https://www.mdsave.com/procedures/epidural-steroid-injection-with-imaging-guidance/d483ffcd/arizona
+  note: 'in-office variant listed at $781: https://www.mdsave.com/procedures/epidural-steroid-injection-with-imaging-guidance-in-office/d281f5cb/arizona/phoenix-az/85255'
+- id: MDSAVE-SIMONMED-PHX
+  name: SimonMed Imaging (19th Ave, Ahwatukee, Anthem, Biltmore, Arrowhead, Avondale, Apache Junction, Buckeye)
+  type: imaging
+  city: Phoenix
+  metro: phoenix
+  state: AZ
+  prices:
+    '73721': 458.0
+    '73221': 458.0
+    '72148': 458.0
+    '72141': 458.0
+    '73718': 458.0
+  source: https://www.mdsave.com/procedures/mri-without-contrast/d781f5c9/arizona/phoenix-az
+  note: MDsave lists this as 'MRI without contrast, any one body part' (not knee-specific)
+- id: MDSAVE-OPENMRI-PHX
+  name: Open MRI Solutions - Phoenix
+  type: imaging
+  city: Phoenix
+  metro: phoenix
+  state: AZ
+  prices:
+    '73721': 425.0
+    '73221': 425.0
+    '72148': 425.0
+    '72141': 425.0
+    '73718': 425.0
+  source: https://www.mdsave.com/procedures/mri-without-contrast/d781f5c9/arizona/phoenix-az
+  note: MRI without contrast, any one body part

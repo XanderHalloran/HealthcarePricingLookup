@@ -1,0 +1,29 @@
+# ortho.traqqit.com — second site from the same image, selected by APP_CONFIG=config-ortho.
+# Own container, own data volume; joins the shared Caddy network like healthcare-app.
+#   cd /root/ortho && docker compose -f docker-compose.ortho.yml up -d --build
+services:
+  ortho:
+    build: .
+    image: ortho-app
+    container_name: ortho-app
+    restart: unless-stopped
+    environment:
+      - APP_CONFIG=config-ortho
+      - BASE_URL=https://ortho.traqqit.com
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - SMTP_HOST=${SMTP_HOST:-}
+      - SMTP_PORT=${SMTP_PORT:-465}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
+      - SMTP_FROM=${SMTP_FROM:-}
+    networks:
+      - travelmap_default
+    volumes:
+      - ortho_data:/app/data
+
+networks:
+  travelmap_default:
+    external: true
+
+volumes:
+  ortho_data:

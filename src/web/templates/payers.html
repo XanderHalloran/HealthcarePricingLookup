@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Payer scorecard{% if sel %} — {{ sel }}{% endif %} | {{ brand.short }}</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+<style>
+  .sc-t td.r, .sc-t th.r { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .sc-t td.sel, .sc-t th.sel { background:var(--green-pale); }
+  .sc-t .x { font-weight:700; color:var(--forest); } .sc-t .n { color:var(--mute); font-size:11px; }
+  .rank { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin-top:8px; }
+  .rank a { display:block; background:var(--sage); border:1px solid var(--line); border-radius:10px; padding:10px 12px; text-decoration:none; color:var(--body); }
+  .rank a.sel { border-color:var(--green); background:var(--green-pale); }
+  .rank b { display:block; font-size:22px; color:var(--forest); } .rank span { font-size:12px; color:var(--mute); }
+</style>
+</head>
+<body class="ortho">
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    <h1>Payer scorecard{% if sel %}: {{ sel }}{% endif %}</h1>
+    <p class="sub">What each insurer's contracted rates run as a multiple of Medicare, procedure by procedure, across every {{ state_name }} facility that publishes one. The view to walk into a renewal with.</p>
+  </div>
+  <div class="disclaimer"><strong>Benchmarking data.</strong> Each cell is the median across facilities of that facility's median negotiated rate for the insurer (all its plans collapsed). Medicare = OPPS for outpatient CPTs, IPPS for DRGs, PFS for office/therapy codes.</div>
+
+  <form class="payerbar card" method="get" action="/payers" role="group" aria-label="Choose payer and area">
+    <label class="pb-lab" for="payer"><b>Highlight payer</b></label>
+    <select id="payer" name="payer" onchange="this.form.submit()">
+      <option value="">— all payers side by side —</option>
+      {% for p in payers %}<option value="{{ p }}" {% if p == sel %}selected{% endif %}>{{ p }}</option>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="metro"><b>Area</b></label>
+    <select id="metro" name="metro" onchange="this.form.submit()">
+      {% include "_area_options.html" %}
+    </select>
+    <a class="btn-mini" href="/payers.csv?metro={{ metro }}">⬇ CSV</a>
+  </form>
+
+  <div class="card" style="margin-top:16px">
+    <div class="fac-h">Ranking <span class="mute">(median across procedures of the payer's market median ÷ Medicare; click to highlight)</span></div>
+    <div class="rank">
+      {% for r in ranking %}<a href="/payers?payer={{ r.payer }}&metro={{ metro }}" class="{{ 'sel' if r.payer == sel }}"><b>{{ r.mult }}×</b><span>{{ r.payer }} · {{ r.codes }} procedures</span></a>{% endfor %}
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">Procedure × payer <span class="mute">(median $ · ×Medicare · facilities)</span></div>
+    <table class="fac-t sc-t">
+      <thead><tr><th>Procedure</th><th class="r">Medicare</th>{% for p in payers %}<th class="r {{ 'sel' if p == sel }}">{{ p }}</th>{% endfor %}{% if sel and own_label %}<th class="r sel">{{ own_label }} · {{ sel }}</th>{% endif %}</tr></thead>
+      <tbody>
+      {% for row in rows %}
+        <tr><td>{{ row.desc }} <span class="mute">{{ row.type }} {{ row.code }}</span></td>
+          <td class="r">{% if row.medicare %}${{ '{:,.0f}'.format(row.medicare) }}{% else %}—{% endif %}</td>
+          {% for p in payers %}{% set c = row.cells.get(p) %}
+            <td class="r {{ 'sel' if p == sel }}">{% if c %}${{ '{:,.0f}'.format(c.median) }}{% if row.medicare %} <span class="x">{{ (c.median / row.medicare)|round(2) }}×</span>{% endif %} <span class="n">({{ c.n }})</span>{% else %}—{% endif %}</td>
+          {% endfor %}
+          {% if sel and own_label %}<td class="r sel">{% if row.own is not none %}${{ '{:,.0f}'.format(row.own) }}{% if row.medicare %} <span class="x">{{ (row.own / row.medicare)|round(2) }}×</span>{% endif %}{% else %}—{% endif %}</td>{% endif %}
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  <p class="refreshed">Source: CMS machine-readable files (refreshed {{ data_refreshed }}). Payer names canonicalized; plans that don't map to a major insurer are excluded. Benchmarking estimates, verify against contracts.</p>
+</main>
+</body>
+</html>

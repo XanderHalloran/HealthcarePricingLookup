@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ svc.desc }} — payer rates by facility | {{ brand.short }}</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+</head>
+<body>
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    <h1>What each payer pays for {{ svc.desc }}</h1>
+    <p class="sub">Contracted (negotiated) rates per facility, straight from each hospital's CMS machine-readable file. {{ m.rows|length }} facilities{% if metro %} in {{ metro_label }}{% else %} statewide{% endif %}.</p>
+  </div>
+  <div class="disclaimer"><strong>Benchmarking data.</strong> Rates are what hospitals publish under the federal Hospital Price Transparency rule; a facility's median across an insurer's plans, not a specific contract. Payer names are canonicalized (all Aetna plans → Aetna).</div>
+
+  <form class="payerbar card" method="get" action="/rates" role="group" aria-label="Choose procedure and area">
+    <label class="pb-lab" for="code"><b>Procedure</b></label>
+    <select id="code" name="code" onchange="this.form.submit()">
+      {% for cat, items in groups %}<optgroup label="{{ cat_labels.get(cat, cat) }}">
+        {% for s in items %}<option value="{{ s.code }}" {% if s.code == svc.code %}selected{% endif %}>{{ s.desc }} ({{ s.type }} {{ s.code }})</option>{% endfor %}
+      </optgroup>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="metro"><b>Area</b></label>
+    <select id="metro" name="metro" onchange="this.form.submit()">
+      {% include "_area_options.html" %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="mine"><b>Your rate</b> (see its percentile)</label>
+    <input type="text" id="mine" name="mine" size="9" inputmode="numeric" placeholder="$" value="{{ mine_raw }}">
+    <button class="btn-mini" type="submit">Go</button>
+    <a class="btn-mini" href="/rates.csv?code={{ svc.code }}&metro={{ metro }}">⬇ CSV</a>
+  </form>
+
+  {% if not m.rows %}
+    <div class="card" style="margin-top:16px">No published rates for this code{% if metro %} in this area{% endif %} yet.</div>
+  {% else %}
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">Market summary{% if medicare %} — Medicare benchmark {{ medicare_src }} <b>${{ '{:,.0f}'.format(medicare) }}</b>{% endif %}</div>
+    <table class="fac-t rates-t">
+      <thead><tr><th>Column</th><th class="r">Facilities</th><th class="r">Min</th><th class="r">25th</th><th class="r">Median</th><th class="r">75th</th><th class="r">Max</th>{% if medicare %}<th class="r">Median ×Medicare</th>{% endif %}{% if mine %}<th class="r">Your ${{ '{:,.0f}'.format(mine) }} is at</th>{% endif %}</tr></thead>
+      <tbody>
+      {% for col in cols %}{% set st = m.stats.get(col) %}{% if st %}
+        <tr><th scope="row">{{ col_label(col) }}</th><td class="r">{{ st.n }}</td><td class="r">${{ '{:,.0f}'.format(st.min) }}</td><td class="r">${{ '{:,.0f}'.format(st.q1) }}</td><td class="r"><b>${{ '{:,.0f}'.format(st.median) }}</b></td><td class="r">${{ '{:,.0f}'.format(st.q3) }}</td><td class="r">${{ '{:,.0f}'.format(st.max) }}</td>
+          {% if medicare %}<td class="r">{{ (st.median / medicare)|round(2) }}×</td>{% endif %}
+          {% if mine %}<td class="r"><b>{{ pct[col] }}th</b> percentile</td>{% endif %}</tr>
+      {% endif %}{% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">Facility × payer <span class="mute">(click a header to sort)</span></div>
+    <table class="fac-t rates-t" id="matrix">
+      <thead><tr><th onclick="sortBy(0)">Facility</th>{% for col in cols %}<th class="r" onclick="sortBy({{ loop.index }})">{{ col_label(col) }}</th>{% endfor %}</tr></thead>
+      <tbody>
+      {% for r in m.rows %}
+        <tr><td>{{ r.name }}{% if own_ids and r.id in own_ids %} <span class="badge own">{{ brand.own.label }}</span>{% endif %}{% if r.hip_knee %}<div class="hk {{ 'good' if r.hip_knee.compare == 'Better' else ('bad' if r.hip_knee.compare == 'Worse' else '') }}">hip/knee complications {{ r.hip_knee.rate }}%</div>{% endif %}</td>
+        {% for col in cols %}{% set v = (r.rates.get(col) if col in m.payers else r[col]) %}
+          {% set low = medicare and v is not none and v < medicare * 0.25 %}
+          <td class="r {{ 'mute' if low }}" data-v="{{ v if v is not none else '' }}" {% if low %}title="Below 25% of the Medicare rate — usually a component or mis-keyed row, not the procedure price"{% endif %}>{% if v is not none %}${{ '{:,.0f}'.format(v) }}{% if low %} ⚠{% elif medicare %}<span class="mute"> {{ (v / medicare)|round(1) }}×</span>{% endif %}{% else %}<span class="mute">—</span>{% endif %}</td>
+        {% endfor %}</tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% endif %}
+  <p class="refreshed">Source: each hospital's CMS machine-readable file (last refreshed {{ data_refreshed }}). Medicare: CY2025 OPPS/PFS, January-2026 ASC, FY2026 IPPS. Estimates for benchmarking — verify against your contract before relying on a number.</p>
+</main>
+<script>
+  let dir = {};
+  function sortBy(i){
+    const t = document.getElementById('matrix'), rows = [...t.tBodies[0].rows];
+    dir[i] = !dir[i];
+    rows.sort((a, b) => {
+      if (i === 0) return a.cells[0].textContent.localeCompare(b.cells[0].textContent) * (dir[i] ? 1 : -1);
+      const av = parseFloat(a.cells[i].dataset.v), bv = parseFloat(b.cells[i].dataset.v);
+      if (isNaN(av)) return 1; if (isNaN(bv)) return -1;
+      return (av - bv) * (dir[i] ? 1 : -1);
+    });
+    rows.forEach(r => t.tBodies[0].appendChild(r));
+  }
+</script>
+</body>
+</html>

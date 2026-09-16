@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ svc.desc }} — hospital outpatient vs ASC | {{ brand.short }}</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+</head>
+<body>
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    <h1>Site of care: {{ svc.desc }}</h1>
+    <p class="sub">Hospital outpatient department (HOPD) prices versus ambulatory surgery centers, with Medicare's own HOPD-vs-ASC differential as the reference.
+      <br><span class="mute" style="font-size:13px">ASCs are not required to publish prices: {{ published_codes|length }} of the tracked codes have a published non-hospital price in Arizona today. Where none exists, the ASC figure is an explicit estimate at the market's Medicare multiple. Add our own sites' rates to <code>config-ortho/freestanding.yaml</code> to replace estimates with actuals.</span></p>
+  </div>
+  <div class="disclaimer"><strong>Benchmarking data.</strong> Hospital prices come from CMS machine-readable files; ASC prices are published self-pay/cash figures with their source. Not every code is ASC-payable, and ASCs are not required to publish prices.</div>
+
+  <form class="payerbar card" method="get" action="/site-of-care" role="group" aria-label="Choose procedure and area">
+    <label class="pb-lab" for="code"><b>Procedure</b></label>
+    <select id="code" name="code" onchange="this.form.submit()">
+      {% for cat, items in groups %}<optgroup label="{{ cat_labels.get(cat, cat) }}">
+        {% for s in items %}<option value="{{ s.code }}" {% if s.code == svc.code %}selected{% endif %}>{{ s.desc }} ({{ s.code }})</option>{% endfor %}
+      </optgroup>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="metro"><b>Area</b></label>
+    <select id="metro" name="metro" onchange="this.form.submit()">
+      {% include "_area_options.html" %}
+    </select>
+  </form>
+
+  <div class="card savings" style="margin-top:16px">
+    <div class="sv-row">
+      <div class="sv-cell"><div class="sv-lab">Medicare pays a hospital (OPPS)</div><div class="sv-big">{% if med.OPPS %}${{ '{:,.0f}'.format(med.OPPS) }}{% else %}—{% endif %}</div></div>
+      <div class="sv-arrow">vs</div>
+      <div class="sv-cell"><div class="sv-lab">Medicare pays an ASC</div><div class="sv-big">{% if med.ASC %}${{ '{:,.0f}'.format(med.ASC) }}{% else %}—{% endif %}</div></div>
+      {% if med.OPPS and med.ASC %}<div class="sv-cell sv-save"><div class="sv-lab">ASC differential</div><div class="sv-big">{{ ((1 - med.ASC / med.OPPS) * 100)|round(0)|int }}% less</div></div>{% endif %}
+    </div>
+    <div class="sv-note">{% if not med.ASC %}No Medicare ASC rate on file for this code — it is either not on the ASC covered-procedures list or not yet loaded.{% else %}CY2025 OPPS vs January-2026 ASC national unadjusted rates. Commercial contracts usually track this gap.{% endif %}</div>
+  </div>
+
+  <div class="card savings" style="margin-top:16px">
+    <div class="sv-row">
+      <div class="sv-cell"><div class="sv-lab">Hospital typical price ({{ hosp|length }} facilities)</div><div class="sv-big">{% if d.neg_median %}${{ '{:,.0f}'.format(d.neg_median) }}{% else %}—{% endif %}</div></div>
+      <div class="sv-arrow">vs</div>
+      {% if asc_median %}
+      <div class="sv-cell"><div class="sv-lab">ASC / freestanding published price ({{ n_sites }} sites)</div><div class="sv-big">${{ '{:,.0f}'.format(asc_median) }}</div></div>
+      {% elif implied %}
+      <div class="sv-cell"><div class="sv-lab">Implied ASC price · estimate</div><div class="sv-big">≈ ${{ '{:,.0f}'.format(implied) }}</div><div class="mute" style="font-size:12px">hospital typical × Medicare ASC ÷ OPPS</div></div>
+      {% else %}
+      <div class="sv-cell"><div class="sv-lab">ASC / freestanding published price (0 sites)</div><div class="sv-big">—</div></div>
+      {% endif %}
+      {% set alt = asc_median or implied %}
+      {% if d.neg_median and alt and d.neg_median > alt %}<div class="sv-cell sv-save"><div class="sv-lab">Savings per case if shifted{% if not asc_median %} · estimate{% endif %}</div><div class="sv-big">${{ '{:,.0f}'.format(d.neg_median - alt) }}</div></div>
+      {% elif d.neg_median and alt %}<div class="sv-cell"><div class="sv-lab">Savings per case if shifted</div><div class="sv-big">none</div><div class="mute" style="font-size:12px">published site prices are at or above the hospital median</div></div>{% endif %}
+    </div>
+    <div class="sv-note">Hospital figure = median of each facility's cash/negotiated price with mis-keyed outliers excluded; ASC figure = median of published cash prices at ASC, imaging, or office sites. MDsave bundles are listed below for reference but excluded from the shift math because they include surgeon and anesthesia fees.</div>
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">Hospitals (outpatient)</div>
+    {% if hosp %}
+    <table class="fac-t"><thead><tr><th>Facility</th><th class="r">Price</th><th class="r">×Medicare OPPS</th><th>Quality</th></tr></thead><tbody>
+    {% for h in hosp %}<tr class="{{ 'out' if h.outlier }}"><td>{{ h.name }}{% if own_ids and h.id in own_ids %} <span class="badge own">{{ brand.own.label }}</span>{% endif %}</td><td class="r">${{ '{:,.0f}'.format(h.price) }}{% if h.outlier %} <span class="mute">({{ 'likely error' if h.outlier == 'low' else 'gross charge' }})</span>{% endif %}</td><td class="r">{% if med.OPPS %}{{ (h.price / med.OPPS)|round(1) }}×{% else %}—{% endif %}</td>
+      <td>{% if h.stars %}<span class="stars">{{ '★' * h.stars }}<span class="off">{{ '★' * (5 - h.stars) }}</span></span>{% endif %}{% if h.hip_knee %}<div class="hk {{ 'good' if h.hip_knee.compare == 'Better' else ('bad' if h.hip_knee.compare == 'Worse' else '') }}">hip/knee complications {{ h.hip_knee.rate }}%</div>{% endif %}</td></tr>{% endfor %}
+    </tbody></table>
+    {% else %}<div class="mute">No hospital prices for this code{% if metro %} in this area{% endif %}.</div>{% endif %}
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">ASCs, freestanding sites &amp; published bundles</div>
+    {% if asc %}
+    <table class="fac-t"><thead><tr><th>Facility</th><th>Type</th><th>City</th><th class="r">Published price</th><th class="r">×Medicare ASC</th></tr></thead><tbody>
+    {% for a in asc %}<tr><td>{{ a.name }}</td><td><span class="chip">{{ {'asc': 'ASC', 'imaging': 'Imaging', 'office': 'Office', 'bundle': 'MDsave bundle (hospital outpatient)'}.get(a.type, a.type) }}</span></td><td>{{ a.city }}</td><td class="r">${{ '{:,.0f}'.format(a.price) }}</td><td class="r">{% if med.ASC %}{{ (a.price / med.ASC)|round(1) }}×{% else %}—{% endif %}</td></tr>{% endfor %}
+    </tbody></table>
+    {% else %}<div class="mute">No {{ state_name }} ASC, imaging center, or office publishes a price for this code{% if implied %}; the figure above is an estimate at the market's Medicare multiple{% endif %}. Add our own sites' rates to <code>config-ortho/freestanding.yaml</code> to compare actuals against every hospital.</div>{% endif %}
+  </div>
+  <p class="refreshed">Sources: CMS machine-readable files (refreshed {{ data_refreshed }}); CY2025 OPPS Addendum B and January-2026 ASC Addendum AA/BB; Care Compare hip/knee complication measure. Benchmarking estimates, not a quote.</p>
+</main>
+</body>
+</html>

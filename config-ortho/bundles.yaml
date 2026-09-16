@@ -1,0 +1,102 @@
+# Episode (bundle) definitions for /bundles. Each component is priced three ways where data exists:
+#   Medicare (fee schedules), market hospital-based (MRF typical price), ASC-based (published or implied).
+# Component kinds:
+#   facility: CPT whose facility price comes from the MRFs (hospital typical) / ASC published-or-implied / OPPS & ASC
+#   drg:      inpatient alternative for the facility component (market DRG median vs IPPS)
+#   pro:      surgeon fee = Medicare PFS (facility RVUs x CF) x commercial_multiplier
+#   anesthesia: (base_units + minutes/15) x anesthesia_cf x commercial_multiplier  (CMS anesthesia base units)
+#   visits:   pre-op / rehab items = PFS x n x commercial_multiplier
+# Assumptions are visible on the page and editable here. Implants are NOT separate: hospital and ASC
+# facility rates published under the rule include them (CORE's case rates say so explicitly).
+commercial_multiplier: 1.4      # commercial professional rates vs Medicare (editable assumption)
+anesthesia_cf: 20.3178          # CY2025 national anesthesia conversion factor, $ per unit
+episodes:
+  - key: tka
+    label: "Total knee replacement"
+    facility: "27447"
+    drg: "470"
+    pro: "27447"
+    anesthesia: { code: "01402", base_units: 7, minutes: 120 }
+    visits:
+      - { code: "99204", n: 1,  label: "Pre-op consult (new patient)" }
+      - { code: "73560", n: 1,  label: "Pre-op knee X-ray" }
+      - { code: "97161", n: 1,  label: "PT evaluation" }
+      - { code: "97110", n: 12, label: "PT therapeutic exercise, 12 visits" }
+      - { code: "97140", n: 12, label: "PT manual therapy, 12 visits" }
+  - key: tha
+    label: "Total hip replacement"
+    facility: "27130"
+    drg: "470"
+    pro: "27130"
+    anesthesia: { code: "01214", base_units: 8, minutes: 120 }
+    visits:
+      - { code: "99204", n: 1,  label: "Pre-op consult (new patient)" }
+      - { code: "73502", n: 1,  label: "Pre-op hip X-ray" }
+      - { code: "97161", n: 1,  label: "PT evaluation" }
+      - { code: "97110", n: 10, label: "PT therapeutic exercise, 10 visits" }
+  - key: tsa
+    label: "Total shoulder replacement"
+    facility: "23472"
+    pro: "23472"
+    anesthesia: { code: "01638", base_units: 10, minutes: 150 }
+    visits:
+      - { code: "99204", n: 1,  label: "Pre-op consult (new patient)" }
+      - { code: "73030", n: 1,  label: "Pre-op shoulder X-ray" }
+      - { code: "97161", n: 1,  label: "PT evaluation" }
+      - { code: "97110", n: 12, label: "PT therapeutic exercise, 12 visits" }
+  - key: acl
+    label: "ACL reconstruction"
+    facility: "29888"
+    pro: "29888"
+    anesthesia: { code: "01382", base_units: 3, minutes: 120 }
+    visits:
+      - { code: "99204", n: 1,  label: "Pre-op consult (new patient)" }
+      - { code: "73721", n: 1,  label: "MRI knee" }
+      - { code: "97161", n: 1,  label: "PT evaluation" }
+      - { code: "97110", n: 16, label: "PT therapeutic exercise, 16 visits" }
+  - key: rcr
+    label: "Rotator cuff repair"
+    facility: "29827"
+    pro: "29827"
+    anesthesia: { code: "01630", base_units: 5, minutes: 120 }
+    visits:
+      - { code: "99204", n: 1,  label: "Pre-op consult (new patient)" }
+      - { code: "73221", n: 1,  label: "MRI shoulder" }
+      - { code: "97161", n: 1,  label: "PT evaluation" }
+      - { code: "97110", n: 12, label: "PT therapeutic exercise, 12 visits" }
+  - key: knee-scope
+    label: "Knee arthroscopy (meniscectomy)"
+    facility: "29881"
+    pro: "29881"
+    anesthesia: { code: "01382", base_units: 3, minutes: 60 }
+    visits:
+      - { code: "99204", n: 1, label: "Pre-op consult (new patient)" }
+      - { code: "73721", n: 1, label: "MRI knee" }
+      - { code: "97110", n: 6, label: "PT therapeutic exercise, 6 visits" }
+  - key: lumbar-fusion
+    label: "Lumbar fusion, single level"
+    facility: "22612"
+    drg: "451"
+    pro: "22612"
+    anesthesia: { code: "00670", base_units: 13, minutes: 180 }
+    visits:
+      - { code: "99204", n: 1, label: "Pre-op consult (new patient)" }
+      - { code: "72148", n: 1, label: "MRI lumbar spine" }
+      - { code: "97110", n: 8, label: "PT therapeutic exercise, 8 visits" }
+  - key: acdf
+    label: "ACDF, single level"
+    facility: "22551"
+    drg: "473"
+    pro: "22551"
+    anesthesia: { code: "00600", base_units: 10, minutes: 120 }
+    visits:
+      - { code: "99204", n: 1, label: "Pre-op consult (new patient)" }
+      - { code: "72141", n: 1, label: "MRI cervical spine" }
+  - key: carpal-tunnel
+    label: "Carpal tunnel release"
+    facility: "64721"
+    pro: "64721"
+    anesthesia: { code: "01810", base_units: 3, minutes: 30 }
+    visits:
+      - { code: "99203", n: 1, label: "Pre-op consult (new patient)" }
+      - { code: "97110", n: 4, label: "PT/OT therapeutic exercise, 4 visits" }

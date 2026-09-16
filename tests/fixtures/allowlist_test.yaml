@@ -1,0 +1,7 @@
+# Fixed allowlist for tests ONLY — matches the codes in the MRF fixtures, so the
+# test suite is independent of the (mutable) production config/allowlist.yaml.
+codes:
+  - { code: "73721", type: CPT,   desc: "MRI lower extremity joint w/o contrast", category: imaging,   shoppable: true }
+  - { code: "85025", type: CPT,   desc: "Complete blood count with differential", category: lab,       shoppable: true }
+  - { code: "G0463", type: HCPCS, desc: "Hospital outpatient clinic visit",       category: er_em,     shoppable: true }
+  - { code: "470",   type: DRG,   desc: "Major hip/knee joint replacement w/o MCC", category: inpatient, shoppable: true }

@@ -1,0 +1,7 @@
+hospital_name,last_updated_on,version,hospital_address
+County Medical Center,2024-02-01,3.0.0,"5 Oak Ave, Austin, TX 78701"
+description,code 1,code 1 type,standard_charge discounted_cash,payer,plan_name,standard_charge negotiated_dollar,standard_charge min,standard_charge max
+Hospital outpatient clinic visit,G0463,HCPCS,150,Medicaid,Managed,120,120,200
+Major hip/knee joint replacement,470,MS-DRG,18000,Aetna,PPO,16000,16000,22000
+Emergency room facility fee,0450,RC,800,Aetna,PPO,700,700,900
+Mystery uncoded line item,ABCDE,,300,Aetna,PPO,250,250,400

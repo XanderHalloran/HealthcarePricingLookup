@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ meta_desc }}">
+<link rel="canonical" href="{{ canonical }}">
+<meta property="og:type" content="article">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ meta_desc }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:site_name" content="Medical Price & Bill Coach">
+<meta property="og:image" content="{{ base }}/static/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ title }}">
+<meta name="twitter:description" content="{{ meta_desc }}">
+<meta name="twitter:image" content="{{ base }}/static/og.png">
+<script type="application/ld+json">{{ ld|tojson }}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+</head>
+{% import "_card.html" as c with context %}
+<body>
+<main>
+{% include "_nav.html" %}
+  <nav class="crumb"><a href="/">Home</a> › {{ city }} › <span>{{ r.code }}</span></nav>
+  <div class="hero">
+    <h1>How much does {{ desc }} cost in {{ city }}?</h1>
+    <p class="sub">CPT {{ r.code }} — the fair price, every hospital's price, and the Medicare benchmark for {{ city }}.</p>
+  </div>
+  <div class="disclaimer"><strong>Estimates only.</strong> Educational estimates from public Medicare
+    benchmarks and hospital-published prices — not a guarantee, and not legal, medical, or financial advice.</div>
+
+  {{ c.card(r, 0) }}
+
+  {# Sibling areas — internal links + lets a visitor jump to their own metro #}
+  <div class="card" style="margin-top:16px">
+    <div class="fac-h">See {{ desc }} prices in another area</div>
+    <div class="linkgrid">
+      {% for s in siblings %}<a class="pill" href="{{ s.url }}">{{ s.label }}</a>{% endfor %}
+    </div>
+  </div>
+
+  <div class="prose">
+    <h2>What should {{ r.code }} cost in {{ city }}?</h2>
+    <p>For <b>{{ desc }}</b> (CPT {{ r.code }}) in {{ city }},
+      {% if r.result.neg_median is not none %}a fair self-pay price is around
+        <b>${{ '{:,.0f}'.format(r.result.neg_median) }}</b>,
+        with hospitals ranging from ${{ '{:,.0f}'.format(r.result.neg_low) }} to
+        ${{ '{:,.0f}'.format(r.result.neg_high) }} across {{ r.result.n_hospitals }} facilities.{% else %}hospital prices vary widely — compare each facility above.{% endif %}
+      {% if not r.result.medicare_missing %}Medicare's benchmark rate is
+        <b>${{ '{:,.0f}'.format(r.result.medicare_rate) }}</b>, the floor to negotiate toward.{% endif %}
+      The card above lists each hospital's price, cheapest first, with CMS quality stars.</p>
+
+    <h2>Frequently asked questions</h2>
+    {% for f in faqs %}
+      <div class="faq"><h3>{{ f.q }}</h3><p>{{ f.a }}</p></div>
+    {% endfor %}
+
+    <h2>Got a bill for this?</h2>
+    <p>If you were charged more than the fair price, you can usually negotiate it down.
+      <a href="/">Paste your itemized bill</a> to get a personalized appeal letter, the exact
+      numbers to cite, an AI negotiation coach, and a charity-care eligibility check — free.</p>
+
+    <h2>Compare other procedures in {{ city }}</h2>
+    <div class="linkgrid">
+      {% for p in related %}<a class="pill" href="{{ p.url }}">{{ p.desc }}</a>{% endfor %}
+    </div>
+    <p class="refreshed">Prices last refreshed {{ data_refreshed }} from each hospital's official CMS machine-readable file. Medicare rate: CY2025 OPPS/PFS/CLFS. Estimates only — not a guarantee.</p>
+  </div>
+</main>
+<script>
+  function flash(btn, msg){ if(!btn) return; const t=btn.textContent; btn.textContent=msg; setTimeout(()=>btn.textContent=t, 1400); }
+  function copyText(text, btn){ navigator.clipboard.writeText('$'+Number(text).toLocaleString()); flash(btn, 'Copied ✓'); }
+  function copyPts(id, btn){
+    const items=[...document.querySelectorAll('#'+id+' li')].map(li=>'• '+li.textContent.trim());
+    navigator.clipboard.writeText(items.join('\n')); flash(btn, 'Copied ✓');
+  }
+  function toggleMore(btn){
+    const fac = btn.closest('.facilities');
+    const expanded = fac.classList.toggle('expanded');
+    [...fac.querySelectorAll('tbody tr')].forEach((r,i)=>{ r.hidden = i>=12 && !expanded; });
+    btn.textContent = expanded ? btn.dataset.less : btn.dataset.more;
+  }
+</script>
+</body>
+</html>

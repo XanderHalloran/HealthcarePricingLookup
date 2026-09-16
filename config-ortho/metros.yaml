@@ -1,0 +1,189 @@
+# Arizona metros for ortho.traqqit.com (mirror of config/metros.yaml, AZ only).
+states:
+  - { code: AZ, name: Arizona, slug: arizona }
+  - { code: VA, name: Virginia, slug: virginia }
+
+metros:
+  - key: phoenix
+    state: AZ
+    promote: true
+    label: "Phoenix Metro"
+    slug_city: "Phoenix, AZ"
+    ids:
+      - BANNER-UMC-PHX
+      - BANNER-ESTRELLA
+      - BANNER-DESERT
+      - BANNER-THUNDERBIRD
+      - BANNER-GATEWAY
+      - BANNER-BAYWOOD
+      - BANNER-BOSWELL
+      - BANNER-DELWEBB
+      - BANNER-HEART
+      - BANNER-IRONWOOD
+      - HONOR-SHEA
+      - HONOR-DEERVALLEY
+      - HONOR-JOHNLINCOLN
+      - HONOR-SONORAN
+      - HONOR-OSBORN
+      - HONOR-THOMPSONPEAK
+      - HONOR-FOURPEAKS
+      - HONOR-TEMPE
+      - HONOR-FLORENCE
+      - VALLEYWISE-PHX
+      - PHX-CHILDRENS
+      - CORE-SPECIALTY-PHX
+      - DIGNITY-CHANDLER
+      - DIGNITY-MERCYGILBERT
+      - DIGNITY-STJOSEPHS
+      - ABRAZO-ARROWHEAD
+      - ABRAZO-HEART
+      - BANNER-CASA-GRANDE
+      - BANNER-PAYSON
+      - WICKENBURG
+
+  - key: tucson
+    state: AZ
+    promote: true
+    label: "Tucson Metro"
+    slug_city: "Tucson, AZ"
+    ids:
+      - BANNER-UMC-TUCSON
+      - BANNER-UMC-SOUTH
+      - TMC-TUCSON
+      - NORTHWEST-TUCSON
+      - ORO-VALLEY
+      - NORTHWEST-HOUGHTON
+      - CARONDELET-STJOSEPH-TUC
+      - CARONDELET-STMARY-TUC
+      - CARONDELET-HOLYCROSS
+
+  - key: northern
+    state: AZ
+    label: "Northern Arizona"
+    slug_city: "Northern Arizona"
+    ids:
+      - NAH-FLAGSTAFF
+      - NAH-VERDE-VALLEY
+      - YRMC-PRESCOTT
+      - KINGMAN-RMC
+      - HAVASU-RMC
+      - SUMMIT-SHOW-LOW
+      - BANNER-PAGE
+      - LCMC-WINSLOW
+      - WMRMC-SPRINGERVILLE
+
+  - key: southern
+    state: AZ
+    label: "Southern & Western Arizona"
+    slug_city: "Southern Arizona"
+    ids:
+      - YUMA-REGIONAL
+      - CANYON-VISTA
+      - COPPER-QUEEN
+      - MT-GRAHAM
+      - COBRE-VALLEY
+      - LA-PAZ-REGIONAL
+      - NORTHERN-COCHISE
+
+  # ===== Virginia =====
+  - key: richmond
+    state: VA
+    label: "Richmond"
+    slug_city: "richmond"
+    ids:
+      - VCU-MAIN
+      - HCA-CHIPPENHAM
+      - HCA-JOHNSTON-WILLIS
+      - HCA-HENRICO
+      - HCA-PARHAM
+      - HCA-RETREAT
+      - HCA-TRICITIES
+      - BONSECOURS-ST-MARYS
+      - BONSECOURS-MEMORIAL-REGIONAL
+      - BONSECOURS-ST-FRANCIS
+      - BONSECOURS-SOUTHSIDE
+
+  - key: northern-virginia
+    state: VA
+    label: "Northern Virginia"
+    slug_city: "northern-virginia"
+    ids:
+      - INOVA-FAIRFAX
+      - INOVA-LOUDOUN
+      - INOVA-ALEXANDRIA
+      - INOVA-FAIR-OAKS
+      - INOVA-MOUNT-VERNON
+      - HCA-RESTON
+      - HCA-STONESPRINGS
+      - SENTARA-NOVA
+      - UVA-CULPEPER
+      - UVA-PRINCE-WILLIAM
+      - UVA-HAYMARKET
+      - MARYWASH-MAIN
+      - MARYWASH-STAFFORD
+      - HCA-SPOTSYLVANIA
+      - LIFEPOINT-FAUQUIER
+
+  - key: hampton-roads
+    state: VA
+    label: "Hampton Roads"
+    slug_city: "hampton-roads"
+    ids:
+      - SENTARA-NORFOLK
+      - SENTARA-LEIGH
+      - SENTARA-PRINCESS-ANNE
+      - SENTARA-VBGH
+      - SENTARA-CAREPLEX
+      - SENTARA-WILLIAMSBURG
+      - SENTARA-OBICI
+      - BONSECOURS-MARYVIEW
+      - BONSECOURS-MARY-IMMACULATE
+      - BONSECOURS-HARBOUR-VIEW
+      - CHESAPEAKE-REGIONAL
+      - RIVERSIDE-REGIONAL
+      - RIVERSIDE-WILLIAMSBURG
+      - RIVERSIDE-WALTER-REED
+
+  - key: charlottesville
+    state: VA
+    label: "Charlottesville"
+    slug_city: "charlottesville"
+    ids:
+      - UVA-MAIN
+      - SENTARA-MARTHA
+
+  - key: roanoke-lynchburg
+    state: VA
+    label: "Roanoke / Lynchburg"
+    slug_city: "roanoke"
+    ids:
+      - CARILION-ROANOKE
+      - CARILION-NRV
+      - HCA-LEWISGALE-SALEM
+      - HCA-LEWISGALE-MONTGOMERY
+      - HCA-LEWISGALE-PULASKI
+      - HCA-LEWISGALE-ALLEGHANY
+
+  - key: southwest-virginia
+    state: VA
+    label: "Southwest Virginia"
+    slug_city: "southwest-virginia"
+    ids:
+      - BALLAD-JOHNSTON
+      - BALLAD-SMYTH
+      - BALLAD-LONESOME-PINE
+      - BALLAD-RUSSELL
+      - SOVAH-DANVILLE
+      - SOVAH-MARTINSVILLE
+      - LIFEPOINT-CLINCH-VALLEY
+      - LIFEPOINT-WYTHE
+      - LIFEPOINT-TWIN-COUNTY
+      - SENTARA-HALIFAX
+
+  - key: shenandoah
+    state: VA
+    label: "Shenandoah Valley"
+    slug_city: "shenandoah-valley"
+    ids:
+      - SENTARA-RMH
+      - AUGUSTA-HEALTH

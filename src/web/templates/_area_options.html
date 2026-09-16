@@ -1,0 +1,5 @@
+{# Area selector for the ortho analysis pages: "All <state>" per live market + its metros. #}
+{% for s in state_list %}<optgroup label="{{ s.name }}">
+  <option value="{{ s.code }}" {% if metro == s.code or (not metro and s.code == state) %}selected{% endif %}>All {{ s.name }}</option>
+  {% for x in metro_list if x.state == s.code %}<option value="{{ x.key }}" {% if x.key == metro %}selected{% endif %}>{{ x.label }}</option>{% endfor %}
+</optgroup>{% endfor %}

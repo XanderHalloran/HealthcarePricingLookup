@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Methodology — how the prices are built | {{ brand.short }}</title>
+<meta name="description" content="Where every number on {{ brand.short }} comes from: hospital machine-readable price files, Medicare fee schedules, CMS quality measures, and exactly how they are filtered, aggregated, and benchmarked.">
+<link rel="canonical" href="{{ base }}/methodology">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+<style>
+  .flow { width:100%; height:auto; display:block; margin:8px 0 4px; font-family:Inter,system-ui,sans-serif; }
+  .flow .box { fill:var(--sage); stroke:var(--line); stroke-width:1.5; rx:10; }
+  .flow .box.src { fill:var(--green-pale); stroke:var(--green); }
+  .flow .box.out { fill:var(--forest); stroke:var(--forest); }
+  .flow text { fill:var(--body); font-size:12px; }
+  .flow text.t { font-weight:700; font-size:14px; fill:var(--forest); }
+  .flow .out text, .flow text.w { fill:#fff; }
+  .flow .lane { fill:none; stroke:var(--line); stroke-dasharray:4 4; }
+  .flow text.lane-t { font-size:11px; letter-spacing:1px; fill:var(--mute); font-weight:600; }
+  .flow .arrow { fill:none; stroke:var(--forest); stroke-width:2; marker-end:url(#ah); }
+  .flow .join { fill:none; stroke:var(--forest); stroke-width:2; }
+  .flow text.note { font-size:11px; fill:var(--mute); }
+  .kv { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:12px; margin-top:10px; }
+  .kv div { background:var(--sage); border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .kv b { display:block; font-size:22px; color:var(--forest); }
+  .kv span { font-size:12px; color:var(--mute); }
+  .m-src th { text-align:left; }
+</style>
+</head>
+<body>
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    <h1>How the numbers are built</h1>
+    <p class="sub">Every price on this site comes from a public file a hospital or CMS published. This page shows the path from those files to a number on a page, and what we do (and don't do) along the way.</p>
+  </div>
+
+  <div class="card">
+    <div class="fac-h">Coverage right now</div>
+    <div class="kv">
+      <div><b>{{ cov.hospitals }}</b><span>facilities with prices{% if cov.states|length > 1 %} across {{ cov.states|length }} states{% else %} in {{ state_name }}{% endif %}</span></div>
+      <div><b>{{ cov.codes }}</b><span>procedure / DRG codes tracked</span></div>
+      <div><b>{{ cov.rows }}</b><span>facility × code price rows</span></div>
+      <div><b>{{ cov.payers }}</b><span>insurers with facility-level negotiated rates</span></div>
+      <div><b>{{ data_refreshed }}</b><span>last refresh (rebuilt weekly)</span></div>
+    </div>
+    {% if cov.states|length > 1 %}<p class="mute" style="margin:10px 0 0;font-size:13px">By state: {% for s in cov.states %}{{ s.name }} {{ s.n }}{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">Data flow</div>
+    <svg class="flow" viewBox="0 0 1000 470" role="img" aria-labelledby="flow-title flow-desc">
+      <title id="flow-title">Data flow from public sources to pages</title>
+      <desc id="flow-desc">Hospital price files and CMS fee schedules are fetched weekly, parsed, filtered to the tracked codes, aggregated per facility into a columnar dataset, benchmarked against Medicare, and rendered as compare, payer-rate, and site-of-care pages.</desc>
+      <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="var(--forest)"/></marker></defs>
+
+      <!-- lanes -->
+      <rect class="lane" x="10" y="10" width="244" height="450"/><text class="lane-t" x="24" y="32">PUBLIC SOURCES</text>
+      <rect class="lane" x="272" y="10" width="446" height="450"/><text class="lane-t" x="286" y="32">PIPELINE · WEEKLY</text>
+      <rect class="lane" x="736" y="10" width="254" height="450"/><text class="lane-t" x="750" y="32">APP · PER REQUEST</text>
+
+      <!-- sources -->
+      <rect class="box src" x="22" y="52" width="220" height="84"/>
+      <text class="t" x="34" y="74">Hospital price files</text>
+      <text x="34" y="94">CMS machine-readable files,</text>
+      <text x="34" y="110">one per hospital (CSV / JSON)</text>
+      <text class="note" x="34" y="127">45 CFR 180 · published by hospitals</text>
+
+      <rect class="box src" x="22" y="156" width="220" height="112"/>
+      <text class="t" x="34" y="178">Medicare fee schedules</text>
+      <text x="34" y="198">OPPS (hospital outpatient)</text>
+      <text x="34" y="214">PFS RVUs × conversion factor</text>
+      <text x="34" y="230">CLFS labs · IPPS DRG weights</text>
+      <text x="34" y="246">ASC Addendum AA / BB</text>
+      <text class="note" x="34" y="262">cms.gov · yearly or quarterly</text>
+
+      <rect class="box src" x="22" y="288" width="220" height="84"/>
+      <text class="t" x="34" y="310">CMS quality data</text>
+      <text x="34" y="330">Care Compare star ratings</text>
+      <text x="34" y="346">hip / knee complication rate</text>
+      <text class="note" x="34" y="363">data.cms.gov · by facility CCN</text>
+
+      <!-- pipeline: column A -->
+      <rect class="box" x="290" y="52" width="200" height="68"/>
+      <text class="t" x="302" y="74">1 · Fetch</text>
+      <text x="302" y="94">every file re-downloaded,</text>
+      <text x="302" y="110">streamed, nothing kept</text>
+
+      <rect class="box" x="290" y="150" width="200" height="68"/>
+      <text class="t" x="302" y="172">4 · Aggregate</text>
+      <text x="302" y="192">per facility × code: cash,</text>
+      <text x="302" y="208">negotiated min / median / max</text>
+
+      <rect class="box" x="290" y="248" width="200" height="68"/>
+      <text class="t" x="302" y="270">5 · Payer rates</text>
+      <text x="302" y="290">plan names → {{ cov.payers }} insurers</text>
+      <text x="302" y="306">median per facility × insurer</text>
+
+      <!-- pipeline: column B -->
+      <rect class="box" x="506" y="52" width="200" height="68"/>
+      <text class="t" x="518" y="74">2 · Parse</text>
+      <text x="518" y="94">tall CSV · wide CSV · JSON</text>
+      <text x="518" y="110">one row per code × payer</text>
+
+      <rect class="box" x="506" y="150" width="200" height="68"/>
+      <text class="t" x="518" y="172">3 · Keep tracked codes</text>
+      <text x="518" y="192">{{ cov.codes }} shoppable codes kept,</text>
+      <text x="518" y="208">everything else dropped</text>
+
+      <rect class="box" x="506" y="248" width="200" height="68"/>
+      <text class="t" x="518" y="270">6 · Columnar dataset</text>
+      <text x="518" y="290">Parquet by state and code,</text>
+      <text x="518" y="306">swapped in atomically</text>
+
+      <rect class="box" x="290" y="346" width="416" height="76"/>
+      <text class="t" x="302" y="368">Reference tables (loaded at start)</text>
+      <text x="302" y="388">Medicare benchmarks by code and source</text>
+      <text x="302" y="404">quality by facility · metros · sites with published prices</text>
+
+      <!-- app -->
+      <rect class="box" x="748" y="52" width="230" height="84"/>
+      <text class="t" x="760" y="74">Benchmark &amp; statistics</text>
+      <text x="760" y="94">×Medicare · IQR band · outliers</text>
+      <text x="760" y="110">typical price · ask target</text>
+      <text x="760" y="126">percentile of your rate</text>
+
+      <rect class="box out" x="748" y="160" width="230" height="52"/>
+      <text class="t w" x="760" y="182" style="fill:#fff">Compare pages</text>
+      <text class="w" x="760" y="200">every facility, cheapest first</text>
+
+      <rect class="box out" x="748" y="232" width="230" height="52"/>
+      <text class="t w" x="760" y="254" style="fill:#fff">Payer rates</text>
+      <text class="w" x="760" y="272">facility × insurer matrix, CSV</text>
+
+      <rect class="box out" x="748" y="304" width="230" height="52"/>
+      <text class="t w" x="760" y="326" style="fill:#fff">Site of care</text>
+      <text class="w" x="760" y="344">hospital outpatient vs ASC</text>
+
+      <rect class="box out" x="748" y="376" width="230" height="52"/>
+      <text class="t w" x="760" y="398" style="fill:#fff">Bill analysis &amp; letter</text>
+      <text class="w" x="760" y="416">paste a bill, get the numbers</text>
+
+      <!-- arrows: sources -> pipeline (routed through the lane gap at x=263) -->
+      <path class="arrow" d="M242,94 H263 V86 H290"/>
+      <path class="arrow" d="M242,212 H263 V384 H290"/>
+      <path class="join" d="M242,330 H263"/>
+      <!-- pipeline chain -->
+      <path class="arrow" d="M490,86 H506"/>
+      <path class="arrow" d="M606,120 V150"/>
+      <path class="arrow" d="M506,184 H490"/>
+      <path class="arrow" d="M390,218 V248"/>
+      <path class="arrow" d="M490,282 H506"/>
+      <!-- pipeline -> app (routed through the lane gap at x=727) -->
+      <path class="arrow" d="M706,282 H727 V94 H748"/>
+      <path class="join" d="M706,384 H727"/>
+      <!-- app chain -->
+      <path class="arrow" d="M863,136 V160"/>
+      <path class="arrow" d="M863,212 V232"/>
+      <path class="arrow" d="M863,284 V304"/>
+      <path class="arrow" d="M863,356 V376"/>
+    </svg>
+  </div>
+
+  <div class="prose">
+    <h2>Sources</h2>
+    <table class="fac-t m-src"><thead><tr><th>What</th><th>Where it comes from</th><th>Vintage</th></tr></thead><tbody>
+      <tr><td>Facility prices (cash, negotiated)</td><td>Each hospital's CMS machine-readable file, linked from its <code>cms-hpt.txt</code> or price-transparency page</td><td>Whatever the hospital last published; re-fetched weekly</td></tr>
+      <tr><td>Hospital outpatient benchmark</td><td>Medicare OPPS Addendum B, national unadjusted payment rate</td><td>CY{{ med_year }}</td></tr>
+      <tr><td>Physician / office benchmark</td><td>Medicare PFS: non-facility total RVU × conversion factor (${{ pfs_cf }})</td><td>CY{{ med_year }}</td></tr>
+      <tr><td>Lab benchmark</td><td>Medicare Clinical Laboratory Fee Schedule</td><td>CY{{ med_year }}</td></tr>
+      {% if 'IPPS' in med_sources %}<tr><td>Inpatient (MS-DRG) benchmark</td><td>IPPS: DRG relative weight × (operating + capital national base rate), wage index 1.0</td><td>FY2026 Final Rule Tables 5 and 1A/1D</td></tr>{% endif %}
+      {% if 'ASC' in med_sources %}<tr><td>ASC benchmark</td><td>Medicare ASC Addendum AA/BB national payment rate; packaged codes shown as not separately payable</td><td>January 2026 update</td></tr>{% endif %}
+      <tr><td>Quality</td><td>Care Compare overall star rating{% if has_hk %}; hip/knee replacement complication rate (COMP_HIP_KNEE), matched to facilities by CCN or name{% endif %}</td><td>Latest Care Compare release</td></tr>
+    </tbody></table>
+
+    <h2>What we compute, exactly</h2>
+    <div class="faq"><h3>Which rows are kept</h3><p>Only rows whose code is on <a href="#codes">the tracked list ({{ cov.codes }} codes)</a>. A hospital file typically has hundreds of thousands of rows; a few thousand survive. Rows without a usable code, and files that contain only chargemaster items with no CPT/HCPCS/DRG codes, are dropped and logged.</p></div>
+    <div class="faq"><h3>The per-facility price</h3><p>For each facility and code: <b>cash</b> is the published discounted cash price; <b>negotiated min / median / max</b> summarize every payer row for that code. The facility list shows cash where published, otherwise the negotiated median.</p></div>
+    <div class="faq"><h3>Payer rates</h3><p>Raw plan names are collapsed to {{ cov.payers }} insurers (all Aetna plans → Aetna, Blue Cross / Blue Shield / Anthem → BCBS, and so on). The rate shown for a facility and insurer is the median across that insurer's plans. Plans that don't map to a major insurer are excluded from the payer view but still count in the negotiated range.</p></div>
+    <div class="faq"><h3>Typical price and the band</h3><p>Across the facilities in the selected area, the <b>typical price</b> is the median with implausible values excluded: anything under 25% of the Medicare rate (a mis-keyed file), and anything outside the Tukey fences (1.5× the interquartile range). The band shown is the 25th to 75th percentile; flagged outliers stay visible in the table, marked.</p></div>
+    <div class="faq"><h3>Medicare multiples and the ask</h3><p>Every price is expressed as a multiple of the Medicare benchmark for its setting (OPPS for hospital outpatient, IPPS for inpatient DRGs, PFS for office). The suggested ask is the lower of 2× Medicare or the local cash price, a figure most facilities accept for self-pay.</p></div>
+    <div class="faq"><h3>Site of care</h3><p>Medicare's own hospital-outpatient (OPPS) and ASC rates for the same code give the reference differential. The per-case shift figure is the hospital typical price minus the median of published non-hospital prices for that code, using only sites that publish a price.</p></div>
+    <div class="faq"><h3>Percentiles</h3><p>"Your rate is at the Nth percentile" means N% of facilities in the selected column have a lower published rate. It is computed over the facilities shown, not a national sample.</p></div>
+
+    <h2>What this is not</h2>
+    <ul>
+      <li><b>Not a quote.</b> Files carry facility fees; professional (surgeon, anesthesia) fees are often separate. Some hospitals publish gross charges only, or one price for a bundle of codes.</li>
+      <li><b>Not a contract.</b> A payer column is a facility's median across that insurer's plans, and hospitals sometimes publish algorithms instead of dollars. Verify before relying on a number.</li>
+      <li><b>Not complete.</b> Ambulatory surgery centers and physician offices are not required to publish files; the non-hospital rows here are the ones that chose to. Quality measures are blank where CMS reports too few cases.</li>
+      <li><b>Not advice.</b> Educational estimates from public data; not legal, medical, or financial advice, and not a guarantee of what anyone will pay.</li>
+    </ul>
+
+    <h2 id="codes">The tracked codes</h2>
+    <p>Every code the pipeline keeps, by category. Codes marked with a link have a dedicated page per metro.</p>
+    {% for cat, items in groups %}
+    <h3 style="margin:14px 0 4px">{{ cat_labels.get(cat, cat) }} <span class="mute" style="font-weight:400">({{ items|length }})</span></h3>
+    <table class="fac-t"><tbody>
+      {% for s in items %}<tr><td style="white-space:nowrap"><code>{{ s.type }} {{ s.code }}</code></td><td>{% if s.slug and first_metro %}<a href="/{{ state_slug }}/{{ first_metro }}/{{ s.slug }}">{{ s.desc }}</a>{% else %}{{ s.desc }}{% endif %}</td></tr>{% endfor %}
+    </tbody></table>
+    {% endfor %}
+
+    <h2>Freshness and reproducibility</h2>
+    <p>The whole dataset is rebuilt from scratch every week: every file is downloaded again, parsed, filtered, and swapped in atomically, so the site never serves a half-built dataset. Hospital files change on their own schedules; the vintage shown on each page is our last rebuild ({{ data_refreshed }}). Every source above is public and linkable, so any number here can be traced back to a row in a hospital's own file.</p>
+    <p class="refreshed"><a href="/">← Back to the site</a></p>
+  </div>
+</main>
+</body>
+</html>

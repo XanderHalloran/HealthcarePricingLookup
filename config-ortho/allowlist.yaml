@@ -1,0 +1,95 @@
+# ORTHO / MSK allowlist for ortho.traqqit.com (APP_PROFILE=ortho). Same shape as
+# config/allowlist.yaml; categories drive the picker headings. DRG rows benchmark against
+# IPPS (config-ortho/ipps.yaml); CPT rows against OPPS (hospital outpatient), PFS, and the
+# ASC fee schedule (site-of-care differential). `slug` = readable SEO page.
+codes:
+  # ===== Joint replacement =====
+  - { code: "27447", type: CPT, desc: "Total knee replacement (arthroplasty)",          category: joint, slug: knee-replacement }
+  - { code: "27130", type: CPT, desc: "Total hip replacement (arthroplasty)",           category: joint, slug: hip-replacement }
+  - { code: "27446", type: CPT, desc: "Partial (unicompartmental) knee replacement",    category: joint }
+  - { code: "23472", type: CPT, desc: "Total shoulder replacement (arthroplasty)",      category: joint, slug: shoulder-replacement }
+  - { code: "27487", type: CPT, desc: "Revision total knee replacement",                category: joint }
+  - { code: "27134", type: CPT, desc: "Revision total hip replacement",                 category: joint }
+  - { code: "470",   type: DRG, desc: "Major hip/knee joint replacement, inpatient, w/o MCC", category: inpatient }
+  - { code: "469",   type: DRG, desc: "Major hip/knee joint replacement, inpatient, w/ MCC",  category: inpatient }
+  - { code: "468",   type: DRG, desc: "Revision of hip or knee replacement, inpatient, w/o CC/MCC", category: inpatient }
+  # ===== Arthroscopy / sports =====
+  - { code: "29881", type: CPT, desc: "Knee arthroscopy with meniscectomy",             category: arthroscopy, slug: knee-arthroscopy }
+  - { code: "29880", type: CPT, desc: "Knee arthroscopy, medial and lateral meniscectomy", category: arthroscopy }
+  - { code: "29888", type: CPT, desc: "ACL reconstruction, arthroscopic",               category: arthroscopy, slug: acl-reconstruction }
+  - { code: "29827", type: CPT, desc: "Shoulder arthroscopy, rotator cuff repair",      category: arthroscopy, slug: rotator-cuff-repair }
+  - { code: "29826", type: CPT, desc: "Shoulder arthroscopy, subacromial decompression", category: arthroscopy }
+  - { code: "29824", type: CPT, desc: "Shoulder arthroscopy, distal claviculectomy",    category: arthroscopy }
+  - { code: "29823", type: CPT, desc: "Shoulder arthroscopy, extensive debridement",    category: arthroscopy }
+  - { code: "29806", type: CPT, desc: "Shoulder arthroscopy, capsulorrhaphy (labral/instability)", category: arthroscopy }
+  - { code: "29914", type: CPT, desc: "Hip arthroscopy, femoroplasty (FAI)",            category: arthroscopy }
+  - { code: "29891", type: CPT, desc: "Ankle arthroscopy with osteochondral repair",    category: arthroscopy }
+  # ===== Spine =====
+  - { code: "22551", type: CPT, desc: "Anterior cervical discectomy & fusion (ACDF), 1 level", category: spine, slug: acdf }
+  - { code: "22612", type: CPT, desc: "Lumbar spinal fusion, posterior, 1 level",       category: spine, slug: lumbar-fusion }
+  - { code: "22633", type: CPT, desc: "Lumbar interbody + posterior fusion (TLIF/PLIF), 1 level", category: spine }
+  - { code: "63030", type: CPT, desc: "Lumbar discectomy (laminotomy), 1 level",        category: spine, slug: lumbar-discectomy }
+  - { code: "63047", type: CPT, desc: "Lumbar laminectomy (decompression), 1 level",    category: spine }
+  - { code: "62323", type: CPT, desc: "Lumbar epidural steroid injection, with imaging", category: spine, slug: epidural-injection }
+  - { code: "64483", type: CPT, desc: "Transforaminal epidural injection, lumbar, 1 level", category: spine }
+  - { code: "64493", type: CPT, desc: "Facet joint injection, lumbar, 1 level",         category: spine }
+  - { code: "64635", type: CPT, desc: "Radiofrequency ablation, lumbar facet, 1 level", category: spine }
+  - { code: "22514", type: CPT, desc: "Kyphoplasty, lumbar",                             category: spine }
+  - { code: "451",   type: DRG, desc: "Single-level spinal fusion except cervical, inpatient, w/o MCC", category: inpatient }
+  - { code: "448",   type: DRG, desc: "Multi-level spinal fusion except cervical, inpatient, w/o MCC", category: inpatient }
+  - { code: "473",   type: DRG, desc: "Cervical spinal fusion, inpatient, w/o CC/MCC",   category: inpatient }
+  # ===== Fracture care =====
+  - { code: "27236", type: CPT, desc: "Hip fracture (femoral neck), open treatment / hemiarthroplasty", category: fracture }
+  - { code: "27245", type: CPT, desc: "Hip fracture (intertrochanteric), intramedullary nail", category: fracture }
+  - { code: "25608", type: CPT, desc: "Distal radius (wrist) fracture, open reduction & fixation", category: fracture }
+  - { code: "27792", type: CPT, desc: "Ankle fracture (lateral malleolus), open reduction & fixation", category: fracture }
+  - { code: "23615", type: CPT, desc: "Proximal humerus fracture, open reduction & fixation", category: fracture }
+  - { code: "27814", type: CPT, desc: "Bimalleolar ankle fracture, open reduction & fixation", category: fracture }
+  - { code: "481",   type: DRG, desc: "Hip & femur procedures except major joint, inpatient, w/ CC", category: inpatient }
+  # ===== Hand / upper extremity =====
+  - { code: "64721", type: CPT, desc: "Carpal tunnel release",                            category: hand, slug: carpal-tunnel-release }
+  - { code: "26055", type: CPT, desc: "Trigger finger release",                           category: hand }
+  - { code: "25000", type: CPT, desc: "De Quervain's release",                            category: hand }
+  - { code: "24359", type: CPT, desc: "Tennis elbow (lateral epicondylitis) release",     category: hand }
+  - { code: "64718", type: CPT, desc: "Cubital tunnel (ulnar nerve) transposition",       category: hand }
+  # ===== Foot / ankle =====
+  - { code: "28296", type: CPT, desc: "Bunionectomy with osteotomy (hallux valgus)",     category: foot, slug: bunion-surgery }
+  - { code: "27650", type: CPT, desc: "Achilles tendon repair",                           category: foot }
+  - { code: "28285", type: CPT, desc: "Hammertoe correction",                             category: foot }
+  - { code: "28060", type: CPT, desc: "Plantar fasciotomy",                               category: foot }
+  - { code: "27870", type: CPT, desc: "Ankle fusion (arthrodesis)",                       category: foot }
+  # ===== Imaging (MSK) =====
+  - { code: "73721", type: CPT, desc: "MRI knee (lower extremity joint), without contrast", category: imaging, slug: mri-knee }
+  - { code: "73221", type: CPT, desc: "MRI shoulder (upper extremity joint), without contrast", category: imaging, slug: mri-shoulder }
+  - { code: "72148", type: CPT, desc: "MRI lumbar spine, without contrast",              category: imaging, slug: mri-lumbar-spine }
+  - { code: "72141", type: CPT, desc: "MRI cervical spine, without contrast",            category: imaging }
+  - { code: "73718", type: CPT, desc: "MRI lower extremity (non-joint), without contrast", category: imaging }
+  - { code: "73700", type: CPT, desc: "CT lower extremity, without contrast",            category: imaging }
+  - { code: "72131", type: CPT, desc: "CT lumbar spine, without contrast",               category: imaging }
+  - { code: "73560", type: CPT, desc: "X-ray knee, 1-2 views",                           category: imaging }
+  - { code: "73030", type: CPT, desc: "X-ray shoulder, 2+ views",                        category: imaging }
+  - { code: "72110", type: CPT, desc: "X-ray lumbar spine, 4+ views",                    category: imaging }
+  - { code: "73502", type: CPT, desc: "X-ray hip, 2-3 views",                            category: imaging }
+  - { code: "77080", type: CPT, desc: "DEXA bone density scan",                          category: imaging }
+  # ===== Injections / office / conservative care =====
+  - { code: "20610", type: CPT, desc: "Major joint injection/aspiration (knee, hip, shoulder)", category: injection, slug: joint-injection }
+  - { code: "20611", type: CPT, desc: "Major joint injection with ultrasound guidance", category: injection }
+  - { code: "20605", type: CPT, desc: "Intermediate joint injection (wrist, elbow, ankle)", category: injection }
+  - { code: "20550", type: CPT, desc: "Tendon sheath / ligament injection",              category: injection }
+  - { code: "J7325", type: HCPCS, desc: "Hyaluronan (Synvisc-One) knee injection, per mg", category: injection }
+  - { code: "J7321", type: HCPCS, desc: "Hyaluronan (Hyalgan/Supartz) knee injection, per dose", category: injection }
+  - { code: "99203", type: CPT, desc: "New patient office visit, low complexity",       category: office }
+  - { code: "99204", type: CPT, desc: "New patient office visit, moderate complexity",  category: office }
+  - { code: "99213", type: CPT, desc: "Established patient office visit, low complexity", category: office }
+  - { code: "99214", type: CPT, desc: "Established patient office visit, moderate complexity", category: office }
+  - { code: "97110", type: CPT, desc: "Physical therapy, therapeutic exercise, 15 min", category: therapy }
+  - { code: "97140", type: CPT, desc: "Physical therapy, manual therapy, 15 min",       category: therapy }
+  - { code: "97161", type: CPT, desc: "Physical therapy evaluation, low complexity",    category: therapy }
+  - { code: "97162", type: CPT, desc: "Physical therapy evaluation, moderate complexity", category: therapy }
+  - { code: "29125", type: CPT, desc: "Short arm splint application",                    category: therapy }
+  - { code: "29405", type: CPT, desc: "Short leg cast application",                      category: therapy }
+  - { code: "L1832", type: HCPCS, desc: "Knee orthosis (brace), adjustable, prefabricated", category: dme }
+  - { code: "L1833", type: HCPCS, desc: "Knee orthosis, adjustable knee joints, custom-fitted", category: dme }
+  - { code: "L0650", type: HCPCS, desc: "Lumbar-sacral orthosis (back brace), prefabricated", category: dme }
+  - { code: "L3908", type: HCPCS, desc: "Wrist-hand orthosis (splint), prefabricated",  category: dme }
+  - { code: "E0143", type: HCPCS, desc: "Walker, folding, wheeled",                      category: dme }

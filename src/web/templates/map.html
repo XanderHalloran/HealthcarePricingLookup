@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ svc.desc }} near {{ q or 'you' }} | {{ brand.short }}</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+{% include "_styles.html" %}
+<style>
+  #map { height:420px; border-radius:12px; border:1px solid var(--line); background:var(--sage); }
+  .nm td.r, .nm th.r { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .nm tr.best td { background:var(--green-pale); }
+  .nm .n { display:inline-block; min-width:22px; height:22px; line-height:22px; text-align:center; border-radius:50%; background:var(--forest); color:#fff; font-size:11px; font-weight:700; margin-right:6px; }
+  .nm tr.own .n { background:#b45309; }
+  .pin { width:24px; height:24px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:var(--forest); border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.35); }
+  .pin.own { background:#b45309; } .pin.free { background:#6b7280; }
+  .leaflet-popup-content { font:13px/1.4 Inter, system-ui, sans-serif; }
+</style>
+</head>
+<body class="ortho">
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    <h1>Facilities near an address</h1>
+    <p class="sub">Enter a street address or ZIP, pick a radius, and see every {{ state_name }} facility with a published price for the procedure inside it. Distance is straight-line from the address to the facility.</p>
+  </div>
+
+  <form class="payerbar card" method="get" action="/map" role="group" aria-label="Choose procedure, address and radius">
+    <label class="pb-lab" for="code"><b>Procedure</b></label>
+    <select id="code" name="code">
+      {% for cat, items in groups %}<optgroup label="{{ cat_labels.get(cat, cat) }}">
+        {% for s in items %}<option value="{{ s.code }}" {% if s.code == svc.code %}selected{% endif %}>{{ s.desc }} ({{ s.type }} {{ s.code }})</option>{% endfor %}
+      </optgroup>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="q"><b>Address or ZIP</b></label>
+    <input type="text" id="q" name="q" size="28" placeholder="85015 or 6501 N 19th Ave, Phoenix" value="{{ q }}" required>
+    <label class="pb-lab" for="radius"><b>Within</b></label>
+    <select id="radius" name="radius">
+      {% for r in radii %}<option value="{{ r }}" {% if r == radius %}selected{% endif %}>{{ r }} mi</option>{% endfor %}
+    </select>
+    <label class="pb-lab" for="metro"><b>Market</b></label>
+    <select id="metro" name="metro">
+      {% include "_area_options.html" %}
+    </select>
+    <input type="hidden" name="sort" value="{{ sort }}">
+    <button class="btn-mini" type="submit">Search</button>
+  </form>
+
+  {% if err %}<div class="card" style="margin-top:16px;color:#b42318">{{ err }}</div>{% endif %}
+
+  {% if center %}
+  <div class="card" style="margin-top:16px">
+    <div class="fac-h">{{ rows|length }} {{ 'facility' if rows|length == 1 else 'facilities' }} within {{ radius }} miles of {{ q }}{% if medicare %} — Medicare benchmark <b>${{ '{:,.0f}'.format(medicare) }}</b>{% endif %}</div>
+    <div id="map" role="img" aria-label="Map of facilities within {{ radius }} miles"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px;overflow-x:auto">
+    <div class="fac-h">{{ svc.desc }} <span class="mute">({{ svc.type }} {{ svc.code }})</span>
+      <span style="float:right">Sort:
+        <a class="btn-mini{% if sort != 'dist' %} on{% endif %}" href="/map?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&metro={{ metro or state }}&sort=price">Cheapest</a>
+        <a class="btn-mini{% if sort == 'dist' %} on{% endif %}" href="/map?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&metro={{ metro or state }}&sort=dist">Closest</a></span></div>
+    {% if not rows %}
+      <p>No facility within {{ radius }} miles publishes a price for this procedure. Widen the radius.</p>
+    {% else %}
+    <table class="fac-t nm">
+      <thead><tr><th>Facility</th><th>Type</th><th class="r">Distance</th><th class="r">Price</th><th class="r">vs Medicare</th><th>Quality</th></tr></thead>
+      <tbody>
+      {% for h in rows %}
+        <tr class="{% if h.cheapest and rows|length > 1 %}best {% endif %}{% if own_ids and h.id in own_ids %}own{% endif %}">
+          <td><span class="n">{{ loop.index }}</span>{{ h.name }}{% if own_ids and h.id in own_ids %} <span class="badge own">{{ brand.own.label }}</span>{% endif %}{% if h.cheapest and rows|length > 1 %} <span class="badge">lowest</span>{% endif %}{% if h.outlier == 'high' %} <span class="oflag hi">gross charge</span>{% elif h.outlier == 'low' %} <span class="oflag">⚠ likely error</span>{% endif %}</td>
+          <td class="mute">{{ h.type }}</td>
+          <td class="r">{{ h.distance }} mi</td>
+          <td class="r"><b>{% if h.price is not none %}${{ '{:,.0f}'.format(h.price) }}{% else %}—{% endif %}</b> <span class="mute" style="font-size:11px">{{ h.rate_type }}</span></td>
+          <td class="r">{% if medicare and h.price %}{{ (h.price / medicare)|round(2) }}×{% else %}—{% endif %}</td>
+          <td>{% if h.hip_knee %}<span class="hk {{ 'good' if h.hip_knee.compare == 'Better' else ('bad' if h.hip_knee.compare == 'Worse' else '') }}">hip/knee complications {{ h.hip_knee.rate }}%</span>{% elif h.stars %}{{ '★' * h.stars }}{% else %}<span class="mute">—</span>{% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% endif %}
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script>
+    const C = [{{ center[0] }}, {{ center[1] }}], R = {{ radius }};
+    const F = {{ rows|map(attribute='name')|list|tojson }};
+    const P = {{ (rows|map(attribute='lat')|list, rows|map(attribute='lon')|list, rows|map(attribute='price')|list, rows|map(attribute='id')|list)|list|tojson }};
+    const OWN = {{ (own_ids or [])|list|tojson }};
+    const map = L.map('map', {scrollWheelZoom:false});
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom:18, attribution:'&copy; OpenStreetMap'}).addTo(map);
+    const ring = L.circle(C, {radius:R*1609.34, color:'#1f5a3c', weight:1, fillOpacity:.05}).addTo(map);
+    L.circleMarker(C, {radius:7, color:'#fff', weight:2, fillColor:'#111', fillOpacity:1}).addTo(map).bindPopup('Your address');
+    const [lats, lons, prices, ids] = P;
+    F.forEach((name, i) => {
+      if (lats[i] == null) return;                      // freestanding sites have city-level coords only
+      const cls = OWN.includes(ids[i]) ? 'pin own' : 'pin';
+      const icon = L.divIcon({className:'', html:`<div class="${cls}" title="${name}"></div>`, iconSize:[24,24], iconAnchor:[12,24]});
+      const price = prices[i] == null ? 'no price' : '$' + Math.round(prices[i]).toLocaleString();
+      L.marker([lats[i], lons[i]], {icon}).addTo(map).bindPopup(`<b>${i+1}. ${name}</b><br>${price}`);
+    });
+    map.fitBounds(ring.getBounds(), {padding:[10,10]});
+  </script>
+  {% endif %}
+
+  <p class="refreshed">Facility prices from CMS machine-readable files (refreshed {{ data_refreshed }}); geocoding by OpenStreetMap Nominatim and zippopotam.us. Distances are straight-line. Benchmarking estimates, not a quote.</p>
+</main>
+</body>
+</html>

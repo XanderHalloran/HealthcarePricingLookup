@@ -1,0 +1,270 @@
+# CMS overall star rating (ratings) + Care Compare COMP_HIP_KNEE (hip_knee: rate of complications for
+# hip/knee replacement patients, 2023-04-01 to 2025-03-31, national 4.1%; https://data.cms.gov/provider-data/dataset/ynj2-r877).
+# Hospitals with too few cases / not available are omitted from hip_knee.
+ratings:
+  BANNER-UMC-PHX: 3
+  BANNER-ESTRELLA: 3
+  BANNER-DESERT: 2
+  BANNER-THUNDERBIRD: 4
+  BANNER-GATEWAY: 3
+  BANNER-BAYWOOD: 2
+  BANNER-BOSWELL: 3
+  BANNER-DELWEBB: 3
+  BANNER-HEART: 2
+  BANNER-IRONWOOD: 3
+  HONOR-SHEA: 3
+  HONOR-DEERVALLEY: 3
+  HONOR-JOHNLINCOLN: 3
+  HONOR-SONORAN: 4
+  HONOR-OSBORN: 3
+  HONOR-THOMPSONPEAK: 5
+  HONOR-FOURPEAKS: 2
+  VALLEYWISE-PHX: 1
+  DIGNITY-CHANDLER: 4
+  DIGNITY-MERCYGILBERT: 5
+  DIGNITY-STJOSEPHS: 4
+  ABRAZO-ARROWHEAD: 2
+  # Virginia (added)
+  VCU-MAIN: 4
+  HCA-CHIPPENHAM: 4
+  HCA-JOHNSTON-WILLIS: 4
+  HCA-HENRICO: 4
+  HCA-PARHAM: 4
+  HCA-RETREAT: 4
+  HCA-TRICITIES: 3
+  BONSECOURS-ST-MARYS: 5
+  BONSECOURS-MEMORIAL-REGIONAL: 4
+  BONSECOURS-ST-FRANCIS: 3
+  BONSECOURS-SOUTHSIDE: 2
+  INOVA-FAIRFAX: 5
+  INOVA-LOUDOUN: 5
+  INOVA-ALEXANDRIA: 5
+  INOVA-FAIR-OAKS: 5
+  INOVA-MOUNT-VERNON: 4
+  HCA-RESTON: 3
+  HCA-STONESPRINGS: 4
+  SENTARA-NOVA: 3
+  UVA-CULPEPER: 2
+  UVA-PRINCE-WILLIAM: 3
+  UVA-HAYMARKET: 4
+  MARYWASH-MAIN: 3
+  MARYWASH-STAFFORD: 4
+  HCA-SPOTSYLVANIA: 3
+  LIFEPOINT-FAUQUIER: 3
+  SENTARA-NORFOLK: 4
+  SENTARA-LEIGH: 3
+  SENTARA-PRINCESS-ANNE: 5
+  SENTARA-VBGH: 4
+  SENTARA-CAREPLEX: 4
+  SENTARA-WILLIAMSBURG: 5
+  SENTARA-OBICI: 4
+  BONSECOURS-MARYVIEW: 3
+  BONSECOURS-MARY-IMMACULATE: 4
+  CHESAPEAKE-REGIONAL: 3
+  RIVERSIDE-REGIONAL: 3
+  RIVERSIDE-WILLIAMSBURG: 5
+  RIVERSIDE-WALTER-REED: 4
+  UVA-MAIN: 4
+  SENTARA-MARTHA: 4
+  CARILION-ROANOKE: 3
+  CARILION-NRV: 4
+  HCA-LEWISGALE-SALEM: 2
+  HCA-LEWISGALE-MONTGOMERY: 3
+  HCA-LEWISGALE-PULASKI: 4
+  HCA-LEWISGALE-ALLEGHANY: 4
+  BALLAD-JOHNSTON: 3
+  BALLAD-SMYTH: 3
+  BALLAD-LONESOME-PINE: 4
+  BALLAD-RUSSELL: 4
+  SOVAH-DANVILLE: 2
+  LIFEPOINT-CLINCH-VALLEY: 3
+  LIFEPOINT-WYTHE: 3
+  LIFEPOINT-TWIN-COUNTY: 2
+  SENTARA-HALIFAX: 3
+  SENTARA-RMH: 5
+  AUGUSTA-HEALTH: 4
+hip_knee:
+  BANNER-DESERT:
+    rate: 4.6
+    compare: No Different
+  BANNER-BAYWOOD:
+    rate: 4.1
+    compare: No Different
+  BANNER-BOSWELL:
+    rate: 3.5
+    compare: No Different
+  BANNER-DELWEBB:
+    rate: 4.9
+    compare: No Different
+  HONOR-SHEA:
+    rate: 4.4
+    compare: No Different
+  HONOR-DEERVALLEY:
+    rate: 5.0
+    compare: No Different
+  HONOR-JOHNLINCOLN:
+    rate: 4.5
+    compare: No Different
+  HONOR-SONORAN:
+    rate: 4.0
+    compare: No Different
+  HONOR-OSBORN:
+    rate: 4.2
+    compare: No Different
+  HONOR-THOMPSONPEAK:
+    rate: 2.9
+    compare: No Different
+  HONOR-FOURPEAKS:
+    rate: 4.8
+    compare: No Different
+  DIGNITY-MERCYGILBERT:
+    rate: 3.6
+    compare: No Different
+  ABRAZO-ARROWHEAD:
+    rate: 4.3
+    compare: No Different
+  TMC-TUCSON:
+    rate: 4.2
+    compare: No Different
+  NORTHWEST-TUCSON:
+    rate: 3.8
+    compare: No Different
+  ORO-VALLEY:
+    rate: 5.3
+    compare: No Different
+  CARONDELET-STJOSEPH-TUC:
+    rate: 4.1
+    compare: No Different
+  CARONDELET-STMARY-TUC:
+    rate: 4.5
+    compare: No Different
+  NAH-FLAGSTAFF:
+    rate: 4.6
+    compare: No Different
+  YRMC-PRESCOTT:
+    rate: 3.5
+    compare: No Different
+  HAVASU-RMC:
+    rate: 3.2
+    compare: No Different
+  SUMMIT-SHOW-LOW:
+    rate: 4.0
+    compare: No Different
+  YUMA-REGIONAL:
+    rate: 4.0
+    compare: No Different
+  CANYON-VISTA:
+    rate: 4.1
+    compare: No Different
+  MT-GRAHAM:
+    rate: 4.1
+    compare: No Different
+  CORE-SPECIALTY-PHX:
+    rate: 3.5
+    compare: No Different
+  # Virginia (added 2026-09-15)
+  VCU-MAIN:
+    rate: 4.8
+    compare: No Different
+  HCA-CHIPPENHAM:
+    rate: 3.4
+    compare: No Different
+  HCA-JOHNSTON-WILLIS:
+    rate: 3.4
+    compare: No Different
+  HCA-HENRICO:
+    rate: 3.3
+    compare: No Different
+  HCA-PARHAM:
+    rate: 3.3
+    compare: No Different
+  HCA-RETREAT:
+    rate: 3.3
+    compare: No Different
+  BONSECOURS-ST-MARYS:
+    rate: 2.8
+    compare: No Different
+  BONSECOURS-MEMORIAL-REGIONAL:
+    rate: 3.8
+    compare: No Different
+  BONSECOURS-ST-FRANCIS:
+    rate: 4.0
+    compare: No Different
+  INOVA-LOUDOUN:
+    rate: 4.1
+    compare: No Different
+  INOVA-ALEXANDRIA:
+    rate: 4.0
+    compare: No Different
+  INOVA-FAIR-OAKS:
+    rate: 4.9
+    compare: No Different
+  INOVA-MOUNT-VERNON:
+    rate: 3.7
+    compare: No Different
+  HCA-RESTON:
+    rate: 3.6
+    compare: No Different
+  HCA-STONESPRINGS:
+    rate: 3.1
+    compare: No Different
+  MARYWASH-MAIN:
+    rate: 3.9
+    compare: No Different
+  LIFEPOINT-FAUQUIER:
+    rate: 5.6
+    compare: No Different
+  SENTARA-LEIGH:
+    rate: 6.2
+    compare: No Different
+  SENTARA-VBGH:
+    rate: 3.7
+    compare: No Different
+  SENTARA-WILLIAMSBURG:
+    rate: 5.6
+    compare: No Different
+  SENTARA-OBICI:
+    rate: 5.6
+    compare: No Different
+  BONSECOURS-MARY-IMMACULATE:
+    rate: 4.7
+    compare: No Different
+  CHESAPEAKE-REGIONAL:
+    rate: 4.6
+    compare: No Different
+  RIVERSIDE-WILLIAMSBURG:
+    rate: 2.5
+    compare: No Different
+  RIVERSIDE-WALTER-REED:
+    rate: 2.9
+    compare: No Different
+  UVA-MAIN:
+    rate: 4.3
+    compare: No Different
+  SENTARA-MARTHA:
+    rate: 4.9
+    compare: No Different
+  CARILION-ROANOKE:
+    rate: 7.9
+    compare: Worse
+  HCA-LEWISGALE-SALEM:
+    rate: 4.2
+    compare: No Different
+  HCA-LEWISGALE-MONTGOMERY:
+    rate: 3.9
+    compare: No Different
+  BALLAD-JOHNSTON:
+    rate: 6.2
+    compare: No Different
+  BALLAD-SMYTH:
+    rate: 4.4
+    compare: No Different
+  SOVAH-DANVILLE:
+    rate: 4.4
+    compare: No Different
+  SENTARA-RMH:
+    rate: 3.9
+    compare: No Different
+  AUGUSTA-HEALTH:
+    rate: 4.3
+    compare: No Different

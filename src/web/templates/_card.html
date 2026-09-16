@@ -1,0 +1,131 @@
+{# Shared result-card macro: one action number, spectrum, facility comparison table,
+   and visible negotiation scripts. Used by index.html (bill rows), card.html (shop
+   fetch-on-demand), and procedure.html (SEO pages). #}
+{% macro money(v) %}{% if v is not none %}${{ '{:,.0f}'.format(v) }}{% else %}—{% endif %}{% endmacro %}
+{%- macro pos(v, lo, span) -%}{{ [[((v - lo) / span * 100), 2]|max, 98]|min | round(1) }}{%- endmacro -%}
+{% macro card(r, idx) %}
+  {% set d = r.result %}
+  {% set pid = 'p-' ~ r.code ~ '-' ~ idx %}
+  <div class="card" data-payer="{{ d.payer or '' }}"
+       data-payer-rate="{{ d.neg_median if (d.payer and d.neg_median is not none) else '' }}"
+       data-cash="{{ d.cash_price if d.cash_price is not none else '' }}">
+    <div><span class="code">{{ r.code }}</span> <span class="desc">{{ d.description or r.code_type }}</span></div>
+    {% if r.note %}<div class="warn">⚠ {{ r.note }}</div>{% endif %}
+
+    {# ── The one action number (consumer: the ask; ortho: the market position) ── #}
+    {% set own_rows = d.hospitals|selectattr('id', 'in', own_ids or [])|selectattr('price')|list if own_ids else [] %}
+    {% if brand.profile == 'ortho' %}
+      {% if d.neg_median is not none %}
+      <div class="ask">
+        <div class="ask-lbl">Market typical price</div>
+        <div class="ask-row"><span class="ask-amt">{{ money(d.neg_median) }}</span></div>
+        <div class="ask-why">{{ d.n_hospitals }} facilities · typical range {{ money(d.neg_low) }} – {{ money(d.neg_high) }}{% if d.medicare_rate %} · {{ (d.neg_median / d.medicare_rate)|round(1) }}× Medicare {{ d.medicare_source }}{% endif %}
+          {% for o in own_rows %}{% set below = d.hospitals|selectattr('type', 'equalto', 'hospital')|selectattr('price')|rejectattr('id', 'equalto', o.id)|selectattr('price', 'lt', o.price)|list|length %}{% set n_oth = (d.hospitals|selectattr('type', 'equalto', 'hospital')|selectattr('price')|list|length) - 1 %}
+          <br><b>{{ brand.own.label }} — {{ o.name }}: {{ money(o.price) }} {{ o.rate_type }}</b>{% if o.cash is not none and o.median is not none and o.cash != o.median %} · negotiated median {{ money(o.median) }}{% endif %}{% if n_oth > 0 %} · {{ (100 * below / n_oth)|round|int }}th percentile of {{ n_oth }} competitors on the same basis · <a href="/position">contract view</a>{% endif %}{% endfor %}</div>
+      </div>
+      {% endif %}
+    {% elif d.target_ask is not none %}
+      <div class="ask">
+        <div class="ask-lbl">Ask to pay</div>
+        <div class="ask-row">
+          <span class="ask-amt" id="ask-{{ pid }}">{{ money(d.target_ask) }}</span>
+          <button class="mini-copy" type="button" aria-label="Copy the amount to ask for"
+                  onclick="copyText('{{ '{:.0f}'.format(d.target_ask) }}', this)">Copy</button>
+        </div>
+        <div class="ask-why">
+          {% if d.target_basis == 'medicare' and d.medicare_rate %}About {{ (d.target_ask / d.medicare_rate) | round(1) }}× what Medicare pays — most hospitals accept a self-pay rate in this range.
+          {% elif d.target_basis == 'cash' %}This is the local cash / self-pay price — usually the best rate you can ask for.
+          {% else %}A fair self-pay target based on public prices.{% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="payer-line"></div>   {# personalized "you'd likely owe ~$X" when a plan is set (JS) #}
+
+    {% set smin = ([d.neg_min, d.medicare_rate]|reject('none')|list|min) if d.neg_min is not none else None %}
+    {% set smax = ([d.neg_max, d.your_price]|reject('none')|list|max) if d.neg_max is not none else None %}
+    {% if d.neg_median is not none and smin is not none and smax is not none and smax > smin %}
+      {% set span = smax - smin %}
+      {% set ql = pos(d.neg_low, smin, span) %}
+      {% set qh = pos(d.neg_high, smin, span) %}
+      <div class="spectrum" role="img"
+           aria-label="Facility prices from {{ money(d.neg_min) }} to {{ money(d.neg_max) }}; typical range {{ money(d.neg_low) }} to {{ money(d.neg_high) }}; typical price {{ money(d.neg_median) }}{% if d.your_price is not none %}; you paid {{ money(d.your_price) }}{% endif %}.">
+        <div class="iqr" style="left:{{ ql }}%; width:{{ (qh|float - ql|float)|round(1) }}%"></div>
+        <div class="pin fair" style="left:{{ pos(d.neg_median, smin, span) }}%">
+          <div class="lbl">{{ d.payer if d.payer else 'Typical' }}</div><div class="val">{{ money(d.neg_median) }}</div><div class="stem"></div></div>
+        {% if d.your_price is not none %}
+          <div class="pin you" style="left:{{ pos(d.your_price, smin, span) }}%">
+            <div class="lbl">You paid</div><div class="val">{{ money(d.your_price) }}</div><div class="stem"></div></div>
+        {% endif %}
+        <div class="spec-bar"></div>
+        {% for h in d.hospitals %}
+          {% if h.price is not none %}<div class="hdot{% if h.outlier %} out{% endif %}" style="left:{{ pos(h.price, smin, span) }}%" title="{{ h.name }}: {{ money(h.price) }}{% if h.outlier %} — flagged, not counted in the typical price{% endif %}"></div>{% endif %}
+        {% endfor %}
+        {% if d.medicare_rate is not none %}
+          <div class="pin below" style="left:{{ pos(d.medicare_rate, smin, span) }}%">
+            <div class="stem"></div><div class="lbl">Medicare {{ money(d.medicare_rate) }}</div></div>
+        {% endif %}
+        {% if brand.profile == 'ortho' %}
+          {% for o in own_rows %}<div class="pin below" style="left:{{ pos(o.price, smin, span) }}%">
+            <div class="stem"></div><div class="lbl">{{ brand.own.label }} {{ money(o.price) }}</div></div>{% endfor %}
+        {% elif d.target_ask is not none %}
+          <div class="pin below" style="left:{{ pos(d.target_ask, smin, span) }}%">
+            <div class="stem"></div><div class="lbl">Ask {{ money(d.target_ask) }}</div></div>
+        {% endif %}
+        <div class="spec-ends"><span>{{ money(d.neg_min) }} low</span><span class="iqr-key">boxed = typical range</span><span>high {{ money(d.neg_max) }}</span></div>
+      </div>
+    {% else %}
+      <div class="warn" style="margin:12px 0">No local hospital price range on file for this service in {{ d.state }}.</div>
+    {% endif %}
+
+    {# ── Supporting stats (secondary to the action number above) ── #}
+    <div class="nums mini">
+      {% if d.your_price is not none %}<div class="num"><div class="k">You were charged</div><div class="v">{{ money(d.your_price) }}</div></div>{% endif %}
+      <div class="num"><div class="k">What Medicare pays<span class="tip" tabindex="0" role="button" aria-label="Medicare's published rate{% if not d.medicare_missing %}, source {{ d.medicare_source }}{% endif %}. The negotiation floor.">ⓘ</span></div><div class="v {% if d.medicare_missing %}gap{% endif %}">{% if d.medicare_missing %}no data{% else %}{{ money(d.medicare_rate) }}{% endif %}</div></div>
+      <div class="num"><div class="k">{% if d.payer %}{{ d.payer }} typical{% elif brand.profile == 'ortho' %}Market typical{% else %}Typical price near you{% endif %}</div><div class="v {% if d.neg_median is none %}gap{% endif %}">{% if d.neg_median is none %}no data{% else %}{{ money(d.neg_median) }}{% endif %}</div></div>
+      <div class="num"><div class="k">Cash / self-pay price</div><div class="v {% if d.cash_price is none %}gap{% endif %}">{% if d.cash_price is none %}no data{% else %}{{ money(d.cash_price) }}{% endif %}</div></div>
+    </div>
+
+    {% if d.hospitals %}
+      {% set has_dist = d.hospitals|selectattr('distance')|list|length > 0 %}
+      <div class="facilities">
+        <div class="fac-h">{% if d.payer %}{{ d.payer }} rates + cash options{% else %}Prices near you{% endif %} — {{ d.hospitals|length }} {{ 'facility' if d.hospitals|length == 1 else 'facilities' }}, lowest first</div>
+        {% if has_dist %}<div class="sortbar">Sort: <button type="button" class="sortbtn on" onclick="sortFac('price',this)">Cheapest</button><button type="button" class="sortbtn" onclick="sortFac('dist',this)">Closest</button></div>{% endif %}
+        <div class="fac-tablewrap">
+          <table class="fac-table">
+            <thead><tr><th scope="col">Facility</th><th scope="col">Type</th>{% if has_dist %}<th scope="col" class="r">Distance</th>{% endif %}<th scope="col" class="r">Price</th><th scope="col" class="r">vs&nbsp;Medicare</th><th scope="col">Quality</th></tr></thead>
+            <tbody>
+              {% for h in d.hospitals %}
+                <tr class="{% if h.cheapest and d.hospitals|length > 1 %}best {% endif %}{% if h.outlier %}out {% endif %}{% if loop.index0 >= 12 %}fac-extra{% endif %}"{% if loop.index0 >= 12 %} hidden{% endif %} data-price="{{ h.price if h.price is not none else '' }}" data-dist="{{ h.distance if h.distance is not none else '' }}">
+                  <td class="fac-n">{{ h.name }}{% if own_ids and h.id in own_ids %} <span class="badge own">{{ brand.own.label }}</span>{% endif %}{% if h.cheapest and d.hospitals|length > 1 %} <span class="badge">lowest</span>{% endif %}{% if h.outlier == 'low' %} <span class="oflag" title="Unusually low — likely a data-entry error in this hospital's published file; not counted in the typical price.">⚠ likely error</span>{% elif h.outlier == 'high' %} <span class="oflag hi" title="Unusually high — looks like the gross list price; not counted in the typical price.">gross charge</span>{% endif %}</td>
+                  <td>{% if h.type == 'imaging' %}<span class="tchip">Imaging center</span>{% elif h.type == 'asc' %}<span class="tchip">Surgery center</span>{% else %}<span class="tchip alt">Hospital</span>{% endif %}</td>
+                  {% if has_dist %}<td class="r xm">{% if h.distance is not none %}{{ h.distance }} mi{% else %}—{% endif %}</td>{% endif %}
+                  <td class="r money{% if h.outlier %} muted{% endif %}">{{ money(h.price) }}<span class="rt">{{ h.rate_type }}</span></td>
+                  <td class="r xm">{% if d.medicare_rate and h.price %}{{ (h.price / d.medicare_rate) | round(1) }}×{% else %}—{% endif %}</td>
+                  <td>{% if h.stars %}<span class="stars" title="CMS overall rating {{ h.stars }} of 5" aria-label="{{ h.stars }} of 5 stars">{{ '★' * h.stars }}<span class="off">{{ '★' * (5 - h.stars) }}</span></span>{% elif not h.hip_knee %}<span class="mute">—</span>{% endif %}{% if h.hip_knee %}<div class="hk {{ 'good' if h.hip_knee.compare == 'Better' else ('bad' if h.hip_knee.compare == 'Worse' else '') }}" title="CMS Care Compare: rate of complications for hip/knee replacement patients ({{ h.hip_knee.compare }} than the national rate)">hip/knee complications {{ h.hip_knee.rate }}%</div>{% endif %}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        {% if d.hospitals|length > 12 %}<button class="more-btn" type="button" onclick="toggleMore(this)"
+             data-more="Show all {{ d.hospitals|length }} facilities" data-less="Show fewer">Show all {{ d.hospitals|length }} facilities</button>{% endif %}
+        <div class="fac-note">Prices from each hospital's public machine-readable file; imaging &amp; surgery-center prices are published self-pay rates (often the cheapest option). <b>vs Medicare</b> is how many times the Medicare rate each facility charges.{% if d.n_excluded %} <b>{{ d.n_excluded }}</b> unusually low/high price{{ 's' if d.n_excluded != 1 }} excluded from the typical price as likely data errors.{% endif %}</div>
+      </div>
+    {% endif %}
+
+    {% if brand.profile != 'ortho' and d.overcharge is not none and d.overcharge > 0 %}
+      <div class="save">💰 You could save about <b>{{ money(d.overcharge) }}</b> vs. what you were charged.</div>
+    {% endif %}
+
+    {% if r.points and brand.profile != 'ortho' %}
+      <div class="scripts">
+        <div class="fac-h">💬 What to say — negotiation scripts</div>
+        <ul class="points" id="{{ pid }}">
+          {% for p in r.points %}<li class="{{ 'missing' if p.missing }}">{{ p.text }}</li>{% endfor %}
+        </ul>
+        <button class="btn-copy" type="button" onclick="copyPts('{{ pid }}', this)">Copy all scripts</button>
+      </div>
+    {% endif %}
+  </div>
+{% endmacro %}

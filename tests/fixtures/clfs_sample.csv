@@ -1,0 +1,7 @@
+2025 Clinical Diagnostic Laboratory Fee Schedule (sample),,,,,,,,
+"CPT codes ... copyright 2025 AMA.",,,,,,,,
+,,,,,,,,
+YEAR,HCPCS,MOD,EFF_DATE,INDICATOR,RATE,SHORTDESC,LONGDESC,EXTENDED LONGDESC
+2025,80053,,20250101,N,00010.56,Comprehen metabolic panel,CMP,Comprehensive metabolic panel
+2025,80053,QW,20250101,N,00010.56,Comprehen metabolic panel,CMP,Comprehensive metabolic panel
+2025,85027,,20250101,N,00007.77,Complete cbc automated,CBC,Complete blood count automated

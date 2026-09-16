@@ -1,0 +1,16 @@
+[project]
+name = "healthcare-price-tool"
+version = "0.1.0"
+description = "Healthcare price transparency + bill-negotiation coaching"
+requires-python = ">=3.10"
+dependencies = [
+    "duckdb>=1.0",     # CSV read, SQL aggregation, AND partitioned Parquet write — covers pyarrow too
+    "ijson>=3",        # streaming JSON parse for JSON-format hospital MRFs (constant memory)
+    "pyyaml>=6",
+    "fastapi>=0.110",
+    "uvicorn[standard]>=0.29",
+    "jinja2>=3",
+    "anthropic>=0.40",   # vision OCR for the bill-photo / EOB upload (gated on ANTHROPIC_API_KEY)
+]
+
+# Tests run standalone: `python tests/test_*.py` (each has an assert-based __main__).

@@ -1,0 +1,6 @@
+hospital_name,last_updated_on,version,hospital_location,hospital_address,license_number|UT
+Wide Hospital,2026-01-01,3.0.0,Main,"1 Main St, Logan, UT 84321",LIC-9
+description,code|1,code|1|type,setting,standard_charge|gross,standard_charge|discounted_cash,standard_charge|Aetna|Connected|negotiated_dollar,standard_charge|Aetna|Connected|negotiated_percentage,standard_charge|Aetna|Connected|methodology,standard_charge|BCBS|PPO|negotiated_dollar,standard_charge|BCBS|PPO|methodology,standard_charge|min,standard_charge|max
+MRI lower extremity joint w/o contrast,73721,CPT,outpatient,2000,1000,900,,fee schedule,1100,case rate,900,1300
+Complete blood count with differential,85025,CPT,outpatient,50,20,,,,18,fee schedule,15,25
+Cash only widget,12345,CPT,outpatient,500,200,,,,,,100,300

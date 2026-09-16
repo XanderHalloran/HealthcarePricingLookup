@@ -1,0 +1,38 @@
+ipps:
+  fiscal_year: 2026
+  operating_base_rate: 6752.61
+  capital_base_rate: 524.15
+  source: https://www.cms.gov/files/zip/fy2026-ipps-fr-table-5.zip
+  base_rate_source: https://www.cms.gov/files/zip/fy2026-ipps-fr-table-1a-1e.zip
+  note: rate = weight x (operating + capital); FY2026 Table 5 "10% cap applied" weights;
+    DRGs 453-455/459/460 were deleted in FY2026 (fusion restructured into 402/426-428/447-451)
+  weights:
+    '470': 1.9289
+    '469': 3.0332
+    '468': 2.748
+    '467': 3.5266
+    '466': 5.2054
+    '473': 2.4413
+    '472': 2.9461
+    '471': 4.8287
+    '481': 2.0945
+    '480': 2.9123
+    '482': 1.631
+    '461': 5.523
+    '462': 2.66
+    '456': 8.4034
+    '457': 5.9631
+    '458': 4.1726
+    '451': 3.2304
+    '450': 5.3296
+    '448': 4.2408
+    '447': 6.6816
+    '402': 4.0205
+    '428': 5.622
+    '427': 7.2186
+    '426': 11.0212
+    '430': 5.7671
+    '429': 9.0096
+    '518': 3.7373
+    '519': 2.0002
+    '520': 1.4939

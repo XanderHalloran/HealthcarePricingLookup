@@ -1,0 +1,50 @@
+# Negotiation talking-point templates. Edit wording here without touching code.
+# Placeholders are filled from the lookup result: {code} {description} {state}
+# {medicare_rate} {cash_price} {neg_low} {neg_median} {neg_high} {target_ask}
+# (all money values are pre-formatted as e.g. $1,100.00).
+#
+# Each point has:
+#   id          stable key
+#   requires    fields that must be present to render `text`; if any is missing,
+#               `missing_note` is emitted instead (a gap is useful negotiation info)
+#   text        the line the consumer can say/write
+#   missing_note (optional) shown when a required field is missing
+
+talking_points:
+  - id: your_charge
+    requires: [your_price, target_ask]
+    text: >-
+      I was charged {your_price} for {code} ({description}). A fair self-pay
+      target for this line is {target_ask} — please reduce my charge to that.
+
+  - id: vs_medicare
+    requires: [medicare_rate, target_ask]
+    text: >-
+      For {code} ({description}), Medicare's benchmark rate is {medicare_rate}.
+      A fair self-pay target for this line is {target_ask}. If I was charged more
+      than that, please reduce it toward this benchmark.
+    missing_note: >-
+      No Medicare benchmark on file for {code} ({description}) — I can't anchor to
+      Medicare here. Please send your pricing methodology for this code.
+
+  - id: vs_local_cash
+    requires: [cash_price]
+    text: >-
+      Your own published cash / self-pay price for {code} is {cash_price}, and
+      negotiated rates at nearby facilities run {neg_low}–{neg_high}. Please apply
+      a rate in that range to my bill rather than the gross charge.
+    missing_note: >-
+      No local cash price is on file for {code} in {state}. Ask the hospital for
+      their cash/self-pay price for this code in writing.
+
+  - id: request_itemized
+    requires: []
+    text: >-
+      Please send a fully itemized bill listing every CPT/HCPCS/DRG code and its
+      individual charge, so I can review each line against published rates.
+
+  - id: financial_assistance
+    requires: []
+    text: >-
+      Separately, what is your financial assistance / charity care policy, and am
+      I eligible? Please send me the application and the income thresholds.

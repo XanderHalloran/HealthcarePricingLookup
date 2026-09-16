@@ -1,0 +1,42 @@
+{
+  "hospital_name": "Sample JSON Hospital",
+  "last_updated_on": "2026-01-01",
+  "version": "3.0.0",
+  "hospital_address": ["100 Test Way, Phoenix, AZ 85001"],
+  "standard_charge_information": [
+    {
+      "description": "MRI lower extremity joint without contrast",
+      "code_information": [
+        {"code": "73721", "type": "CPT"},
+        {"code": "0610", "type": "RC"}
+      ],
+      "standard_charges": [
+        {
+          "setting": "outpatient",
+          "gross_charge": 2600,
+          "discounted_cash": 950,
+          "minimum": 700,
+          "maximum": 1500,
+          "payers_information": [
+            {"payer_name": "Aetna", "plan_name": "PPO", "standard_charge_dollar": 800},
+            {"payer_name": "BCBS", "plan_name": "HMO", "standard_charge_dollar": 1200}
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Comprehensive metabolic panel",
+      "code_information": [{"code": "80053", "type": "CPT"}],
+      "standard_charges": [
+        {"setting": "outpatient", "gross_charge": 180, "discounted_cash": 60,
+         "minimum": 25, "maximum": 90,
+         "payers_information": [{"payer_name": "Cigna", "standard_charge_dollar": 40}]}
+      ]
+    },
+    {
+      "description": "Unlisted boutique service",
+      "code_information": [{"code": "99999", "type": "CPT"}],
+      "standard_charges": [{"discounted_cash": 500, "payers_information": []}]
+    }
+  ]
+}
