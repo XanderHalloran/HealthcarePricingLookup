@@ -5,22 +5,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 {% if brand.profile == 'ortho' %}
 <title>{{ brand.name }}</title>
-<meta name="description" content="Published prices for orthopedic and spine procedures at every Arizona and Virginia hospital — by procedure, by payer, and by site of care — benchmarked to Medicare OPPS, IPPS and ASC rates. Contracting and network intelligence for HOPCo.">
+<meta name="description" content="Published prices for orthopedic and spine procedures at every hospital in Arizona, Virginia, Nevada, Michigan and Florida — by procedure, by payer, and by site of care — benchmarked to Medicare OPPS, IPPS and ASC rates. Contracting and network intelligence for HOPCo.">
 <link rel="canonical" href="{{ base }}/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="{{ brand.name }}">
-<meta property="og:description" content="Arizona and Virginia orthopedic and spine prices by procedure, payer, and site of care, benchmarked to Medicare. Contracting and network intelligence for HOPCo.">
+<meta property="og:description" content="Orthopedic and spine prices across five HOPCo states by procedure, payer, and site of care, benchmarked to Medicare. Contracting and network intelligence for HOPCo.">
 <meta property="og:url" content="{{ base }}/">
 <meta property="og:site_name" content="{{ brand.short }}">
 <meta property="og:image" content="{{ base }}/static/og-ortho.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="{{ brand.name }}: Arizona and Virginia orthopedic prices by procedure, payer, and site of care.">
+<meta property="og:image:alt" content="{{ brand.name }}: orthopedic prices across five states by procedure, payer, and site of care.">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ brand.name }}">
-<meta name="twitter:description" content="Arizona and Virginia orthopedic and spine prices by procedure, payer, and site of care, benchmarked to Medicare.">
+<meta name="twitter:description" content="Orthopedic and spine prices across five HOPCo states by procedure, payer, and site of care, benchmarked to Medicare.">
 <meta name="twitter:image" content="{{ base }}/static/og-ortho.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"{{ brand.name }}","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"{{ base }}/","description":"Arizona and Virginia orthopedic and spine procedure prices by facility, payer, and site of care, benchmarked to Medicare."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"{{ brand.name }}","applicationCategory":"BusinessApplication","operatingSystem":"Web","url":"{{ base }}/","description":"Orthopedic and spine procedure prices in Arizona, Virginia, Nevada, Michigan and Florida by facility, payer, and site of care, benchmarked to Medicare."}</script>
 {% else %}
 <title>{{ state_name }} Medical Price Compare &amp; Bill Negotiation Coach — Free</title>
 <meta name="description" content="Compare hospital prices across {{ state_name }}, find the fair cash price for any procedure (MRI, CT, colonoscopy, ER, labs), and get an AI coach + appeal letter to negotiate your medical bill. Free, no signup.">

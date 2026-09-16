@@ -167,6 +167,90 @@ ratings:
   MUNSON-TRAVERSECITY: 4
   MCLAREN-NORTHERN: 3
   UPHS-MARQUETTE: 3
+  # Florida (added)
+  BAPTIST-MIAMI: 5
+  BAPTIST-DOCTORS-CG: 5
+  BAPTIST-SOUTH-MIAMI: 4
+  BAPTIST-WEST-KENDALL: 5
+  BAPTIST-BETHESDA-EAST: 2
+  BAPTIST-BOCA: 2
+  JACKSON-MEMORIAL: 1
+  HCA-KENDALL: 4
+  HCA-AVENTURA: 3
+  HCA-WESTSIDE: 2
+  HCA-NORTHWEST: 2
+  HCA-JFK: 2
+  HCA-PALMS-WEST: 2
+  HCA-MERCY: 2
+  BROWARD-MEDICAL-CENTER: 3
+  BROWARD-NORTH: 3
+  BROWARD-CORAL-SPRINGS: 4
+  HOLY-CROSS-FTL: 4
+  CCF-WESTON: 5
+  CCF-MARTIN-NORTH: 3
+  MOUNT-SINAI-MIAMI: 3
+  TENET-DELRAY: 1
+  TENET-PBG: 2
+  TENET-GOOD-SAM: 2
+  TENET-ST-MARYS: 1
+  TENET-WEST-BOCA: 3
+  UHS-WELLINGTON: 2
+  TGH-MAIN: 3
+  ADVENT-TAMPA: 3
+  ADVENT-WESLEY-CHAPEL: 5
+  BAYCARE-ST-JOSEPHS: 4
+  BAYCARE-MORTON-PLANT: 4
+  BAYCARE-ST-ANTHONYS: 3
+  BAYCARE-MEASE-COUNTRYSIDE: 4
+  HCA-BRANDON: 3
+  HCA-SOUTH-TAMPA: 5
+  HCA-LARGO: 2
+  HCA-TRINITY: 2
+  HCA-BAYONET-POINT: 2
+  HCA-NORTHSIDE: 1
+  LAKELAND-REGIONAL: 1
+  ADVENT-ORLANDO: 3
+  ADVENT-DAYTONA: 5
+  HCA-OSCEOLA: 2
+  HCA-LAKE-MONROE: 2
+  HCA-OVIEDO: 3
+  HCA-UCF-LAKE-NONA: 3
+  HALIFAX-DAYTONA: 2
+  MAYO-FL: 5
+  BAPTIST-JAX: 4
+  BAPTIST-JAX-BEACHES: 4
+  UF-HEALTH-JAX: 4
+  HCA-MEMORIAL-JAX: 2
+  HCA-ORANGE-PARK: 3
+  ASCENSION-STV-RIVERSIDE: 3
+  ASCENSION-STV-SOUTHSIDE: 4
+  UF-HEALTH-ST-JOHNS: 3
+  UF-HEALTH-SHANDS: 5
+  HCA-NORTH-FLORIDA: 3
+  HCA-OCALA: 1
+  ADVENT-OCALA: 4
+  UF-HEALTH-VILLAGES: 4
+  LEE-GULF-COAST: 4
+  LEE-MEMORIAL: 5
+  LEE-CAPE-CORAL: 3
+  NCH-NAPLES: 3
+  PHYSICIANS-REGIONAL-PINE-RIDGE: 2
+  SARASOTA-MEMORIAL: 5
+  SARASOTA-MEMORIAL-VENICE: 5
+  HCA-BLAKE: 2
+  HCA-SARASOTA-DOCTORS: 4
+  UHS-MANATEE-MEMORIAL: 3
+  UHS-LAKEWOOD-RANCH: 4
+  HCA-WEST-PENSACOLA: 3
+  BAPTIST-PENSACOLA: 4
+  BAPTIST-GULF-BREEZE: 4
+  ASCENSION-SACRED-HEART-PENSACOLA: 4
+  TMH-TALLAHASSEE: 3
+  HCA-CAPITAL: 2
+  HCA-FORT-WALTON-DESTIN: 3
+  HEALTH-FIRST-HOLMES: 4
+  HEALTH-FIRST-CAPE-CANAVERAL: 3
+  HEALTH-FIRST-VIERA: 5
 hip_knee:
   BANNER-DESERT:
     rate: 4.6
@@ -525,4 +609,221 @@ hip_knee:
     compare: No Different
   UPHS-MARQUETTE:
     rate: 4.7
+    compare: No Different
+  # Florida hip/knee (added)
+  BAPTIST-DOCTORS-CG:
+    rate: 4
+    compare: No Different
+  BAPTIST-BETHESDA-EAST:
+    rate: 6.7
+    compare: No Different
+  BAPTIST-BOCA:
+    rate: 4.3
+    compare: No Different
+  JACKSON-MEMORIAL:
+    rate: 3.2
+    compare: No Different
+  HCA-KENDALL:
+    rate: 4.9
+    compare: No Different
+  HCA-AVENTURA:
+    rate: 3.8
+    compare: No Different
+  HCA-WESTSIDE:
+    rate: 4.5
+    compare: No Different
+  HCA-NORTHWEST:
+    rate: 4.9
+    compare: No Different
+  HCA-JFK:
+    rate: 3.7
+    compare: No Different
+  HCA-MERCY:
+    rate: 3.1
+    compare: No Different
+  BROWARD-NORTH:
+    rate: 5
+    compare: No Different
+  BROWARD-CORAL-SPRINGS:
+    rate: 4
+    compare: No Different
+  HOLY-CROSS-FTL:
+    rate: 3.3
+    compare: No Different
+  CCF-WESTON:
+    rate: 3.7
+    compare: No Different
+  CCF-MARTIN-NORTH:
+    rate: 4
+    compare: No Different
+  MOUNT-SINAI-MIAMI:
+    rate: 3.2
+    compare: No Different
+  TENET-DELRAY:
+    rate: 6.1
+    compare: No Different
+  TENET-PBG:
+    rate: 5.7
+    compare: No Different
+  TENET-GOOD-SAM:
+    rate: 4.5
+    compare: No Different
+  TENET-ST-MARYS:
+    rate: 4.1
+    compare: No Different
+  TENET-WEST-BOCA:
+    rate: 5.2
+    compare: No Different
+  UHS-WELLINGTON:
+    rate: 3.3
+    compare: No Different
+  TGH-MAIN:
+    rate: 3.5
+    compare: No Different
+  ADVENT-TAMPA:
+    rate: 4.7
+    compare: No Different
+  ADVENT-WESLEY-CHAPEL:
+    rate: 4.7
+    compare: No Different
+  BAYCARE-MORTON-PLANT:
+    rate: 4.1
+    compare: No Different
+  BAYCARE-ST-ANTHONYS:
+    rate: 3.5
+    compare: No Different
+  HCA-BRANDON:
+    rate: 3.8
+    compare: No Different
+  HCA-LARGO:
+    rate: 3.8
+    compare: No Different
+  HCA-TRINITY:
+    rate: 4.5
+    compare: No Different
+  HCA-BAYONET-POINT:
+    rate: 4.4
+    compare: No Different
+  HCA-NORTHSIDE:
+    rate: 4.7
+    compare: No Different
+  LAKELAND-REGIONAL:
+    rate: 4.2
+    compare: No Different
+  ADVENT-ORLANDO:
+    rate: 3.5
+    compare: No Different
+  ADVENT-DAYTONA:
+    rate: 4.7
+    compare: No Different
+  HCA-LAKE-MONROE:
+    rate: 4.4
+    compare: No Different
+  HCA-OVIEDO:
+    rate: 3.1
+    compare: No Different
+  HALIFAX-DAYTONA:
+    rate: 4.7
+    compare: No Different
+  MAYO-FL:
+    rate: 4.8
+    compare: No Different
+  BAPTIST-JAX:
+    rate: 4.2
+    compare: No Different
+  BAPTIST-JAX-BEACHES:
+    rate: 3.5
+    compare: No Different
+  UF-HEALTH-JAX:
+    rate: 4.6
+    compare: No Different
+  HCA-MEMORIAL-JAX:
+    rate: 3.3
+    compare: No Different
+  ASCENSION-STV-RIVERSIDE:
+    rate: 4.1
+    compare: No Different
+  ASCENSION-STV-SOUTHSIDE:
+    rate: 3.5
+    compare: No Different
+  UF-HEALTH-ST-JOHNS:
+    rate: 4
+    compare: No Different
+  UF-HEALTH-SHANDS:
+    rate: 3.7
+    compare: No Different
+  HCA-NORTH-FLORIDA:
+    rate: 2.6
+    compare: No Different
+  HCA-OCALA:
+    rate: 6.2
+    compare: No Different
+  ADVENT-OCALA:
+    rate: 4.9
+    compare: No Different
+  UF-HEALTH-VILLAGES:
+    rate: 4.5
+    compare: No Different
+  LEE-GULF-COAST:
+    rate: 3.5
+    compare: No Different
+  LEE-MEMORIAL:
+    rate: 3.7
+    compare: No Different
+  LEE-CAPE-CORAL:
+    rate: 5.6
+    compare: No Different
+  NCH-NAPLES:
+    rate: 4.5
+    compare: No Different
+  PHYSICIANS-REGIONAL-PINE-RIDGE:
+    rate: 4.1
+    compare: No Different
+  SARASOTA-MEMORIAL:
+    rate: 2.9
+    compare: No Different
+  SARASOTA-MEMORIAL-VENICE:
+    rate: 4.1
+    compare: No Different
+  HCA-BLAKE:
+    rate: 3.7
+    compare: No Different
+  HCA-SARASOTA-DOCTORS:
+    rate: 2.5
+    compare: No Different
+  UHS-MANATEE-MEMORIAL:
+    rate: 3.3
+    compare: No Different
+  UHS-LAKEWOOD-RANCH:
+    rate: 4.4
+    compare: No Different
+  HCA-WEST-PENSACOLA:
+    rate: 4.9
+    compare: No Different
+  BAPTIST-PENSACOLA:
+    rate: 3.9
+    compare: No Different
+  BAPTIST-GULF-BREEZE:
+    rate: 5.8
+    compare: No Different
+  ASCENSION-SACRED-HEART-PENSACOLA:
+    rate: 3.7
+    compare: No Different
+  TMH-TALLAHASSEE:
+    rate: 3.2
+    compare: No Different
+  HCA-CAPITAL:
+    rate: 4
+    compare: No Different
+  HCA-FORT-WALTON-DESTIN:
+    rate: 4.9
+    compare: No Different
+  HEALTH-FIRST-HOLMES:
+    rate: 4.7
+    compare: No Different
+  HEALTH-FIRST-CAPE-CANAVERAL:
+    rate: 5.9
+    compare: No Different
+  HEALTH-FIRST-VIERA:
+    rate: 4.3
     compare: No Different

@@ -1,8 +1,8 @@
 # Site identity for this profile (loaded by app.py; config/ has no brand.yaml -> consumer defaults).
 profile: ortho
-name: "Orthopedic Price Intelligence: Arizona and Virginia"
+name: "Orthopedic Price Intelligence"
 short: "Ortho Price Intel"
-tagline: "What every Arizona and Virginia hospital publishes for orthopedic and spine care: by procedure, by payer, and by site of care, benchmarked to Medicare and to our own facilities."
+tagline: "What every hospital in Arizona, Virginia, Nevada, Michigan and Florida publishes for orthopedic and spine care: by procedure, by payer, and by site of care, benchmarked to Medicare and to our own facilities."
 audience: "Built for contracting, network strategy, and ASC development at HOPCo."
 # Our own facilities: badged in every table and compared against the market on /position.
 # Payers hidden from this site (dropdown, rates matrix, CSV, position page). Data still ingests.

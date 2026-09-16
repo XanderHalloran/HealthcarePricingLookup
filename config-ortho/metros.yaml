@@ -4,6 +4,7 @@ states:
   - { code: VA, name: Virginia, slug: virginia }
   - { code: NV, name: Nevada, slug: nevada }
   - { code: MI, name: Michigan, slug: michigan }
+  - { code: FL, name: Florida, slug: florida }
 
 metros:
   - key: phoenix
@@ -341,3 +342,136 @@ metros:
       - MUNSON-TRAVERSECITY
       - MCLAREN-NORTHERN
       - UPHS-MARQUETTE
+
+  # ===== Florida =====
+  - key: south-florida
+    state: FL
+    label: "Miami / Fort Lauderdale / West Palm"
+    slug_city: "south-florida"
+    ids:
+      - BAPTIST-MIAMI
+      - BAPTIST-DOCTORS-CG
+      - BAPTIST-SOUTH-MIAMI
+      - BAPTIST-WEST-KENDALL
+      - BAPTIST-BETHESDA-EAST
+      - BAPTIST-BOCA
+      - JACKSON-MEMORIAL
+      - UHEALTH-TOWER
+      - HCA-KENDALL
+      - HCA-AVENTURA
+      - HCA-WESTSIDE
+      - HCA-NORTHWEST
+      - HCA-JFK
+      - HCA-PALMS-WEST
+      - HCA-MERCY
+      - BROWARD-MEDICAL-CENTER
+      - BROWARD-NORTH
+      - BROWARD-CORAL-SPRINGS
+      - HOLY-CROSS-FTL
+      - CCF-WESTON
+      - CCF-MARTIN-NORTH
+      - MOUNT-SINAI-MIAMI
+      - TENET-DELRAY
+      - TENET-PBG
+      - TENET-GOOD-SAM
+      - TENET-ST-MARYS
+      - TENET-WEST-BOCA
+      - UHS-WELLINGTON
+
+  - key: tampa-bay
+    state: FL
+    label: "Tampa Bay"
+    slug_city: "tampa"
+    ids:
+      - TGH-MAIN
+      - ADVENT-TAMPA
+      - ADVENT-WESLEY-CHAPEL
+      - BAYCARE-ST-JOSEPHS
+      - BAYCARE-MORTON-PLANT
+      - BAYCARE-ST-ANTHONYS
+      - BAYCARE-MEASE-COUNTRYSIDE
+      - HCA-BRANDON
+      - HCA-SOUTH-TAMPA
+      - HCA-LARGO
+      - HCA-TRINITY
+      - HCA-BAYONET-POINT
+      - HCA-NORTHSIDE
+      - LAKELAND-REGIONAL
+
+  - key: orlando
+    state: FL
+    label: "Orlando / Daytona"
+    slug_city: "orlando"
+    ids:
+      - ADVENT-ORLANDO
+      - ADVENT-DAYTONA
+      - HCA-OSCEOLA
+      - HCA-LAKE-MONROE
+      - HCA-OVIEDO
+      - HCA-UCF-LAKE-NONA
+      - HALIFAX-DAYTONA
+
+  - key: jacksonville
+    state: FL
+    label: "Jacksonville / St. Augustine"
+    slug_city: "jacksonville"
+    ids:
+      - MAYO-FL
+      - BAPTIST-JAX
+      - BAPTIST-JAX-BEACHES
+      - UF-HEALTH-JAX
+      - HCA-MEMORIAL-JAX
+      - HCA-ORANGE-PARK
+      - ASCENSION-STV-RIVERSIDE
+      - ASCENSION-STV-SOUTHSIDE
+      - UF-HEALTH-ST-JOHNS
+
+  - key: gainesville
+    state: FL
+    label: "Gainesville / Ocala / The Villages"
+    slug_city: "gainesville"
+    ids:
+      - UF-HEALTH-SHANDS
+      - HCA-NORTH-FLORIDA
+      - HCA-OCALA
+      - ADVENT-OCALA
+      - UF-HEALTH-VILLAGES
+
+  - key: southwest-florida
+    state: FL
+    label: "Naples / Fort Myers / Sarasota"
+    slug_city: "southwest-florida"
+    ids:
+      - LEE-GULF-COAST
+      - LEE-MEMORIAL
+      - LEE-CAPE-CORAL
+      - NCH-NAPLES
+      - PHYSICIANS-REGIONAL-PINE-RIDGE
+      - SARASOTA-MEMORIAL
+      - SARASOTA-MEMORIAL-VENICE
+      - HCA-BLAKE
+      - HCA-SARASOTA-DOCTORS
+      - UHS-MANATEE-MEMORIAL
+      - UHS-LAKEWOOD-RANCH
+
+  - key: panhandle
+    state: FL
+    label: "Pensacola / Tallahassee"
+    slug_city: "panhandle"
+    ids:
+      - HCA-WEST-PENSACOLA
+      - BAPTIST-PENSACOLA
+      - BAPTIST-GULF-BREEZE
+      - ASCENSION-SACRED-HEART-PENSACOLA
+      - TMH-TALLAHASSEE
+      - HCA-CAPITAL
+      - HCA-FORT-WALTON-DESTIN
+
+  - key: space-coast
+    state: FL
+    label: "Space Coast"
+    slug_city: "space-coast"
+    ids:
+      - HEALTH-FIRST-HOLMES
+      - HEALTH-FIRST-CAPE-CANAVERAL
+      - HEALTH-FIRST-VIERA
