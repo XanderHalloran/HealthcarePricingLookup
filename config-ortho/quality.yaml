@@ -251,6 +251,17 @@ ratings:
   HEALTH-FIRST-HOLMES: 4
   HEALTH-FIRST-CAPE-CANAVERAL: 3
   HEALTH-FIRST-VIERA: 5
+  # blocked sites MI + FL
+  MYMICHIGAN-MIDLAND: 4
+  MYMICHIGAN-SAGINAW: 3
+  MYMICHIGAN-ALPENA: 3
+  ORLANDO-HEALTH-ORMC: 4
+  ORLANDO-HEALTH-BAYFRONT: 2
+  ORLANDO-HEALTH-MELBOURNE: 3
+  JUPITER-MEDICAL: 4
+  MEMORIAL-REGIONAL: 3
+  MEMORIAL-WEST: 3
+  MEMORIAL-MIRAMAR: 5
 hip_knee:
   BANNER-DESERT:
     rate: 4.6
@@ -826,4 +837,32 @@ hip_knee:
     compare: No Different
   HEALTH-FIRST-VIERA:
     rate: 4.3
+    compare: No Different
+  # blocked sites MI + FL
+  MYMICHIGAN-MIDLAND:
+    rate: 2.9
+    compare: No Different
+  MYMICHIGAN-SAGINAW:
+    rate: 4.7
+    compare: No Different
+  MYMICHIGAN-ALPENA:
+    rate: 4.1
+    compare: No Different
+  ORLANDO-HEALTH-ORMC:
+    rate: 3.0
+    compare: No Different
+  ORLANDO-HEALTH-BAYFRONT:
+    rate: 4.6
+    compare: No Different
+  ORLANDO-HEALTH-MELBOURNE:
+    rate: 3.3
+    compare: No Different
+  JUPITER-MEDICAL:
+    rate: 5.3
+    compare: No Different
+  MEMORIAL-REGIONAL:
+    rate: 3.7
+    compare: No Different
+  MEMORIAL-WEST:
+    rate: 4.6
     compare: No Different

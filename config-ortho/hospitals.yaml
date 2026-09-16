@@ -302,3 +302,14 @@ hospitals:
   - { id: HEALTH-FIRST-HOLMES, name: "Health First Holmes Regional Medical Center (Melbourne)", state: FL, ccn: "100019", url: "https://www.hf.org/sites/default/files/2026-03/590624371_Holmes-Regional-Medical-Center_standardcharges.csv" }
   - { id: HEALTH-FIRST-CAPE-CANAVERAL, name: "Health First Cape Canaveral Hospital (Cocoa Beach)", state: FL, ccn: "100177", url: "https://www.hf.org/sites/default/files/2026-03/592477479_Cape-Canaveral-Hospital_standardcharges.csv" }
   - { id: HEALTH-FIRST-VIERA, name: "Health First Viera Hospital (Melbourne)", state: FL, ccn: "100315", url: "https://www.hf.org/sites/default/files/2026-03/264019868_Viera-Hospital_standardcharges.csv" }
+  # ===== Bot-blocked sites (MI + FL), files fetched off-box 2026-09-16 (see DEPLOY.md) =====
+  - { id: MYMICHIGAN-MIDLAND, name: "MyMichigan Medical Center Midland", state: MI, ccn: "230222", file: data/raw/MYMICHIGAN-MIDLAND.csv }
+  - { id: MYMICHIGAN-SAGINAW, name: "MyMichigan Medical Center Saginaw (former St. Mary's of Michigan)", state: MI, ccn: "230077", file: data/raw/MYMICHIGAN-SAGINAW.csv }
+  - { id: MYMICHIGAN-ALPENA, name: "MyMichigan Medical Center Alpena", state: MI, ccn: "230036", file: data/raw/MYMICHIGAN-ALPENA.csv }
+  - { id: ORLANDO-HEALTH-ORMC, name: "Orlando Health Orlando Regional Medical Center (incl. Jewett Orthopedic Institute)", state: FL, ccn: "100006", format: json, file: data/raw/ORLANDO-HEALTH-ORMC.json }
+  - { id: ORLANDO-HEALTH-BAYFRONT, name: "Orlando Health Bayfront Hospital (St. Petersburg)", state: FL, ccn: "100032", format: json, file: data/raw/ORLANDO-HEALTH-BAYFRONT.json }
+  - { id: ORLANDO-HEALTH-MELBOURNE, name: "Orlando Health Melbourne Hospital", state: FL, ccn: "100291", format: json, file: data/raw/ORLANDO-HEALTH-MELBOURNE.json }
+  - { id: JUPITER-MEDICAL, name: "Jupiter Medical Center", state: FL, ccn: "100253", file: data/raw/JUPITER-MEDICAL.csv }
+  - { id: MEMORIAL-REGIONAL, name: "Memorial Regional Hospital (Hollywood)", state: FL, ccn: "100038", unzip: true, file: data/raw/MEMORIAL-REGIONAL.zip }
+  - { id: MEMORIAL-WEST, name: "Memorial Hospital West (Pembroke Pines)", state: FL, ccn: "100281", unzip: true, file: data/raw/MEMORIAL-WEST.zip }
+  - { id: MEMORIAL-MIRAMAR, name: "Memorial Hospital Miramar", state: FL, ccn: "100285", unzip: true, file: data/raw/MEMORIAL-MIRAMAR.zip }

@@ -323,6 +323,8 @@ metros:
       - HENRYFORD-GENESYS
       - COVENANT-SAGINAW
       - MCLAREN-BAY
+      - MYMICHIGAN-MIDLAND
+      - MYMICHIGAN-SAGINAW
 
   - key: kalamazoo
     state: MI
@@ -342,6 +344,7 @@ metros:
       - MUNSON-TRAVERSECITY
       - MCLAREN-NORTHERN
       - UPHS-MARQUETTE
+      - MYMICHIGAN-ALPENA
 
   # ===== Florida =====
   - key: south-florida
@@ -377,6 +380,10 @@ metros:
       - TENET-ST-MARYS
       - TENET-WEST-BOCA
       - UHS-WELLINGTON
+      - JUPITER-MEDICAL
+      - MEMORIAL-REGIONAL
+      - MEMORIAL-WEST
+      - MEMORIAL-MIRAMAR
 
   - key: tampa-bay
     state: FL
@@ -397,6 +404,7 @@ metros:
       - HCA-BAYONET-POINT
       - HCA-NORTHSIDE
       - LAKELAND-REGIONAL
+      - ORLANDO-HEALTH-BAYFRONT
 
   - key: orlando
     state: FL
@@ -410,6 +418,7 @@ metros:
       - HCA-OVIEDO
       - HCA-UCF-LAKE-NONA
       - HALIFAX-DAYTONA
+      - ORLANDO-HEALTH-ORMC
 
   - key: jacksonville
     state: FL
@@ -475,3 +484,4 @@ metros:
       - HEALTH-FIRST-HOLMES
       - HEALTH-FIRST-CAPE-CANAVERAL
       - HEALTH-FIRST-VIERA
+      - ORLANDO-HEALTH-MELBOURNE
