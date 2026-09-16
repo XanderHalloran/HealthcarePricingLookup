@@ -106,8 +106,9 @@ def _zip_member(zip_path: str, hid: str) -> str:
 
 
 def _resolve_source(entry: dict, raw_dir: str) -> str:
-    if entry.get("file"):
-        return os.path.join(ROOT, entry["file"])
+    if entry.get("file"):                            # off-box copy (bot-blocked host); zip -> (zip, member)
+        path = os.path.join(ROOT, entry["file"])
+        return (path, _zip_member(path, entry["id"])) if entry.get("unzip") else path
     if entry.get("url"):
         if entry.get("unzip"):                       # MRF delivered as a zip -> (zip, member)
             zpath = os.path.join(raw_dir, f"{entry['id']}.zip")

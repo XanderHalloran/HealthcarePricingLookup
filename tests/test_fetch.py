@@ -89,3 +89,20 @@ if __name__ == "__main__":
             fn()
             print("ok ", name)
     print("\n2 passed")
+
+
+def test_local_file_entry_can_be_a_zip(tmp_path=None):
+    """file: + unzip: true resolves to (zip, largest member) exactly like a downloaded zip."""
+    import os, tempfile, zipfile
+    import pipeline
+    d = tempfile.mkdtemp()
+    z = os.path.join(d, "X.zip")
+    with zipfile.ZipFile(z, "w") as zf:
+        zf.writestr("small.csv", "a\n")
+        zf.writestr("big.csv", "hospital_name\n" * 50)
+    old_root, pipeline.ROOT = pipeline.ROOT, d
+    try:
+        assert pipeline._resolve_source({"id": "X", "file": "X.zip", "unzip": True}, d) == (z, "big.csv")
+        assert pipeline._resolve_source({"id": "X", "file": "X.zip"}, d) == z
+    finally:
+        pipeline.ROOT = old_root

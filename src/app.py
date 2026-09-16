@@ -596,8 +596,18 @@ def _payer_table(state, metro, stamp):
         if metro_ids is not None and hid not in metro_ids:
             continue
         acc.setdefault((code, payer), []).append(rate)
-    for k, vals in acc.items():
-        out[k] = {"median": statistics.median(vals), "n": len(vals)}
+    floors = {}
+    for code in {c for c, _ in acc}:
+        svc = _by_code.get(code)
+        med, _ = get_medicare(STATE["con"], code, svc["type"]) if svc else (None, None)
+        floors[code] = med * 0.25 if med else 0
+    for (code, payer), vals in acc.items():
+        # Same plausibility floor as the typical price: a $10.62 "rate" for a knee replacement is a
+        # professional or per-unit component in that file, not a facility contract (Michigan's DMC,
+        # Trinity and Henry Ford files all do this for surgical CPTs while their DRG rows look normal).
+        keep = [v for v in vals if v >= floors[code]]
+        if keep:
+            out[(code, payer)] = {"median": statistics.median(keep), "n": len(keep), "dropped": len(vals) - len(keep)}
     return out
 
 
