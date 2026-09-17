@@ -118,6 +118,8 @@ def test_map_near_address():
     r = client.get("/map", params={"code": "73721", "q": "85015", "radius": "25"})
     assert r.status_code == 200 and "within 25 miles" in r.text and "leaflet" in r.text
     assert 'id="map"' in r.text
+    assert 'onclick="useMyLocation()"' not in client.get("/").text   # ortho offers ZIP/address only, never the browser prompt
+    assert "never asks your browser" in r.text
     r = client.get("/map", params={"code": "73721", "q": "85015", "radius": "junk", "sort": "dist"})
     assert r.status_code == 200 and "within 25 miles" in r.text     # bad radius falls back to 25
     def boom(q, st=""): raise ValueError

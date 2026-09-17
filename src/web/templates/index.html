@@ -138,11 +138,11 @@
     <label class="coins" title="Your share of the cost after the deductible is met">coinsurance
       <input type="text" id="coins" value="20" size="2" inputmode="numeric" aria-label="Coinsurance percent — your share after deductible" oninput="applyDeductible()">%</label>
     <span class="bar-sep"></span>
-    <label class="pb-lab" for="zip"><b>Near you</b></label>
+    <label class="pb-lab" for="zip"><b>Near you</b>{% if brand.profile == 'ortho' %} <span class="mute">(ZIP only; your browser location is never requested)</span>{% endif %}</label>
     <input type="text" id="zip" inputmode="numeric" size="6" placeholder="ZIP" aria-label="Your ZIP code"
            onkeydown="if(event.key==='Enter'){event.preventDefault();setZip()}">
     <button class="btn-mini" type="button" onclick="setZip()">Go</button>
-    <button class="btn-mini" type="button" onclick="useMyLocation()">📍 Use my location</button>
+    {% if brand.profile != 'ortho' %}<button class="btn-mini" type="button" onclick="useMyLocation()">📍 Use my location</button>{% endif %}
     <span id="loc-status" class="loc-status"></span>
     {% if brand.profile == 'ortho' %}</div></details>{% endif %}
   </div>
