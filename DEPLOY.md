@@ -66,6 +66,13 @@ the question at 1000 chars and `/eob` at a 12 MB file.
   report through it with CFG pointed at config-ortho or append by hand), redeploy, then
   `docker exec -d ortho-app sh -c 'python -u src/pipeline.py --state XX > data/ingest-XX.log 2>&1'`.
 - Weekly refresh: host `ortho-ingest.timer` (Tue 02:00 UTC).
+- **Weekly refresh runs ONE STATE AT A TIME** (`/root/ingest-by-state.sh <container> <STATES...>`, called by both
+  `healthcare-ingest.service` and `ortho-ingest.service`). A single full rebuild OOM-killed the box on 2026-09-21:
+  3.8 GB RAM, no swap, and the kernel picked the largest process -- `uvicorn`, the web server -- so the SITE went
+  down and the refresh died 2.5 h in having written nothing. Now each `--state XX` run does its own atomic partition
+  swap, peak memory is bounded by one state, a failing state does not cost the others, and the pipeline sets
+  `oom_score_adj=500` so any future squeeze kills the batch job instead of the site. The box also has a 4 GB swapfile.
+  Add a state to the weekly run by appending its code to the unit's `ExecStart` line.
 - **Bot-blocked MRFs (both sites).** Some hosts (Akamai: vhchealth.org, centrahealth.com, valleyhealthlink.com;
   Cloudflare: marywashingtonhealthcare.com; IP-range blocks: memorialhermann.org, mrfs.hyvehealthcare.com) refuse
   the VPS. Their manifest entries use `file: data/raw/<ID>.<ext>` instead of `url:`; the file is fetched
