@@ -8,7 +8,8 @@ dependencies = [
     "ijson>=3",        # streaming JSON parse for JSON-format hospital MRFs (constant memory)
     "pyyaml>=6",
     "fastapi>=0.110",
-    "uvicorn[standard]>=0.29",
+    "uvicorn>=0.29",          # plain, not [standard]: the image skips uvloop/httptools/watchfiles
+    "python-multipart>=0.0.9",   # required by the Form/File routes (/analyze, /eob, /email)
     "jinja2>=3",
     "anthropic>=0.40",   # vision OCR for the bill-photo / EOB upload (gated on ANTHROPIC_API_KEY)
 ]

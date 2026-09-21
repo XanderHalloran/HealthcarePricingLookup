@@ -30,6 +30,22 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 
+def to_float(v) -> float | None:
+    """A money cell to float: strips $ and commas; blank or non-numeric -> None.
+    One parser for the MRF readers, the Medicare reference loader and the web form, which all
+    meet the same dollar strings in different shapes (JSON number, CSV cell, typed input)."""
+    if v is None:
+        return None
+    try:
+        return float(v)                     # already numeric (JSON), or a clean string
+    except (TypeError, ValueError):
+        pass
+    try:
+        return float(str(v).replace("$", "").replace(",", "").strip())
+    except ValueError:
+        return None
+
+
 _MODIFIER = re.compile(r"-([A-Z0-9]{2})$")
 _DELIMS = re.compile(r"[\s,|;\t]+")
 
@@ -135,8 +151,3 @@ def extract_amounts(line: str, code: str | None = None) -> list[float]:
     ints = {float(t) for t in re.findall(r"\b\d{2,}\b", line)} - {code_val}
     return [next(iter(ints))] if len(ints) == 1 else []
 
-
-def extract_amount(line: str, code: str | None = None) -> float | None:
-    """The billed charge (largest amount) on a line, or None."""
-    amts = extract_amounts(line, code)
-    return amts[0] if amts else None

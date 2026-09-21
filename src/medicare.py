@@ -19,21 +19,12 @@ import re
 
 import duckdb
 
-from normalize import normalize_code
+from normalize import normalize_code, to_float
 
 
 def _key(h: str) -> str:
     return re.sub(r"[\s|_]+", " ", h.strip().lower())
 
-
-def _num(v):
-    if v is None:
-        return None
-    s = str(v).strip().replace("$", "").replace(",", "")
-    try:
-        return float(s)
-    except (ValueError, TypeError):
-        return None
 
 
 def _find(header, *needles):
@@ -133,7 +124,7 @@ def load_pfs(con, path, year, conversion_factor, locality="NATIONAL"):
         if not any(x.strip() for x in r):
             continue
         code = _clean_code(r[ci]) if ci < len(r) else None
-        total = _num(r[ti]) if ti < len(r) else None
+        total = to_float(r[ti]) if ti < len(r) else None
         if not code or not total:                 # skip 0/empty RVU (non-payable, labs)
             continue
         ctype = "HCPCS" if code[0].isalpha() else "CPT"
@@ -153,7 +144,7 @@ def load_opps(con, path, year, locality="NATIONAL"):
             ri = _find(header, "payment", "rate") or _find(header, "payment")
             first = False
         code = _clean_code(row[ci])
-        rate = _num(row[ri]) if ri is not None else None
+        rate = to_float(row[ri]) if ri is not None else None
         if not code or rate is None:
             continue
         ctype = "HCPCS" if code[0].isalpha() else "CPT"
@@ -212,7 +203,7 @@ def load_clfs(con, path, year, locality="NATIONAL"):
         if ri is None:
             break
         code = _clean_code(row[ci]) if ci < len(row) else None
-        rate = _num(row[ri]) if ri < len(row) else None
+        rate = to_float(row[ri]) if ri < len(row) else None
         if not code or rate is None:
             continue
         ctype = "HCPCS" if code[0].isalpha() else "CPT"

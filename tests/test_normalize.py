@@ -8,7 +8,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-from normalize import normalize_code, normalize_lines, extract_amount, extract_amounts  # noqa: E402
+from normalize import normalize_code, normalize_lines, extract_amounts, to_float  # noqa: E402
 
 
 def test_plain_cpt():
@@ -75,15 +75,11 @@ def test_first_code_wins():
     assert r.code == "73721"
 
 
-def test_extract_amount_strong_signals():
-    assert extract_amount("73721 MRI lower extremity $2,400.00", "73721") == 2400.0
-    assert extract_amount("73721,MRI,2400.00,1200.00", "73721") == 2400.0  # largest = charge
-    assert extract_amount("85025 20.00", "85025") == 20.0
-
-
-def test_extract_amount_bare_int_fallback_and_none():
-    assert extract_amount("99213 office visit 350", "99213") == 350.0
-    assert extract_amount("73721", "73721") is None        # only the code, no charge
+def test_to_float_covers_every_shape_the_parsers_meet():
+    assert to_float("$2,400.00") == 2400.0 and to_float(" 1200 ") == 1200.0
+    assert to_float(1200) == 1200.0 and to_float(1200.5) == 1200.5      # JSON numbers
+    assert to_float(None) is None and to_float("") is None              # blank cell
+    assert to_float("N/A") is None and to_float("see contract") is None
 
 
 def test_extract_amounts_charge_and_allowed():

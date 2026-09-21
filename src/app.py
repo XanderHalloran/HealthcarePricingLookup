@@ -30,6 +30,7 @@ from pricing import (analyze, load_templates, load_services, load_hospital_names
 from analysis import detect_issues, build_letter, savings_summary
 from assistant import ask, build_context
 from eob import extract_eob
+from normalize import to_float
 from payers import CANONICAL
 import capture
 
@@ -165,12 +166,8 @@ def _state_path(state):
 
 
 def _money_in(s):
-    """Parse a user-entered dollar amount ('$1,200' / '1200') to float, or None."""
-    s = (s or "").replace("$", "").replace(",", "").strip()
-    try:
-        return float(s) or None
-    except ValueError:
-        return None
+    """A user-entered dollar amount ('$1,200' / '1200') to float; blank or zero -> None."""
+    return to_float(s) or None
 
 
 def _ctx(rows, codes, state, mode, payer="", gfe=None, metro=""):

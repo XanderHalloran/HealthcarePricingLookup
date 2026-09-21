@@ -22,6 +22,8 @@ from __future__ import annotations
 import csv
 import io
 import re
+
+from normalize import to_float
 from dataclasses import dataclass
 
 
@@ -41,18 +43,6 @@ def _key(header: str) -> str:
     So `standard_charge|discounted_cash` and `standard charge discounted cash` match."""
     return re.sub(r"[\s|_]+", " ", header.strip().lower())
 
-
-def _money(val: str | None) -> float | None:
-    """Parse a charge cell: strip $ , and whitespace; blank/non-numeric -> None."""
-    if val is None:
-        return None
-    s = val.strip().replace("$", "").replace(",", "")
-    if not s:
-        return None
-    try:
-        return float(s)
-    except ValueError:
-        return None
 
 
 _CODE_RE = re.compile(r"^code (\d+)$")
@@ -122,15 +112,15 @@ def parse_mrf(src):
             base = dict(
                 description=(_cell(row, cols.get("description")) or "").strip(),
                 codes=codes,
-                cash=_money(_cell(row, cols.get("cash"))),
-                charge_min=_money(_cell(row, cols.get("charge_min"))),
-                charge_max=_money(_cell(row, cols.get("charge_max"))),
+                cash=to_float(_cell(row, cols.get("cash"))),
+                charge_min=to_float(_cell(row, cols.get("charge_min"))),
+                charge_max=to_float(_cell(row, cols.get("charge_max"))),
             )
             if "negotiated_dollar" in cols or not cols.get("wide"):        # tall
-                yield MrfRow(negotiated_dollar=_money(_cell(row, cols.get("negotiated_dollar"))),
+                yield MrfRow(negotiated_dollar=to_float(_cell(row, cols.get("negotiated_dollar"))),
                              payer=(_cell(row, cols.get("payer")) or "").strip() or None, **base)
                 continue
-            wide = [(p, _money(_cell(row, i))) for p, i in cols["wide"]]
+            wide = [(p, to_float(_cell(row, i))) for p, i in cols["wide"]]
             wide = [(p, v) for p, v in wide if v is not None]
             if not wide:                                                   # cash/min/max only
                 yield MrfRow(negotiated_dollar=None, **base)

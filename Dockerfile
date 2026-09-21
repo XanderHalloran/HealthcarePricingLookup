@@ -11,7 +11,6 @@ COPY src/ ./src/
 COPY config/ ./config/
 COPY config-ortho/ ./config-ortho/
 COPY reference/ ./reference/
-COPY tests/fixtures/ ./tests/fixtures/
 
 EXPOSE 8200
 # Serve immediately; do NOT block startup on ingest. Real MRFs are ~500 MB to

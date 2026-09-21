@@ -22,19 +22,8 @@ import codecs
 import ijson
 
 from mrf_parser import MrfRow
+from normalize import to_float
 
-
-def _num(v):
-    if v is None:
-        return None
-    try:
-        return float(v)
-    except (TypeError, ValueError):
-        s = str(v).replace("$", "").replace(",", "").strip()
-        try:
-            return float(s)
-        except ValueError:
-            return None
 
 
 _CTRL = bytes.maketrans(bytes(range(0x20)), b" " * 0x20)   # every C0 control byte -> space
@@ -68,13 +57,13 @@ def parse_mrf_json(src):
             if not codes:
                 continue
             for sc in item.get("standard_charges") or []:
-                cash = _num(sc.get("discounted_cash"))
-                cmin, cmax = _num(sc.get("minimum")), _num(sc.get("maximum"))
+                cash = to_float(sc.get("discounted_cash"))
+                cmin, cmax = to_float(sc.get("minimum")), to_float(sc.get("maximum"))
                 payers = sc.get("payers_information") or sc.get("payers") or []
                 if payers:
                     for p in payers:
                         yield MrfRow(desc, codes, cash,
-                                     _num(p.get("standard_charge_dollar")), cmin, cmax,
+                                     to_float(p.get("standard_charge_dollar")), cmin, cmax,
                                      (p.get("payer_name") or "").strip() or None)
                 else:                          # cash/min/max only, no payer rows
                     yield MrfRow(desc, codes, cash, None, cmin, cmax)

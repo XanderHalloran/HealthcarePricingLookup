@@ -1,103 +1,136 @@
-# Healthcare price transparency + bill-negotiation coaching
+# Hospital price transparency toolkit
 
-Paste medical billing codes from an itemized hospital bill, get back the Medicare
-benchmark, local hospital cash/negotiated prices, a suggested target ask, and a
-specific negotiation talking point per code.
+Hospitals are required to publish every price they charge, including what they have
+negotiated with each insurer. They publish it as enormous, wildly inconsistent machine-readable
+files that almost nobody can read. This project ingests those files and turns them into
+something a person can act on.
 
-> **Estimates only.** Not a guarantee of bill reduction, and not legal, medical,
-> or financial advice. Every output surface repeats this.
+One codebase runs two live sites from the same engine, switched by a config directory:
 
-## Status
-Phases 1–4 done. Phase 5 (deploy) not started — gated on explicit go-ahead.
+| | [healthcare.traqqit.com](https://healthcare.traqqit.com) | ortho.traqqit.com |
+|---|---|---|
+| For | patients comparing prices and negotiating a bill | contracting and network strategy |
+| Profile | `APP_CONFIG=config` (default) | `APP_CONFIG=config-ortho` |
+| Markets | 6 states, 27 metros, 333 hospitals | 5 states, 29 metros, 299 hospitals |
+| Tracked codes | 107 shoppable procedures | 82 musculoskeletal procedures |
+| Access | public | analysis pages behind HTTP basic auth |
 
-## Web app (Phase 4)
+> **Estimates, not quotes.** Published prices are frequently stale, mislabeled, or
+> internally contradictory, and this tool says so rather than hiding it. Nothing here is
+> legal, medical, or financial advice. Every output surface repeats this.
+
+## Quick start
+
+```bash
+pip install -e .
+python -u src/pipeline.py --state AZ          # fetch + ingest one state (a full run is hours)
+uvicorn app:app --reload --app-dir src        # http://127.0.0.1:8000
+APP_CONFIG=config-ortho uvicorn app:app --reload --app-dir src   # the ortho profile
 ```
-python src/pipeline.py                              # populate data/hospital_rates first
-uvicorn app:app --reload --app-dir src              # http://127.0.0.1:8000
-```
-Paste codes (one per line, charge optional, e.g. `73721 MRI $2,400`), optional state,
-get a per-code pricing table + copy-able negotiation talking points. Disclaimer on page.
-Single template `src/web/templates/index.html`; no auth, no build step.
 
-## Ingest (Phase 2)
-```
-python src/pipeline.py        # reads config/hospitals.yaml, writes data/ + reports/
-```
-- `src/mrf_parser.py` — defensive CMS v3.0.0 tall-CSV parser (skiprows=2).
-- `src/ingest.py` — parse → normalize → filter to allowlist → aggregate per code →
-  append partitioned Parquet (`state`/`code`). Dropped codes go to `reports/`.
-- `src/medicare.py` — PFS/OPPS/IPPS loaders into `medicare_rates`.
-- `src/pipeline.py` — manifest-driven fetch (urllib) + ingest driver.
-- `config/hospitals.yaml` — MRF manifest. `config/medicare.yaml` — rate params.
-Run tests: `for t in tests/test_*.py; do python "$t"; done` (or `pytest`).
+The app serves fine with no data at all — every page degrades to "no data for this market"
+rather than failing, so you can boot it first and ingest later.
 
-## Layout
+## How it works
+
 ```
-config/
-  allowlist.yaml      filter-before-store list: only these codes are kept at ingest
+CMS machine-readable files          Medicare reference data
+(CSV tall/wide, JSON, zipped)       (OPPS, PFS, CLFS, IPPS, ASC)
+            |                                   |
+      src/pipeline.py  ──fetch, stream──►  src/ingest.py
+            |                                   |
+     filter to the allowlist            normalize + aggregate
+            |                                   |
+            └──────────►  data/*.parquet  ◄─────┘
+                      (hive-partitioned by state/code)
+                                 |
+                          src/app.py (FastAPI + DuckDB)
+```
+
+Everything streams. A single hospital file can be 900 MB of JSON or a 1.8 GB zip holding a
+43 GB CSV, so nothing is ever read into memory whole, and only allowlisted codes are kept.
+Writes are staged and swapped atomically per state partition, so a failed refresh leaves the
+live dataset untouched.
+
+There is no database server. DuckDB reads the Parquet files directly and holds the Medicare
+reference tables in memory.
+
+## Pages
+
+Both profiles share the price lookup, per-procedure SEO pages, and a methodology page that
+shows the live coverage numbers and a data-flow diagram. The consumer profile adds bill
+analysis, negotiation talking points, and an appeal-letter generator. The ortho profile adds
+a payer-rate matrix, a site-of-care comparison (hospital outpatient vs ambulatory surgery
+center), an own-facility-vs-market position view, a payer scorecard as a multiple of Medicare,
+episode/bundle pricing, and a radius map that takes a ZIP or address.
+
+## Repo layout
+
+```
 src/
-  schema.sql          DuckDB DDL (procedures, medicare_rates, hospitals) + Parquet spec
-  normalize.py        billing-code normalizer (the load-bearing messy part)
-tests/
-  test_normalize.py   normalizer tests (pytest OR `python tests/test_normalize.py`)
-data/                 (gitignored) partitioned Parquet lands here
-reports/              (gitignored) dropped/unmatched-code reports from ingest
+  pipeline.py     manifest-driven fetch; streams zips, handles bot-blocked hosts
+  mrf_parser.py   CMS tall + wide CSV parsers (the formats vary enormously)
+  mrf_json.py     streaming JSON parser (ijson), tolerant of control bytes and BOMs
+  ingest.py       normalize -> filter -> aggregate per facility -> Parquet
+  normalize.py    billing-code normalizer (the load-bearing messy part)
+  medicare.py     OPPS/PFS/CLFS/IPPS/ASC benchmark loaders
+  pricing.py      per-code lookup, outlier rejection, payer matrix
+  analysis.py     bill issues, talking points, appeal letter
+  app.py          FastAPI routes + Jinja templates
+config/           consumer profile: hospitals, metros, allowlist, quality, geo
+config-ortho/     ortho profile: same shape + brand.yaml, bundles.yaml, asc/ipps benchmarks
+ops/              deployment helpers that live on the server
+reference/        CMS fee-schedule CSVs, committed so the image needs no downloads
+data/             (gitignored) Parquet lands here
 ```
 
-## Data model
-- **procedures**(code, code_type[CPT|HCPCS|DRG], description, category, is_shoppable)
-- **medicare_rates**(code, code_type, locality, rate, year, source[PFS|OPPS|IPPS])
-- **hospitals**(id, name, state, ccn, lat, lng)
-- **hospital_rates** → Parquet under `data/hospital_rates/`, partitioned by `state`
-  then `code`: (hospital_id, state, code, code_type, cash_price, negotiated_min,
-  negotiated_median, negotiated_max, payer_optional). Queried with DuckDB; no DB server.
+`config-ortho/brand.yaml` is what makes a profile: its presence switches the branding,
+navigation, and copy, and sets which facilities are treated as "ours".
 
-Full column details and types are in [src/schema.sql](src/schema.sql).
+## Adding a market or a procedure page
 
-## Normalization spec
-Consumer-pasted bills mix CPT, HCPCS, DRG, and revenue codes with descriptions
-and extra columns. `normalize_code(line)` returns one classified code per line:
+- **State**: append to `hospitals.yaml`, `metros.yaml`, `geo.yaml`, and `quality.yaml`, then
+  run `python -u src/pipeline.py --state XX`. `tools/add_state.py` applies a research report
+  to all four files at once.
+- **Procedure page**: add `slug: my-procedure` to the code's row in `allowlist.yaml` and
+  `/<state>/<metro>/my-procedure` exists for every live metro and enters the sitemap.
+- **Bot-blocked hospitals**: some hosts refuse datacenter IPs entirely. Those manifest entries
+  use `file: data/raw/<ID>.csv` instead of `url:`, and the file is fetched elsewhere and
+  copied in. See DEPLOY.md.
 
-`NormalizedCode(raw, code, code_type, matched, note)`
+## Code normalization
 
-Steps:
-1. Strip + uppercase.
-2. Scan tokens (split on whitespace / `,` `|` `;` tab) left-to-right; take the
-   **first** token matching a code pattern — handles code-first and description-first.
-3. Strip a trailing 2-char modifier (`J1234-RT` → `J1234`), recorded in `note`.
-4. Classify:
+Pasted bills mix CPT, HCPCS, DRG, and revenue codes with descriptions and stray columns.
+`normalize_code(line)` returns one classified code per line: it scans tokens left to right,
+takes the first that matches a code pattern (so code-first and description-first both work),
+strips a trailing modifier, and classifies:
 
-   | pattern | type | notes |
-   |---------|------|-------|
-   | `\d{5}` | CPT | Category I |
-   | `\d{4}[FT]` | CPT | Category II / III |
-   | `[A-V]\d{4}` | HCPCS | Level II |
-   | `0\d{3}` | REV | revenue code (4-digit, leading zero) |
-   | `\d{1,3}` | DRG | MS-DRG; bare numerics are ambiguous |
-   | else | UNKNOWN | |
+| pattern | type | notes |
+|---------|------|-------|
+| `\d{5}` | CPT | Category I |
+| `\d{4}[FT]` | CPT | Category II / III |
+| `[A-V]\d{4}` | HCPCS | Level II |
+| `0\d{3}` | REV | revenue code |
+| `\d{1,3}` | DRG | MS-DRG |
 
-5. Revenue codes name a department, not a service — only the few in `REV_TO_CPT`
-   resolve to a CPT; the rest get `matched=False` for the dropped-codes report.
+Unmatched lines are kept and flagged rather than dropped, because a gap is itself useful
+information when you are questioning a bill. A bare 3-digit number is genuinely ambiguous
+between an MS-DRG and a revenue code; it is assumed to be a DRG and flagged.
 
-`matched=False` is deliberate, not a failure: gaps and ambiguities are surfaced
-(in `note`) rather than silently dropped, because a gap is useful negotiation info.
+## Tests
 
-**Known ambiguity:** a bare 3-digit number (e.g. `450`) could be an MS-DRG or a
-non-zero-padded revenue code. We assume DRG and flag it. Upgrade path: use
-surrounding context / a code dictionary lookup if real bills make this common.
+Each suite is a standalone runner with no framework:
 
-## Running tests (needs Python 3.10+ installed)
+```bash
+python tests/test_normalize.py          # one suite
+for t in tests/test_*.py; do python "$t"; done
 ```
-python tests/test_normalize.py      # or: pytest
-```
-> ⚠️ No Python interpreter is installed on the current machine (only Windows
-> Store stubs). Tests are written but unrun until Python is available.
 
-## Adding a metro / procedure page, and email
-- **Procedure SEO page**: add `slug: my-procedure` to the code's row in `config/allowlist.yaml`
-  -> `/<state>/<metro>/my-procedure` exists for every live metro and lands in the sitemap.
-- **Metro**: add a `metros:` entry in `config/metros.yaml` (key, state, label, slug_city, ids) and the
-  hospitals in `config/hospitals.yaml` (`tools/add_state.py` does both from a research report).
-- **Email me this letter/comparison**: set `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`,
-  `SMTP_FROM` (see DEPLOY.md). Unset = feature hidden. Captures land in `data/capture.sqlite`.
+`tests/test_ortho.py` must run standalone, because it sets `APP_CONFIG` before importing the
+app. One test runs `node --check` over the page's inline JavaScript, after a bad escape once
+broke search silently for hours.
 
+## Deployment
+
+Both sites run as containers behind a shared Caddy reverse proxy, refreshed weekly by systemd
+timers that ingest one state at a time. See [DEPLOY.md](DEPLOY.md).

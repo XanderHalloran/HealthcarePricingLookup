@@ -51,23 +51,6 @@ def get_medicare(con, code, code_type):
     return None, None
 
 
-def get_hospital(con, rates_dir, code, state):
-    """Aggregate hospital cash + negotiated range across hospitals in `state`.
-    Returns dict (or None if no rows / no dataset yet)."""
-    if not _has_parquet(rates_dir):
-        return None
-    row = con.execute(
-        f"""SELECT median(TRY_CAST(cash_price AS DOUBLE)), min(TRY_CAST(negotiated_min AS DOUBLE)),
-                   median(TRY_CAST(negotiated_median AS DOUBLE)), max(TRY_CAST(negotiated_max AS DOUBLE)),
-                   count(*)
-            FROM {rates_source(rates_dir)} WHERE code=? AND state=?""",
-        [code, state.upper()],
-    ).fetchone()
-    if not row or row[4] == 0:
-        return None
-    return {"cash_price": row[0], "neg_low": row[1], "neg_median": row[2],
-            "neg_high": row[3], "n_hospitals": row[4]}
-
 
 def _has_parquet(rates_dir):
     return os.path.isdir(rates_dir) and any(
