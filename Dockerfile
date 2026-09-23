@@ -4,8 +4,12 @@ WORKDIR /app
 # Runtime deps only. duckdb covers CSV read + aggregation + Parquet (no pyarrow).
 # Plain uvicorn (not [standard]) keeps the image and memory footprint small — this
 # is a low-traffic app on a shared box.
-RUN pip install --no-cache-dir \
-    duckdb ijson pyyaml fastapi uvicorn jinja2 python-multipart anthropic
+# Pinned to the exact resolved set (requirements.txt), transitive deps included.
+# Unpinned installs mean every rebuild pulls whatever PyPI serves that minute, so
+# one poisoned release of any dep lands straight in prod. Copied before src/ so
+# the (slow, rarely-changing) dep layer stays cached across code redeploys.
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY src/ ./src/
 COPY config/ ./config/

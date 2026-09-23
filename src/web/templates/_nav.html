@@ -2,13 +2,14 @@
 {% if brand.profile == 'ortho' %}
 <nav class="onav" aria-label="Site">
   <a class="onav-brand" href="/">{{ brand.short }}</a>
+  <a href="/refer" {% if nav == 'refer' %}class="on"{% endif %}>Find a facility</a>
   <details class="onav-menu" {% if nav in ('rates', 'site', 'position', 'payers', 'bundles', 'map') %}open{% endif %}>
     <summary class="{% if nav in ('rates', 'site', 'position', 'payers', 'bundles', 'map') %}on{% endif %}">Analyses ▾</summary>
     <div class="onav-drop">
       <a href="/" {% if nav == 'compare' %}class="on"{% endif %}>Market view</a>
       <a href="/rates" {% if nav == 'rates' %}class="on"{% endif %}>Payer rates</a>
       <a href="/site-of-care" {% if nav == 'site' %}class="on"{% endif %}>Site of care</a>
-      <a href="/map" {% if nav == 'map' %}class="on"{% endif %}>Near an address</a>
+      <a href="/map" {% if nav == 'map' %}class="on"{% endif %}>Map view</a>
       {% if brand.own %}<a href="/position" {% if nav == 'position' %}class="on"{% endif %}>{{ brand.own.label }} vs market</a>{% endif %}
       <a href="/payers" {% if nav == 'payers' %}class="on"{% endif %}>Payer scorecard</a>
       <a href="/bundles" {% if nav == 'bundles' %}class="on"{% endif %}>Episode pricing</a>

@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Find a facility{% if svc %} — {{ svc.desc }}{% endif %} | {{ brand.short }}</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+<style>
+  .rf-lede { max-width:62ch; }
+  .opt { display:grid; grid-template-columns:44px 1fr auto; gap:0 16px; align-items:start;
+         background:var(--white); border:1px solid var(--line); border-radius:var(--r-sm);
+         padding:16px 18px; margin-top:12px; }
+  .opt.own { border-color:#b45309; box-shadow:inset 3px 0 0 #b45309; }
+  .opt .rk { width:34px; height:34px; border-radius:50%; background:var(--forest); color:#fff;
+             font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center; }
+  .opt.own .rk { background:#b45309; }
+  .opt h3 { margin:0 0 2px; font-size:17px; color:var(--ink); line-height:1.25; }
+  .opt .meta { font-size:14px; color:var(--body); line-height:1.5; }
+  .opt .meta a { color:var(--forest); }
+  .opt .money { text-align:right; white-space:nowrap; }
+  .opt .money b { display:block; font-size:22px; color:var(--forest); font-variant-numeric:tabular-nums; }
+  .opt .money .lab { font-size:11px; color:var(--mute); text-transform:uppercase; letter-spacing:.04em; }
+  .opt .money .sub2 { font-size:13px; color:var(--body); margin-top:6px; font-variant-numeric:tabular-nums; }
+  .chips { margin-top:8px; display:flex; flex-wrap:wrap; gap:6px; }
+  .chip { font-size:12px; padding:2px 9px; border-radius:9999px; background:var(--sage); color:var(--body); }
+  .chip.good { background:var(--green-pale); color:#1a7f37; }
+  .chip.bad { background:#fdecea; color:#b42318; }
+  .chip.own { background:#fff2e0; color:#92400e; font-weight:600; }
+  .acts { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
+  .rf-note { font-size:13px; color:var(--mute); margin-top:14px; max-width:70ch; }
+  .sortbar { font-size:13px; color:var(--mute); margin-top:14px; }
+  .sortbar a { margin-left:6px; }
+  @media print {
+    .payerbar, .acts, .onav, .sortbar, .refreshed, .rf-lede { display:none !important; }
+    .opt { break-inside:avoid; border:1px solid #999; box-shadow:none; }
+    body { background:#fff; }
+  }
+  @media (max-width:640px) {
+    .opt { grid-template-columns:34px 1fr; }
+    .opt .money { grid-column:2; text-align:left; margin-top:8px; }
+  }
+</style>
+</head>
+<body class="ortho">
+<main>
+{% include "_nav.html" %}
+  <div class="hero">
+    <h1>Find a facility for a patient</h1>
+    <p class="sub rf-lede">Enter the procedure, the patient's ZIP and their insurance. You get the nearest facilities
+      that publish a price for that plan, with address, phone and an out-of-pocket estimate — enough to hand
+      the patient in one call.</p>
+  </div>
+
+  <form class="payerbar card" method="get" action="/refer" role="group" aria-label="Find a facility for a patient">
+    <label class="pb-lab" for="code"><b>Procedure</b></label>
+    <select id="code" name="code">
+      {% for cat, items in groups %}<optgroup label="{{ cat_labels.get(cat, cat) }}">
+        {% for s in items %}<option value="{{ s.code }}" {% if s.code == svc.code %}selected{% endif %}>{{ s.desc }}</option>{% endfor %}
+      </optgroup>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="q"><b>Patient ZIP</b></label>
+    <input type="text" id="q" name="q" size="16" placeholder="85015" value="{{ q }}" required>
+    <label class="pb-lab" for="payer"><b>Insurance</b></label>
+    <select id="payer" name="payer">
+      <option value="">— any / not known —</option>
+      {% for p in payers %}<option value="{{ p }}" {% if p == sel %}selected{% endif %}>{{ p }}</option>{% endfor %}
+    </select>
+    <label class="pb-lab" for="radius"><b>Within</b></label>
+    <select id="radius" name="radius">
+      {% for r in radii %}<option value="{{ r }}" {% if r == radius %}selected{% endif %}>{{ r }} mi</option>{% endfor %}
+    </select>
+    <span class="bar-sep"></span>
+    <label class="pb-lab" for="ded"><b>Deductible left</b></label>
+    <input type="text" id="ded" name="ded" size="7" inputmode="numeric" placeholder="$" value="{{ ded }}">
+    <label class="pb-lab" for="coins"><b>Coinsurance</b></label>
+    <input type="text" id="coins" name="coins" size="4" inputmode="numeric" placeholder="20" value="{{ coins }}">
+    <input type="hidden" name="metro" value="{{ metro or state }}">
+    <input type="hidden" name="sort" value="{{ sort }}">
+    <button class="btn-mini" type="submit">Find facilities</button>
+  </form>
+
+  {% if err %}<div class="card" style="margin-top:16px;color:#b42318">{{ err }}</div>{% endif %}
+
+  {% if center and not rows %}
+    <div class="card" style="margin-top:16px">No facility within {{ radius }} miles publishes a price
+      for {{ svc.desc }}{% if sel %} under {{ sel }}{% endif %}. Widen the radius, or clear the insurance
+      filter to see every facility's typical price.</div>
+  {% endif %}
+
+  {% if rows %}
+  <div class="sortbar">Showing {{ rows|length }} of {{ rows|length + more }} within {{ radius }} miles ·
+    Sort:
+    <a class="btn-mini{% if sort == 'price' %} on{% endif %}" href="/refer?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&payer={{ sel|urlencode }}&ded={{ ded }}&coins={{ coins }}&metro={{ metro or state }}&sort=price">Lowest cost</a>
+    <a class="btn-mini{% if sort == 'dist' %} on{% endif %}" href="/refer?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&payer={{ sel|urlencode }}&ded={{ ded }}&coins={{ coins }}&metro={{ metro or state }}&sort=dist">Closest</a>
+    <a class="btn-mini{% if sort == 'quality' %} on{% endif %}" href="/refer?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&payer={{ sel|urlencode }}&ded={{ ded }}&coins={{ coins }}&metro={{ metro or state }}&sort=quality">Best hip/knee outcomes</a>
+  </div>
+
+  <div id="options">
+  {% for h in rows %}
+    <div class="opt {{ 'own' if own_ids and h.id in own_ids }}">
+      <div class="rk">{{ loop.index }}</div>
+      <div>
+        <h3>{{ h.name }}</h3>
+        <div class="meta">
+          {% if h.contact and h.contact.address %}{{ h.contact.address }}, {{ h.contact.city }} {{ h.contact.zip }}<br>{% endif %}
+          {% if h.contact and h.contact.phone %}<a href="tel:{{ h.contact.phone | replace('(','') | replace(')','') | replace(' ','') | replace('-','') }}">{{ h.contact.phone }}</a> · {% endif %}
+          {{ h.distance }} miles from {{ q }}
+          {% if h.contact and h.contact.address %}
+            · <a target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination={{ (h.contact.address ~ ', ' ~ h.contact.city ~ ' ' ~ h.contact.zip) | urlencode }}">Directions</a>
+          {% endif %}
+        </div>
+        <div class="chips">
+          {% if own_ids and h.id in own_ids %}<span class="chip own">{{ brand.own.label }} facility</span>{% endif %}
+          <span class="chip">{{ h.type }}</span>
+          {% if h.hip_knee %}<span class="chip {{ 'good' if h.hip_knee.compare == 'Better' else ('bad' if h.hip_knee.compare == 'Worse' else '') }}">hip/knee complications {{ h.hip_knee.rate }}%{% if h.hip_knee.compare != 'No Different' %} — {{ h.hip_knee.compare }} than national{% endif %}</span>{% endif %}
+          {% if h.outlier == 'high' %}<span class="chip bad">published price looks like a gross charge</span>{% endif %}
+        </div>
+      </div>
+      <div class="money">
+        {% if h.patient is not none %}
+          <span class="lab">Patient pays approx.</span><b>${{ '{:,.0f}'.format(h.patient) }}</b>
+          <div class="sub2">of ${{ '{:,.0f}'.format(h.price) }} {{ sel if sel else 'typical' }} rate</div>
+        {% elif h.price is not none %}
+          <span class="lab">{{ sel if sel else 'Typical' }} rate</span><b>${{ '{:,.0f}'.format(h.price) }}</b>
+          {% if medicare %}<div class="sub2">{{ (h.price / medicare)|round(1) }}× Medicare</div>{% endif %}
+        {% else %}
+          <span class="lab">No published price</span><b>—</b>
+        {% endif %}
+      </div>
+    </div>
+  {% endfor %}
+  </div>
+
+  <div class="acts">
+    <button class="btn-mini" type="button" onclick="copyOptions(this)">Copy these options</button>
+    <button class="btn-mini" type="button" onclick="window.print()">Print</button>
+  </div>
+  <p class="rf-note" id="copy-note"></p>
+
+  <p class="rf-note">{% if sel %}Prices are {{ sel }}'s published negotiated rate at each facility.{% else %}
+    Prices are each facility's typical published rate across insurers — pick the patient's plan above for a
+    plan-specific number.{% endif %}
+    {% if ded or coins %}The patient estimate applies ${{ ded or 0 }} of remaining deductible then
+    {{ coins or 0 }}% coinsurance. It ignores out-of-pocket maximums and any separately billed
+    professional fee.{% else %}Enter the patient's remaining deductible and coinsurance for an out-of-pocket
+    estimate.{% endif %}
+    Always confirm network status and the quote with the facility before the patient relies on it.</p>
+  {% endif %}
+
+  <script>
+    function copyOptions(btn){
+      const note = document.getElementById('copy-note');
+      const lines = [...document.querySelectorAll('#options .opt')].map((el, i) => {
+        const name = el.querySelector('h3').textContent.trim();
+        const meta = el.querySelector('.meta').innerText.replace(/\s*\n\s*/g, ' · ').trim();
+        const money = el.querySelector('.money').innerText.replace(/\s*\n\s*/g, ' ').trim();
+        return (i + 1) + '. ' + name + '\n   ' + meta + '\n   ' + money;
+      });
+      const text = {{ svc.desc | tojson }} + ' — options near ' + {{ (q or '') | tojson }}
+        + ({{ (sel or '') | tojson }} ? ' (' + {{ (sel or '') | tojson }} + ')' : '') + '\n\n'
+        + lines.join('\n\n') + '\n\nPublished prices, estimates only. Confirm with the facility.';
+      navigator.clipboard.writeText(text).then(
+        () => { note.textContent = 'Copied ' + lines.length + ' options to the clipboard.'; },
+        () => { note.textContent = 'Could not copy automatically — use Print instead.'; });
+    }
+  </script>
+
+  <p class="refreshed">Facility prices from CMS machine-readable files (refreshed {{ data_refreshed }});
+    addresses and phone numbers from CMS Care Compare; hip/knee complication rates from CMS Care Compare.
+    Estimates for care navigation, not a quote or a guarantee of network status.</p>
+</main>
+</body>
+</html>

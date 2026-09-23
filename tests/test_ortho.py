@@ -127,6 +127,32 @@ def test_map_near_address():
     assert "find that address" in client.get("/map", params={"q": "nowhere"}).text
 
 
+def test_referral_finder():
+    """Care-management view: payer pricing, contact details, patient cost, hand-off."""
+    webapp._geocode = lambda q, st="": (33.48, -112.07)
+    r = client.get("/refer")
+    assert r.status_code == 200 and "Find a facility for a patient" in r.text
+    r = client.get("/refer", params={"code": "73721", "q": "85015", "radius": "25",
+                                     "ded": "500", "coins": "20"})
+    assert r.status_code == 200
+    assert "Patient pays approx" in r.text or "No facility within" in r.text
+    assert "copyOptions" in r.text                      # hand-off action present
+    # patient-cost math: deductible first, then coinsurance on the rest
+    assert webapp._patient_cost(1000, 500, 20) == 600   # 500 + 20% of 500
+    assert webapp._patient_cost(300, 500, 20) == 300    # all inside the deductible
+    assert webapp._patient_cost(1000, 0, 20) == 200     # deductible met
+    assert webapp._patient_cost(1000, None, None) is None
+    assert webapp._patient_cost(None, 500, 20) is None
+    # every hospital can be handed to a patient
+    import yaml
+    man = yaml.safe_load(open("config-ortho/hospitals.yaml", encoding="utf-8"))["hospitals"]
+    contact = webapp.STATE["contact"]
+    missing = [h["id"] for h in man if not (contact.get(h["id"]) or {}).get("phone")]
+    assert not missing, f"no phone for {missing[:5]}"
+    for k in ("sort=quality", "Best hip/knee"):
+        assert k in client.get("/map", params={"code": "73721", "q": "85015"}).text
+
+
 def test_inline_script_parses():
     if not shutil.which("node"):
         return

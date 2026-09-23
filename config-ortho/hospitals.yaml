@@ -313,3 +313,6 @@ hospitals:
   - { id: MEMORIAL-REGIONAL, name: "Memorial Regional Hospital (Hollywood)", state: FL, ccn: "100038", unzip: true, file: data/raw/MEMORIAL-REGIONAL.zip }
   - { id: MEMORIAL-WEST, name: "Memorial Hospital West (Pembroke Pines)", state: FL, ccn: "100281", unzip: true, file: data/raw/MEMORIAL-WEST.zip }
   - { id: MEMORIAL-MIRAMAR, name: "Memorial Hospital Miramar", state: FL, ccn: "100285", unzip: true, file: data/raw/MEMORIAL-MIRAMAR.zip }
+  # ===== Arizona orthopedic SPECIALTY hospitals (physician-owned; CORE's direct comparators), added 2026-09-22 =====
+  - { id: AOSSH-PHX, name: "Arizona Specialty Hospital, formerly Arizona Orthopedic & Surgical Specialty Hospital (Phoenix) [ORTHO SPECIALTY HOSPITAL]", state: AZ, ccn: "030112", format: json, url: "https://mrfs.hyvehealthcare.com/USPI/752936470_arizona-specialty-hospital_standardcharges.json" }
+  - { id: AZSJH-MESA, name: "Arizona Spine & Joint Hospital (Mesa) [PHYSICIAN-OWNED ORTHO SPECIALTY HOSPITAL]", state: AZ, ccn: "030107", format: json, url: "https://mrfs.hyvehealthcare.com/USPI/364399746_arizona-spine-and-joint-hospital_standardcharges.json" }

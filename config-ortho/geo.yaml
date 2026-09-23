@@ -305,3 +305,6 @@ hospitals:
   MEMORIAL-REGIONAL: [26.012, -80.163]
   MEMORIAL-WEST: [26.013, -80.31]
   MEMORIAL-MIRAMAR: [25.99, -80.372]
+  # AZ ortho specialty hospitals (added 2026-09-22)
+  AOSSH-PHX: [33.457, -111.997]
+  AZSJH-MESA: [33.38, -111.735]

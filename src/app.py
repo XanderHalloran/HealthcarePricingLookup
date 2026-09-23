@@ -26,6 +26,7 @@ sys.path.insert(0, os.path.dirname(__file__))
 from medicare import build_reference_db, build_reference
 from pricing import (analyze, load_templates, load_services, load_hospital_names,
                      load_quality, load_hip_knee, load_freestanding, load_metros, load_geo,
+                     load_contact,
                      payer_matrix, get_medicare_all, get_medicare, lookup)
 from analysis import detect_issues, build_letter, savings_summary
 from assistant import ask, build_context
@@ -101,6 +102,7 @@ def _load():
         "hip_knee": load_hip_knee(os.path.join(CFG, "quality.yaml")),
         "metros": load_metros(os.path.join(CFG, "metros.yaml")),
         "geo": load_geo(os.path.join(CFG, "geo.yaml")),
+        "contact": load_contact(os.path.join(CFG, "contact.yaml")),
         "freestanding": load_freestanding(os.path.join(CFG, "freestanding.yaml")),
         "multiplier": multiplier,
     }
@@ -800,35 +802,94 @@ def _geocode(q, state_name=""):
     return float(hit["lat"]), float(hit["lon"])
 
 
-@app.get("/map", response_class=HTMLResponse)
-def near_map(request: Request, code: str = "", q: str = "", radius: str = "25", sort: str = "price", metro: str = ""):
-    """Facilities within a radius of an address or ZIP for one procedure, on a map."""
-    svc = _svc(code)
-    state, metro, _ = _area(metro)
+def _patient_cost(price, ded_left, coins):
+    """What the patient pays out of pocket, as a plain estimate: the remaining deductible
+    first, then coinsurance on the rest. Both inputs optional; returns None without them.
+    Ignores out-of-pocket maximums and any facility fee the plan carves out separately."""
+    if price is None or (ded_left is None and coins is None):
+        return None
+    ded = min(price, ded_left or 0)
+    return round(ded + (price - ded) * ((coins if coins is not None else 0) / 100.0))
+
+
+def _near(svc, state, q, radius, payer=None, sort="price"):
+    """Facilities within `radius` miles of an address/ZIP, priced for one insurer if given.
+    Shared by the map (analyst) and the referral finder (care management), so both always
+    show the same number for the same patient. -> (center, rows, err, medicare_rate)."""
     try:
         rad = min(max(int(radius), 5), 200)
-    except ValueError:
+    except (TypeError, ValueError):
         rad = 25
     center = err = None
-    if q.strip():
+    if (q or "").strip():
         try:
             center = _geocode(q.strip(), MARKETS[state]["name"])
         except Exception:
             err = "Couldn't find that address or ZIP. Try a ZIP code or 'street, city'."
     rows, med_rate = [], None
     if center:
-        d = _analyze(svc["code"], state, None, None, center[0], center[1])
+        d = _analyze(svc["code"], state, payer or None, None, center[0], center[1])
         hosp = d[0]["result"]["hospitals"] if d and d[0]["resolved"] else []
         rows = [h for h in hosp if h.get("distance") is not None and h["distance"] <= rad]
         for h in rows:
             h["lat"], h["lon"] = STATE["geo"].get(h["id"]) or (None, None)
             h["hip_knee"] = STATE["hip_knee"].get(h["id"]) if h["id"] else None
-        rows.sort(key=lambda h: (h["distance"] if sort == "dist" else (h["price"] if h["price"] is not None else 1e12)))
+            h["contact"] = STATE["contact"].get(h["id"]) if h["id"] else None
+        # a facility with no published rate for THIS payer sorts last, never first
+        big = 1e12
+        if sort == "dist":
+            rows.sort(key=lambda h: h["distance"])
+        elif sort == "quality":
+            # lowest complication rate first; unscored facilities after the scored ones
+            rows.sort(key=lambda h: (h["hip_knee"]["rate"] if h.get("hip_knee") else big, h["distance"]))
+        else:
+            rows.sort(key=lambda h: h["price"] if h["price"] is not None else big)
         med_rate, _ = get_medicare(STATE["con"], svc["code"], svc["type"])
+    return center, rows, err, rad, med_rate
+
+
+@app.get("/map", response_class=HTMLResponse)
+def near_map(request: Request, code: str = "", q: str = "", radius: str = "25", sort: str = "price",
+             metro: str = "", payer: str = "", ded: str = "", coins: str = ""):
+    """Facilities within a radius of an address or ZIP for one procedure, on a map."""
+    svc = _svc(code)
+    state, metro, _ = _area(metro)
+    sel = payer if payer in PAYER_LIST else ""
+    center, rows, err, rad, med_rate = _near(svc, state, q, radius, sel, sort)
+    ded_v, coins_v = _money_in(ded), _money_in(coins)
+    for h in rows:
+        h["patient"] = _patient_cost(h["price"], ded_v, coins_v)
     return templates.TemplateResponse(request, "map.html", {
         "svc": svc, "q": q, "radius": rad, "sort": sort, "center": center, "err": err, "rows": rows,
         "medicare": med_rate, "radii": [5, 10, 25, 50, 100], "groups": _groups(), "cat_labels": CAT_LABELS,
+        "payers": PAYER_LIST, "sel": sel, "ded": ded, "coins": coins,
         "brand": BRAND, "nav": "map", **_area_ctx(state, metro), "own_ids": OWN_IDS,
+        "data_refreshed": DATA_REFRESHED})
+
+
+@app.get("/refer", response_class=HTMLResponse)
+def refer(request: Request, code: str = "", q: str = "", radius: str = "25", metro: str = "",
+          payer: str = "", ded: str = "", coins: str = "", sort: str = "price", n: str = "5"):
+    """Referral finder: procedure + patient ZIP + insurance -> a short ranked list a care
+    manager can act on in under a minute. Same data as /map, shaped for one decision."""
+    svc = _svc(code)
+    state, metro, _ = _area(metro)
+    sel = payer if payer in PAYER_LIST else ""
+    center, rows, err, rad, med_rate = _near(svc, state, q, radius, sel, sort)
+    ded_v, coins_v = _money_in(ded), _money_in(coins)
+    for h in rows:
+        h["patient"] = _patient_cost(h["price"], ded_v, coins_v)
+    try:
+        top = max(3, min(int(n), 10))
+    except ValueError:
+        top = 5
+    shown, more = rows[:top], max(0, len(rows) - top)
+    return templates.TemplateResponse(request, "refer.html", {
+        "svc": svc, "q": q, "radius": rad, "sort": sort, "center": center, "err": err,
+        "rows": shown, "more": more, "n": top, "medicare": med_rate,
+        "radii": [5, 10, 25, 50, 100], "groups": _groups(), "cat_labels": CAT_LABELS,
+        "payers": PAYER_LIST, "sel": sel, "ded": ded, "coins": coins,
+        "brand": BRAND, "nav": "refer", **_area_ctx(state, metro), "own_ids": OWN_IDS,
         "data_refreshed": DATA_REFRESHED})
 
 

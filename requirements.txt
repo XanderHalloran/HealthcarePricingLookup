@@ -1,0 +1,41 @@
+# Exact versions, frozen from the running healthcare-app/ortho-app containers
+# 2026-09-22. Direct deps are declared in pyproject.toml; this file is the full
+# resolved set (transitive included) so a rebuild can never silently pull a
+# newly-published — or newly-compromised — release off PyPI.
+#
+# ponytail: versions pinned, not hashes. Pinning stops "latest got poisoned",
+# which is the realistic attack. Add --require-hashes (pip-compile --generate-hashes)
+# if you ever need to defend against a re-uploaded artifact at the same version.
+#
+# To bump: docker exec healthcare-app pip install -U <pkg> is NOT the way.
+# Edit pyproject.toml, rebuild WITHOUT this file, pip freeze, paste back here.
+
+# --- direct (pyproject.toml) ---
+duckdb==1.5.5
+ijson==3.5.1
+PyYAML==6.0.3
+fastapi==0.141.1
+uvicorn==0.53.0
+python-multipart==0.0.32
+Jinja2==3.1.6
+anthropic==1.7.0
+
+# --- transitive ---
+annotated-doc==0.0.5
+annotated-types==0.8.0
+anyio==4.15.1
+click==8.5.0
+docstring_parser==0.18.0
+h11==0.16.0
+httpcore2==2.13.0
+httpx2==2.13.0
+idna==3.20
+jiter==0.17.0
+MarkupSafe==3.0.3
+pydantic==2.13.5
+pydantic_core==2.46.5
+sniffio==1.3.1
+starlette==1.6.0
+truststore==0.10.4
+typing-inspection==0.4.4
+typing_extensions==4.16.0

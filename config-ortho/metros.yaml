@@ -43,6 +43,8 @@ metros:
       - BANNER-CASA-GRANDE
       - BANNER-PAYSON
       - WICKENBURG
+      - AOSSH-PHX
+      - AZSJH-MESA
 
   - key: tucson
     state: AZ

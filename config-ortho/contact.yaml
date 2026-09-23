@@ -1,0 +1,1512 @@
+# Street address + phone per hospital id, so referral staff can hand a patient
+# something actionable. Source: CMS Care Compare Hospital General Information
+# (data.cms.gov xubh-q36u), pulled 2026-09-23 by scratchpad/build_contact.py.
+# Matched on CCN where the manifest records one, else on hospital name.
+hospitals:
+  ABRAZO-ARROWHEAD:
+    address: "18701 North 67th Avenue"
+    city: "Glendale"
+    zip: "85308"
+    phone: "(623) 561-1000"
+  ADVENT-DAYTONA:
+    address: "301 Memorial Medical Parkway"
+    city: "Daytona Beach"
+    zip: "32117"
+    phone: "(386) 231-6000"
+  ADVENT-OCALA:
+    address: "1500 Sw 1st Ave"
+    city: "Ocala"
+    zip: "34474"
+    phone: "(352) 351-7200"
+  ADVENT-ORLANDO:
+    address: "601 E Rollins St"
+    city: "Orlando"
+    zip: "32803"
+    phone: "(407) 303-1976"
+  ADVENT-TAMPA:
+    address: "3100 E Fletcher Ave"
+    city: "Tampa"
+    zip: "33613"
+    phone: "(813) 615-7200"
+  ADVENT-WESLEY-CHAPEL:
+    address: "2600 Bruce B Downs Blvd"
+    city: "Wesley Chapel"
+    zip: "33544"
+    phone: "(813) 929-5000"
+  AOSSH-PHX:
+    address: "750 North 40th Street"
+    city: "Phoenix"
+    zip: "85008"
+    phone: "(480) 603-9000"
+  ASCENSION-SACRED-HEART-PENSACOLA:
+    address: "5151 N 9th Ave"
+    city: "Pensacola"
+    zip: "32504"
+    phone: "(850) 416-7000"
+  ASCENSION-STV-RIVERSIDE:
+    address: "1 Shircliff Way"
+    city: "Jacksonville"
+    zip: "32204"
+    phone: "(904) 308-7300"
+  ASCENSION-STV-SOUTHSIDE:
+    address: "4201 Belfort Rd"
+    city: "Jacksonville"
+    zip: "32216"
+    phone: "(904) 296-3700"
+  AUGUSTA-HEALTH:
+    address: "78 Medical Center Drive"
+    city: "Fishersville"
+    zip: "22939"
+    phone: "(540) 332-4000"
+  AZSJH-MESA:
+    address: "4620 East Baseline Road"
+    city: "Mesa"
+    zip: "85206"
+    phone: "(480) 832-4770"
+  BALLAD-JOHNSTON:
+    address: "16000 Johnston Memorial Drive"
+    city: "Abingdon"
+    zip: "24211"
+    phone: "(276) 258-1000"
+  BALLAD-LONESOME-PINE:
+    address: "1990 Holton Avenue East"
+    city: "Big Stone Gap"
+    zip: "24219"
+    phone: "(276) 523-3111"
+  BALLAD-RUSSELL:
+    address: "58 Carroll Street"
+    city: "Lebanon"
+    zip: "24266"
+    phone: "(276) 883-8000"
+  BALLAD-SMYTH:
+    address: "245 Medical Park Drive"
+    city: "Marion"
+    zip: "24354"
+    phone: "(276) 378-1000"
+  BANNER-BAYWOOD:
+    address: "6644 East Baywood Avenue"
+    city: "Mesa"
+    zip: "85206"
+    phone: "(480) 321-2000"
+  BANNER-BOSWELL:
+    address: "13632 N 99th Ave"
+    city: "Sun City"
+    zip: "85351"
+    phone: "(623) 832-4000"
+  BANNER-CASA-GRANDE:
+    address: "1800 East Florence Boulevard"
+    city: "Casa Grande"
+    zip: "85122"
+    phone: "(520) 381-6300"
+  BANNER-CHURCHILL:
+    address: "801 East Williams Avenue"
+    city: "Fallon"
+    zip: "89406"
+    phone: "(775) 423-3151"
+  BANNER-DELWEBB:
+    address: "14502 West Meeker Boulevard"
+    city: "Sun City West"
+    zip: "85375"
+    phone: "(623) 524-4000"
+  BANNER-DESERT:
+    address: "1400 South  Dobson Road"
+    city: "Mesa"
+    zip: "85202"
+    phone: "(480) 412-3000"
+  BANNER-ESTRELLA:
+    address: "9201 West Thomas Road"
+    city: "Phoenix"
+    zip: "85037"
+    phone: "(623) 327-4000"
+  BANNER-GATEWAY:
+    address: "1900 North Higley Road"
+    city: "Gilbert"
+    zip: "85234"
+    phone: "(480) 543-2000"
+  BANNER-HEART:
+    address: "6750 East Baywood Avenue"
+    city: "Mesa"
+    zip: "85206"
+    phone: "(480) 854-5050"
+  BANNER-IRONWOOD:
+    address: "37000 North Gantzel Road"
+    city: "Queen Creek"
+    zip: "85140"
+    phone: "(480) 394-4000"
+  BANNER-PAGE:
+    address: "501 North Navajo Drive"
+    city: "Page"
+    zip: "86040"
+    phone: "(928) 645-2424"
+  BANNER-PAYSON:
+    address: "807 South Ponderosa Drive"
+    city: "Payson"
+    zip: "85541"
+    phone: "(928) 474-3222"
+  BANNER-THUNDERBIRD:
+    address: "5555 West Thunderbird Road"
+    city: "Glendale"
+    zip: "85306"
+    phone: "(602) 865-4470"
+  BANNER-UMC-PHX:
+    address: "1111 East Mcdowell Road"
+    city: "Phoenix"
+    zip: "85006"
+    phone: "(602) 839-2000"
+  BANNER-UMC-SOUTH:
+    address: "1625 North Campbell Avenue"
+    city: "Tucson"
+    zip: "85719"
+    phone: "(520) 874-4189"
+  BANNER-UMC-TUCSON:
+    address: "1625 North Campbell Avenue"
+    city: "Tucson"
+    zip: "85719"
+    phone: "(520) 874-4189"
+  BAPTIST-BETHESDA-EAST:
+    address: "2815 S Seacrest Blvd"
+    city: "Boynton Beach"
+    zip: "33435"
+    phone: "(561) 737-7733"
+  BAPTIST-BOCA:
+    address: "800 Meadows Rd"
+    city: "Boca Raton"
+    zip: "33486"
+    phone: "(561) 955-4200"
+  BAPTIST-DOCTORS-CG:
+    address: "5000 University Dr"
+    city: "Coral Gables"
+    zip: "33146"
+    phone: "(786) 308-3000"
+  BAPTIST-GULF-BREEZE:
+    address: "1110 Gulf Breeze Pkwy"
+    city: "Gulf Breeze"
+    zip: "32561"
+    phone: "(850) 934-2000"
+  BAPTIST-JAX:
+    address: "800 Prudential Dr"
+    city: "Jacksonville"
+    zip: "32207"
+    phone: "(904) 202-2000"
+  BAPTIST-JAX-BEACHES:
+    address: "1350 13th Ave S"
+    city: "Jacksonville Beach"
+    zip: "32250"
+    phone: "(904) 247-2900"
+  BAPTIST-MIAMI:
+    address: "8900 N Kendall Dr"
+    city: "Miami"
+    zip: "33176"
+    phone: "(786) 596-1960"
+  BAPTIST-PENSACOLA:
+    address: "123 Baptist Way"
+    city: "Pensacola"
+    zip: "32503"
+    phone: "(850) 434-4011"
+  BAPTIST-SOUTH-MIAMI:
+    address: "6200 Sw 73rd St"
+    city: "Miami"
+    zip: "33143"
+    phone: "(786) 662-4000"
+  BAPTIST-WEST-KENDALL:
+    address: "9555 Sw 162 Ave"
+    city: "Miami"
+    zip: "33196"
+    phone: "(786) 467-2000"
+  BAYCARE-MEASE-COUNTRYSIDE:
+    address: "3231 Mcmullen Booth Rd"
+    city: "Safety Harbor"
+    zip: "34695"
+    phone: "(727) 734-6950"
+  BAYCARE-MORTON-PLANT:
+    address: "300 Pinellas St"
+    city: "Clearwater"
+    zip: "33756"
+    phone: "(727) 462-7000"
+  BAYCARE-ST-ANTHONYS:
+    address: "1200 Seventh Ave N"
+    city: "Saint Petersburg"
+    zip: "33705"
+    phone: "(727) 825-1100"
+  BAYCARE-ST-JOSEPHS:
+    address: "3001 W Martin Luther King Jr Blvd"
+    city: "Tampa"
+    zip: "33607"
+    phone: "(813) 870-4398"
+  BEACON-BORGESS:
+    address: "1521 Gull Road"
+    city: "Kalamazoo"
+    zip: "49048"
+    phone: "(269) 226-7000"
+  BONSECOURS-HARBOUR-VIEW:
+    address: "1020 Bon Secours Drive"
+    city: "Suffolk"
+    zip: "23435"
+    phone: "(757) 673-5917"
+  BONSECOURS-MARY-IMMACULATE:
+    address: "2 Bernardine Drive"
+    city: "Newport News"
+    zip: "23602"
+    phone: "(757) 886-6000"
+  BONSECOURS-MARYVIEW:
+    address: "3636 High Street"
+    city: "Portsmouth"
+    zip: "23707"
+    phone: "(757) 398-2200"
+  BONSECOURS-MEMORIAL-REGIONAL:
+    address: "8260 Atlee Road"
+    city: "Mechanicsville"
+    zip: "23116"
+    phone: "(804) 764-6000"
+  BONSECOURS-SOUTHSIDE:
+    address: "200 Medical Park Boulevard"
+    city: "Petersburg"
+    zip: "23805"
+    phone: "(804) 765-5000"
+  BONSECOURS-ST-FRANCIS:
+    address: "13710 St Francis Boulevard"
+    city: "Midlothian"
+    zip: "23114"
+    phone: "(804) 594-7400"
+  BONSECOURS-ST-MARYS:
+    address: "5801 Bremo Rd"
+    city: "Richmond"
+    zip: "23226"
+    phone: "(804) 285-2011"
+  BOULDER-CITY:
+    address: "901 Adams Blvd"
+    city: "Boulder City"
+    zip: "89005"
+    phone: "(702) 293-4111"
+  BRONSON-BATTLECREEK:
+    address: "300 North Avenue"
+    city: "Battle Creek"
+    zip: "49017"
+    phone: "(269) 966-8000"
+  BRONSON-METHODIST:
+    address: "601 John Street"
+    city: "Kalamazoo"
+    zip: "49007"
+    phone: "(269) 341-6000"
+  BROWARD-CORAL-SPRINGS:
+    address: "3000 Coral Hills Dr"
+    city: "Coral Springs"
+    zip: "33065"
+    phone: "(954) 344-3121"
+  BROWARD-MEDICAL-CENTER:
+    address: "1600 S Andrews Ave"
+    city: "Fort Lauderdale"
+    zip: "33316"
+    phone: "(954) 355-4400"
+  BROWARD-NORTH:
+    address: "201 E Sample Rd"
+    city: "Deerfield Beach"
+    zip: "33064"
+    phone: "(954) 786-6400"
+  CANYON-VISTA:
+    address: "5700 East Highway 90"
+    city: "Sierra Vista"
+    zip: "85635"
+    phone: "(520) 263-2220"
+  CARILION-NRV:
+    address: "2900 Lamb Circle"
+    city: "Christiansburg"
+    zip: "24073"
+    phone: "(540) 731-2000"
+  CARILION-ROANOKE:
+    address: "1906 Belleview Avenue, Se"
+    city: "Roanoke"
+    zip: "24014"
+    phone: "(540) 981-7000"
+  CARONDELET-HOLYCROSS:
+    address: "1171 West Target Range Road"
+    city: "Nogales"
+    zip: "85621"
+    phone: "(520) 285-3000"
+  CARONDELET-STJOSEPH-TUC:
+    address: "350 North Wilmot Road"
+    city: "Tucson"
+    zip: "85711"
+    phone: "(520) 873-3000"
+  CARONDELET-STMARY-TUC:
+    address: "1601 West St Mary'S Road"
+    city: "Tucson"
+    zip: "85745"
+    phone: "(520) 872-3000"
+  CARSON-TAHOE-REGIONAL:
+    address: "1600 Medical Parkway"
+    city: "Carson City"
+    zip: "89703"
+    phone: "(775) 445-8000"
+  CARSON-VALLEY-HEALTH:
+    address: "1107 Highway 395"
+    city: "Gardnerville"
+    zip: "89410"
+    phone: "(775) 782-1500"
+  CCF-MARTIN-NORTH:
+    address: "200 Se Hospital Ave"
+    city: "Stuart"
+    zip: "34994"
+    phone: "(772) 287-5200"
+  CCF-WESTON:
+    address: "3100 Weston Rd"
+    city: "Weston"
+    zip: "33331"
+    phone: "(954) 689-5000"
+  CENTRA-LYNCHBURG:
+    address: "1901 Tate Springs Road"
+    city: "Lynchburg"
+    zip: "24501"
+    phone: "(434) 200-4789"
+  CENTRA-VIRGINIA-BAPTIST:
+    address: "1901 Tate Springs Road"
+    city: "Lynchburg"
+    zip: "24501"
+    phone: "(434) 200-4789"
+  CHESAPEAKE-REGIONAL:
+    address: "736 Battlefield Blvd, North"
+    city: "Chesapeake"
+    zip: "23320"
+    phone: "(757) 312-8121"
+  COBRE-VALLEY:
+    address: "5880 South Hospital Drive"
+    city: "Globe"
+    zip: "85501"
+    phone: "(928) 402-1122"
+  COPPER-QUEEN:
+    address: "101 Cole Avenue"
+    city: "Bisbee"
+    zip: "85603"
+    phone: "(520) 432-6401"
+  CORE-SPECIALTY-PHX:
+    address: "6501 North 19th Avenue"
+    city: "Phoenix"
+    zip: "85015"
+    phone: "(602) 795-6020"
+  COREWELL-BLODGETT:
+    address: "100 Michigan St Ne"
+    city: "Grand Rapids"
+    zip: "49503"
+    phone: "(616) 391-1774"
+  COREWELL-BUTTERWORTH:
+    address: "100 Michigan St Ne"
+    city: "Grand Rapids"
+    zip: "49503"
+    phone: "(616) 391-1774"
+  COREWELL-DEARBORN:
+    address: "18101 Oakwood Blvd"
+    city: "Dearborn"
+    zip: "48124"
+    phone: "(313) 593-7125"
+  COREWELL-FARMINGTONHILLS:
+    address: "28050 Grand River Avenue"
+    city: "Farmington Hills"
+    zip: "48336"
+    phone: "(248) 471-8000"
+  COREWELL-GROSSEPOINTE:
+    address: "468 Cadieux Rd"
+    city: "Grosse Pointe"
+    zip: "48230"
+    phone: "(313) 473-1000"
+  COREWELL-LAKELAND-STJOSEPH:
+    address: "1234 Napier Avenue"
+    city: "St Joseph"
+    zip: "49085"
+    phone: "(269) 983-8300"
+  COREWELL-ROYALOAK:
+    address: "3601 W Thirteen Mile Rd"
+    city: "Royal Oak"
+    zip: "48073"
+    phone: "(248) 898-5400"
+  COREWELL-TAYLOR:
+    address: "10000 Telegraph Road"
+    city: "Taylor"
+    zip: "48180"
+    phone: "(313) 295-5000"
+  COREWELL-TRENTON:
+    address: "5450 Fort Street"
+    city: "Trenton"
+    zip: "48183"
+    phone: "(734) 671-3800"
+  COREWELL-TROY:
+    address: "44201 Dequindre Road"
+    city: "Troy"
+    zip: "48085"
+    phone: "(248) 964-8800"
+  COREWELL-WAYNE:
+    address: "33155 Annapolis Ave"
+    city: "Wayne"
+    zip: "48184"
+    phone: "(734) 467-4175"
+  COREWELL-ZEELAND:
+    address: "8333 Felch St"
+    city: "Zeeland"
+    zip: "49464"
+    phone: "(616) 772-4644"
+  COVENANT-SAGINAW:
+    address: "1447 N Harrison"
+    city: "Saginaw"
+    zip: "48602"
+    phone: "(989) 583-6000"
+  DIGNITY-CHANDLER:
+    address: "1955 West Frye Road"
+    city: "Chandler"
+    zip: "85224"
+    phone: "(480) 728-3000"
+  DIGNITY-MERCYGILBERT:
+    address: "3555 South Val Vista Drive"
+    city: "Gilbert"
+    zip: "85297"
+    phone: "(480) 728-8000"
+  DIGNITY-ROSE-DE-LIMA:
+    address: "102 E Lake Mead Dr"
+    city: "Henderson"
+    zip: "89015"
+    phone: "(702) 616-5000"
+  DIGNITY-SAN-MARTIN:
+    address: "8280 W Warm Springs Road"
+    city: "Las Vegas"
+    zip: "89113"
+    phone: "(702) 492-8509"
+  DIGNITY-SIENA:
+    address: "3001 St Rose Parkway"
+    city: "Henderson"
+    zip: "89052"
+    phone: "(702) 616-5000"
+  DIGNITY-STJOSEPHS:
+    address: "350 West Thomas Road"
+    city: "Phoenix"
+    zip: "85013"
+    phone: "(602) 406-8225"
+  DMC-HARPER:
+    address: "3990 John R Street"
+    city: "Detroit"
+    zip: "48201"
+    phone: "(313) 745-6211"
+  DMC-HURONVALLEY:
+    address: "One William Carls Drive"
+    city: "Commerce Township"
+    zip: "48382"
+    phone: "(248) 937-3370"
+  DMC-RECEIVING:
+    address: "4201 St Antoine St"
+    city: "Detroit"
+    zip: "48201"
+    phone: "(313) 745-2941"
+  DMC-SINAIGRACE:
+    address: "6071 W Outer Drive"
+    city: "Detroit"
+    zip: "48235"
+    phone: "(313) 966-3300"
+  FORESTHEALTH-YPSILANTI:
+    address: "135 S Prospect St"
+    city: "Ypsilanti"
+    zip: "48198"
+    phone: "(734) 547-4700"
+  HALIFAX-DAYTONA:
+    address: "303 N Clyde Morris Blvd"
+    city: "Daytona Beach"
+    zip: "32114"
+    phone: "(386) 254-4000"
+  HAVASU-RMC:
+    address: "101 Civic Center Lane"
+    city: "Lake Havasu City"
+    zip: "86403"
+    phone: "(928) 855-8185"
+  HCA-AVENTURA:
+    address: "20900 Biscayne Blvd"
+    city: "Aventura"
+    zip: "33180"
+    phone: "(305) 682-7000"
+  HCA-BAYONET-POINT:
+    address: "14000 Fivay Rd"
+    city: "Hudson"
+    zip: "34667"
+    phone: "(727) 819-2929"
+  HCA-BLAKE:
+    address: "2020 59th St W"
+    city: "Bradenton"
+    zip: "34209"
+    phone: "(941) 798-6110"
+  HCA-BRANDON:
+    address: "119 Oakfield Dr"
+    city: "Brandon"
+    zip: "33511"
+    phone: "(813) 916-0600"
+  HCA-CAPITAL:
+    address: "2626 Capital Medical Blvd"
+    city: "Tallahassee"
+    zip: "32308"
+    phone: "(850) 656-5000"
+  HCA-CHIPPENHAM:
+    address: "7101 Jahnke Road"
+    city: "Richmond"
+    zip: "23225"
+    phone: "(804) 483-0000"
+  HCA-FORT-WALTON-DESTIN:
+    address: "1000 Mar-Walt Dr"
+    city: "Fort Walton Beach"
+    zip: "32547"
+    phone: "(850) 862-1111"
+  HCA-HENRICO:
+    address: "1602 Skipwith Road"
+    city: "Richmond"
+    zip: "23229"
+    phone: "(804) 289-4500"
+  HCA-JFK:
+    address: "5301 S Congress Ave"
+    city: "Atlantis"
+    zip: "33462"
+    phone: "(561) 965-7300"
+  HCA-JOHNSTON-WILLIS:
+    address: "7101 Jahnke Road"
+    city: "Richmond"
+    zip: "23225"
+    phone: "(804) 483-0000"
+  HCA-KENDALL:
+    address: "11750 Bird Rd"
+    city: "Miami"
+    zip: "33175"
+    phone: "(305) 223-3000"
+  HCA-LAKE-MONROE:
+    address: "1401 W Seminole Blvd"
+    city: "Sanford"
+    zip: "32771"
+    phone: "(407) 321-4500"
+  HCA-LARGO:
+    address: "201 14th St Sw"
+    city: "Largo"
+    zip: "33770"
+    phone: "(727) 588-5200"
+  HCA-LEWISGALE-ALLEGHANY:
+    address: "One Arh Lane - Po Box 7"
+    city: "Low Moor"
+    zip: "24457"
+    phone: "(540) 862-6200"
+  HCA-LEWISGALE-MONTGOMERY:
+    address: "3700 South Main Street"
+    city: "Blacksburg"
+    zip: "24060"
+    phone: "(540) 951-1111"
+  HCA-LEWISGALE-PULASKI:
+    address: "2400 Lee Highway"
+    city: "Pulaski"
+    zip: "24301"
+    phone: "(540) 994-8100"
+  HCA-LEWISGALE-SALEM:
+    address: "1900 Electric Road"
+    city: "Salem"
+    zip: "24153"
+    phone: "(540) 776-4100"
+  HCA-MEMORIAL-JAX:
+    address: "3625 University Blvd S"
+    city: "Jacksonville"
+    zip: "32216"
+    phone: "(904) 702-6111"
+  HCA-MERCY:
+    address: "401 Nw 42nd Ave"
+    city: "Plantation"
+    zip: "33317"
+    phone: "(954) 587-5010"
+  HCA-MOUNTAINVIEW:
+    address: "3100 N Tenaya Way"
+    city: "Las Vegas"
+    zip: "89128"
+    phone: "(702) 255-5000"
+  HCA-NORTH-FLORIDA:
+    address: "6500 W Newberry Rd"
+    city: "Gainesville"
+    zip: "32605"
+    phone: "(352) 333-4100"
+  HCA-NORTHSIDE:
+    address: "6000 49th St N"
+    city: "Saint Petersburg"
+    zip: "33709"
+    phone: "(727) 521-5121"
+  HCA-NORTHWEST:
+    address: "2801 N State Rd 7"
+    city: "Margate"
+    zip: "33063"
+    phone: "(954) 974-0400"
+  HCA-OCALA:
+    address: "1431 Sw 1st Ave"
+    city: "Ocala"
+    zip: "34471"
+    phone: "(352) 401-1000"
+  HCA-ORANGE-PARK:
+    address: "2001 Kingsley Ave"
+    city: "Orange Park"
+    zip: "32073"
+    phone: "(904) 276-8500"
+  HCA-OSCEOLA:
+    address: "700 West Oak Street"
+    city: "Kissimmee"
+    zip: "34741"
+    phone: "(407) 846-2266"
+  HCA-OVIEDO:
+    address: "8300 Red Bug Lake Rd"
+    city: "Oviedo"
+    zip: "32765"
+    phone: "(615) 850-6055"
+  HCA-PALMS-WEST:
+    address: "13001 Southern Blvd"
+    city: "Loxahatchee"
+    zip: "33470"
+    phone: "(561) 798-3300"
+  HCA-PARHAM:
+    address: "1602 Skipwith Road"
+    city: "Richmond"
+    zip: "23229"
+    phone: "(804) 289-4500"
+  HCA-RESTON:
+    address: "1850 Town Center Parkway"
+    city: "Reston"
+    zip: "20190"
+    phone: "(703) 689-9000"
+  HCA-RETREAT:
+    address: "1602 Skipwith Road"
+    city: "Richmond"
+    zip: "23229"
+    phone: "(804) 289-4500"
+  HCA-SARASOTA-DOCTORS:
+    address: "5731 Bee Ridge Rd"
+    city: "Sarasota"
+    zip: "34233"
+    phone: "(941) 342-1100"
+  HCA-SOUTH-TAMPA:
+    address: "2901 W Swann Ave"
+    city: "Tampa"
+    zip: "33609"
+    phone: "(813) 873-6400"
+  HCA-SOUTHERN-HILLS:
+    address: "9300 West Sunset Rd"
+    city: "Las Vegas"
+    zip: "89148"
+    phone: "(702) 880-2100"
+  HCA-SPOTSYLVANIA:
+    address: "4600 Spotsylvania Parkway"
+    city: "Fredericksburg"
+    zip: "22408"
+    phone: "(540) 498-4000"
+  HCA-STONESPRINGS:
+    address: "24440 Stone Springs Boulevard"
+    city: "Dulles"
+    zip: "20166"
+    phone: "(571) 349-4000"
+  HCA-SUNRISE:
+    address: "3186 S Maryland Pkwy"
+    city: "Las Vegas"
+    zip: "89109"
+    phone: "(702) 731-8000"
+  HCA-TRICITIES:
+    address: "411 West Randolph Road"
+    city: "Hopewell"
+    zip: "23860"
+    phone: "(804) 541-1600"
+  HCA-TRINITY:
+    address: "9330 Sr 54"
+    city: "Trinity"
+    zip: "34655"
+    phone: "(727) 834-4900"
+  HCA-UCF-LAKE-NONA:
+    address: "6700 Lake Nona Blvd"
+    city: "Orlando"
+    zip: "32827"
+    phone: "(850) 523-2115"
+  HCA-WEST-PENSACOLA:
+    address: "8383 N Davis Hwy"
+    city: "Pensacola"
+    zip: "32514"
+    phone: "(850) 494-4000"
+  HCA-WESTSIDE:
+    address: "8201 W Broward Blvd"
+    city: "Plantation"
+    zip: "33324"
+    phone: "(954) 473-6600"
+  HEALTH-FIRST-CAPE-CANAVERAL:
+    address: "701 W Cocoa Beach Causeway"
+    city: "Cocoa Beach"
+    zip: "32931"
+    phone: "(321) 799-7111"
+  HEALTH-FIRST-HOLMES:
+    address: "1350 S Hickory St"
+    city: "Melbourne"
+    zip: "32901"
+    phone: "(321) 434-7000"
+  HEALTH-FIRST-VIERA:
+    address: "8745 N Wickham Rd"
+    city: "Melbourne"
+    zip: "32940"
+    phone: "(321) 434-9000"
+  HENRYFORD-DETROIT:
+    address: "2799 W Grand Blvd"
+    city: "Detroit"
+    zip: "48202"
+    phone: "(313) 916-2600"
+  HENRYFORD-GENESYS:
+    address: "One Genesys Parkway"
+    city: "Grand Blanc"
+    zip: "48439"
+    phone: "(810) 606-6050"
+  HENRYFORD-JACKSON:
+    address: "205 N East Ave"
+    city: "Jackson"
+    zip: "49201"
+    phone: "(517) 788-4800"
+  HENRYFORD-MACOMB:
+    address: "15855 Nineteen Mile Rd"
+    city: "Clinton Township"
+    zip: "48038"
+    phone: "(586) 263-2300"
+  HENRYFORD-PROVIDENCE-NOVI:
+    address: "16001 W Nine Mile Rd"
+    city: "Southfield"
+    zip: "48075"
+    phone: "(248) 849-3000"
+  HENRYFORD-PROVIDENCE-SOUTHFIELD:
+    address: "16001 W Nine Mile Rd"
+    city: "Southfield"
+    zip: "48075"
+    phone: "(248) 849-3000"
+  HENRYFORD-ROCHESTER:
+    address: "1101 W University Drive"
+    city: "Rochester"
+    zip: "48307"
+    phone: "(248) 652-5000"
+  HENRYFORD-STJOHN:
+    address: "22101 Moross Rd"
+    city: "Detroit"
+    zip: "48236"
+    phone: "(313) 343-4000"
+  HENRYFORD-WARREN:
+    address: "11800 East Twelve Mile Road"
+    city: "Warren"
+    zip: "48093"
+    phone: "(586) 573-5000"
+  HENRYFORD-WESTBLOOMFIELD:
+    address: "6777 West Maple Road"
+    city: "W Bloomfield"
+    zip: "48322"
+    phone: "(248) 325-1000"
+  HENRYFORD-WYANDOTTE:
+    address: "2333 Biddle Ave"
+    city: "Wyandotte"
+    zip: "48192"
+    phone: "(734) 246-6000"
+  HOLLAND:
+    address: "602 Michigan Ave"
+    city: "Holland"
+    zip: "49423"
+    phone: "(616) 392-5141"
+  HOLY-CROSS-FTL:
+    address: "4725 N Federal Hwy"
+    city: "Ft Lauderdale"
+    zip: "33308"
+    phone: "(954) 771-8000"
+  HONOR-DEERVALLEY:
+    address: "19829 North 27th Avenue"
+    city: "Phoenix"
+    zip: "85027"
+    phone: "(623) 879-6100"
+  HONOR-FOURPEAKS:
+    address: "1301 South Crismon Road"
+    city: "Mesa"
+    zip: "85209"
+    phone: "(480) 358-6100"
+  HONOR-JOHNLINCOLN:
+    address: "250 East Dunlap Avenue"
+    city: "Phoenix"
+    zip: "85020"
+    phone: "(602) 943-2381"
+  HONOR-OSBORN:
+    address: "7400 East Osborn Road"
+    city: "Scottsdale"
+    zip: "85251"
+    phone: "(480) 882-4004"
+  HONOR-SHEA:
+    address: "9003 East Shea Boulevard"
+    city: "Scottsdale"
+    zip: "85260"
+    phone: "(480) 323-3000"
+  HONOR-SONORAN:
+    address: "33400 North 32nd Avenue"
+    city: "Phoenix"
+    zip: "85085"
+    phone: "(480) 882-4327"
+  HONOR-TEMPE:
+    address: "1800 East Van Buren Street"
+    city: "Phoenix"
+    zip: "85006"
+    phone: "(602) 251-8156"
+  HONOR-THOMPSONPEAK:
+    address: "7400 East Thompson Peak Parkway"
+    city: "Scottsdale"
+    zip: "85255"
+    phone: "(480) 324-7001"
+  HUMBOLDT-GENERAL:
+    address: "118 East Haskell Street"
+    city: "Winnemucca"
+    zip: "89445"
+    phone: "(775) 623-5222"
+  HURLEY-FLINT:
+    address: "One Hurley Plaza"
+    city: "Flint"
+    zip: "48503"
+    phone: "(810) 257-9000"
+  INOVA-ALEXANDRIA:
+    address: "4320 Seminary Rd"
+    city: "Alexandria"
+    zip: "22304"
+    phone: "(703) 504-3167"
+  INOVA-FAIR-OAKS:
+    address: "3600 Joseph Siewick Drive"
+    city: "Fairfax"
+    zip: "22033"
+    phone: "(703) 391-4170"
+  INOVA-FAIRFAX:
+    address: "3300 Gallows Road"
+    city: "Falls Church"
+    zip: "22042"
+    phone: "(703) 698-1110"
+  INOVA-LOUDOUN:
+    address: "44045 Riverside Parkway"
+    city: "Leesburg"
+    zip: "20176"
+    phone: "(703) 858-6600"
+  INOVA-MOUNT-VERNON:
+    address: "2501 Parkers Lane"
+    city: "Alexandria"
+    zip: "22306"
+    phone: "(703) 664-7105"
+  INSIGHT-SURGICAL-WARREN:
+    address: "21230 Dequindre Road"
+    city: "Warren"
+    zip: "48091"
+    phone: "(586) 427-1000"
+  JACKSON-MEMORIAL:
+    address: "1611 Nw 12th Ave"
+    city: "Miami"
+    zip: "33136"
+    phone: "(305) 585-1111"
+  JUPITER-MEDICAL:
+    address: "1210 S Old Dixie Hwy"
+    city: "Jupiter"
+    zip: "33458"
+    phone: "(561) 747-2234"
+  KINGMAN-RMC:
+    address: "3269 Stockton Hill Road"
+    city: "Kingman"
+    zip: "86401"
+    phone: "(928) 757-2101"
+  LA-PAZ-REGIONAL:
+    address: "1200 West Mohave Road"
+    city: "Parker"
+    zip: "85344"
+    phone: "(928) 669-9201"
+  LAKEHURON-PORTHURON:
+    address: "2601 Electric Avenue"
+    city: "Port Huron"
+    zip: "48060"
+    phone: "(810) 985-1500"
+  LAKELAND-REGIONAL:
+    address: "1324 Lakeland Hills Blvd"
+    city: "Lakeland"
+    zip: "33805"
+    phone: "(863) 687-1100"
+  LCMC-WINSLOW:
+    address: "1501 North Williamson Avenue"
+    city: "Winslow"
+    zip: "86047"
+    phone: "(928) 289-4691"
+  LEE-CAPE-CORAL:
+    address: "636 Del Prado Blvd"
+    city: "Cape Coral"
+    zip: "33990"
+    phone: "(239) 424-2000"
+  LEE-GULF-COAST:
+    address: "13681 Doctors Way"
+    city: "Fort Myers"
+    zip: "33912"
+    phone: "(239) 343-1000"
+  LEE-MEMORIAL:
+    address: "2776 Cleveland Ave"
+    city: "Fort Myers"
+    zip: "33901"
+    phone: "(239) 343-5000"
+  LIFEPOINT-CLINCH-VALLEY:
+    address: "6801 Governor Gc Perry Highway"
+    city: "Richlands"
+    zip: "24641"
+    phone: "(276) 596-6000"
+  LIFEPOINT-FAUQUIER:
+    address: "500 Hospital Drive"
+    city: "Warrenton"
+    zip: "20186"
+    phone: "(540) 316-5000"
+  LIFEPOINT-NNRH-ELKO:
+    address: "2001 Errecart Blvd"
+    city: "Elko"
+    zip: "89801"
+    phone: "(775) 738-5151"
+  LIFEPOINT-TWIN-COUNTY:
+    address: "200 Hospital Drive"
+    city: "Galax"
+    zip: "24333"
+    phone: "(276) 236-1650"
+  LIFEPOINT-WYTHE:
+    address: "600 West Ridge Road"
+    city: "Wytheville"
+    zip: "24382"
+    phone: "(276) 228-0200"
+  MARYWASH-MAIN:
+    address: "1001 Sam Perry Boulevard"
+    city: "Fredericksburg"
+    zip: "22401"
+    phone: "(540) 741-1100"
+  MARYWASH-STAFFORD:
+    address: "101 Hospital Center Boulevard"
+    city: "Stafford"
+    zip: "22554"
+    phone: "(540) 741-9000"
+  MAYO-FL:
+    address: "4500 San Pablo Rd"
+    city: "Jacksonville"
+    zip: "32224"
+    phone: "(904) 953-2000"
+  MCLAREN-BAY:
+    address: "1900 Columbus Ave"
+    city: "Bay City"
+    zip: "48708"
+    phone: "(989) 894-9510"
+  MCLAREN-FLINT:
+    address: "401 S Ballenger Highway"
+    city: "Flint"
+    zip: "48532"
+    phone: "(810) 342-2000"
+  MCLAREN-LANSING:
+    address: "2900 Collins Road"
+    city: "Lansing"
+    zip: "48910"
+    phone: "(517) 975-5600"
+  MCLAREN-MACOMB:
+    address: "1000 Harrington St"
+    city: "Mount Clemens"
+    zip: "48043"
+    phone: "(586) 493-8000"
+  MCLAREN-NORTHERN:
+    address: "416 Connable Ave"
+    city: "Petoskey"
+    zip: "49770"
+    phone: "(231) 487-4000"
+  MCLAREN-OAKLAND:
+    address: "50 N Perry St"
+    city: "Pontiac"
+    zip: "48342"
+    phone: "(248) 338-5000"
+  MCLAREN-PORTHURON:
+    address: "1221 Pine Grove Ave"
+    city: "Port Huron"
+    zip: "48061"
+    phone: "(810) 987-5000"
+  MEMORIAL-MIRAMAR:
+    address: "1901 Sw 172nd Ave"
+    city: "Miramar"
+    zip: "33029"
+    phone: "(954) 538-5000"
+  MEMORIAL-REGIONAL:
+    address: "3501 Johnson St"
+    city: "Hollywood"
+    zip: "33021"
+    phone: "(954) 987-2000"
+  MEMORIAL-WEST:
+    address: "703 N Flamingo Rd"
+    city: "Pembroke Pines"
+    zip: "33028"
+    phone: "(954) 436-5000"
+  MESA-VIEW-MESQUITE:
+    address: "1299 Bertha Howe Avenue"
+    city: "Mesquite"
+    zip: "89027"
+    phone: "(702) 345-4280"
+  MOUNT-SINAI-MIAMI:
+    address: "4300 Alton Rd"
+    city: "Miami Beach"
+    zip: "33140"
+    phone: "(305) 674-2121"
+  MT-GRAHAM:
+    address: "1600 South 20th Avenue"
+    city: "Safford"
+    zip: "85546"
+    phone: "(928) 348-4000"
+  MUNSON-TRAVERSECITY:
+    address: "1105 Sixth Street"
+    city: "Traverse City"
+    zip: "49684"
+    phone: "(231) 935-5000"
+  MYMICHIGAN-ALPENA:
+    address: "1501 W Chisholm St"
+    city: "Alpena"
+    zip: "49707"
+    phone: "(989) 356-7390"
+  MYMICHIGAN-MIDLAND:
+    address: "4000 Wellness Drive"
+    city: "Midland"
+    zip: "48670"
+    phone: "(989) 839-3000"
+  MYMICHIGAN-SAGINAW:
+    address: "800 S Washington Avenue"
+    city: "Saginaw"
+    zip: "48601"
+    phone: "(989) 776-8000"
+  NAH-FLAGSTAFF:
+    address: "1200 North Beaver Street"
+    city: "Flagstaff"
+    zip: "86001"
+    phone: "(928) 779-3366"
+  NAH-VERDE-VALLEY:
+    address: "269 South Candy Lane"
+    city: "Cottonwood"
+    zip: "86326"
+    phone: "(928) 773-2357"
+  NCH-NAPLES:
+    address: "350 7th St N"
+    city: "Naples"
+    zip: "34102"
+    phone: "(239) 624-5000"
+  NORTHERN-COCHISE:
+    address: "901 West Rex Allen Drive"
+    city: "Willcox"
+    zip: "85643"
+    phone: "(520) 384-3541"
+  NORTHWEST-HOUGHTON:
+    address: "6200 North La Cholla Boulevard"
+    city: "Tucson"
+    zip: "85741"
+    phone: "(520) 469-8100"
+  NORTHWEST-TUCSON:
+    address: "6200 North La Cholla Boulevard"
+    city: "Tucson"
+    zip: "85741"
+    phone: "(520) 469-8100"
+  ORLANDO-HEALTH-BAYFRONT:
+    address: "701 6th St S"
+    city: "Saint Petersburg"
+    zip: "33701"
+    phone: "(727) 823-1234"
+  ORLANDO-HEALTH-MELBOURNE:
+    address: "250 North Wickham Road"
+    city: "Melbourne"
+    zip: "32935"
+    phone: "(321) 752-1200"
+  ORLANDO-HEALTH-ORMC:
+    address: "52 W Underwood St"
+    city: "Orlando"
+    zip: "32806"
+    phone: "(321) 841-5111"
+  ORO-VALLEY:
+    address: "1551 East Tangerine Road"
+    city: "Oro Valley"
+    zip: "85755"
+    phone: "(520) 901-3500"
+  PHX-CHILDRENS:
+    address: "1919 East Thomas Road"
+    city: "Phoenix"
+    zip: "85016"
+    phone: "(602) 933-1000"
+  PHYSICIANS-REGIONAL-PINE-RIDGE:
+    address: "6101 Pine Ridge Road"
+    city: "Naples"
+    zip: "34119"
+    phone: "(239) 304-5145"
+  PRIME-NORTH-VISTA:
+    address: "1409 East Lake Mead Blvd"
+    city: "North Las Vegas"
+    zip: "89030"
+    phone: "(702) 649-7711"
+  PRIME-SAINT-MARYS:
+    address: "235 W 6th St"
+    city: "Reno"
+    zip: "89503"
+    phone: "(775) 770-3000"
+  RENOWN-REGIONAL:
+    address: "1155 Mill Street"
+    city: "Reno"
+    zip: "89502"
+    phone: "(775) 982-4100"
+  RENOWN-SOUTH-MEADOWS:
+    address: "10101 Double R Blvd"
+    city: "Reno"
+    zip: "89521"
+    phone: "(775) 982-7063"
+  RIVERSIDE-REGIONAL:
+    address: "500 J Clyde Morris Blvd"
+    city: "Newport News"
+    zip: "23601"
+    phone: "(757) 594-2000"
+  RIVERSIDE-WALTER-REED:
+    address: "7519 Hospital Road"
+    city: "Gloucester"
+    zip: "23061"
+    phone: "(804) 693-8800"
+  RIVERSIDE-WILLIAMSBURG:
+    address: "1500 Commonwealth Avenue"
+    city: "Williamsburg"
+    zip: "23185"
+    phone: "(757) 585-2010"
+  SARASOTA-MEMORIAL:
+    address: "1700 S Tamiami Trl"
+    city: "Sarasota"
+    zip: "34239"
+    phone: "(941) 917-9000"
+  SARASOTA-MEMORIAL-VENICE:
+    address: "2600 Laurel Road East"
+    city: "North Venice"
+    zip: "34275"
+    phone: "(941) 917-7299"
+  SENTARA-CAREPLEX:
+    address: "3000 Coliseum Drive"
+    city: "Hampton"
+    zip: "23666"
+    phone: "(757) 827-2545"
+  SENTARA-HALIFAX:
+    address: "2204 Wilborn Avenue"
+    city: "South Boston"
+    zip: "24592"
+    phone: "(434) 517-3100"
+  SENTARA-LEIGH:
+    address: "830 Kempsville Road"
+    city: "Norfolk"
+    zip: "23502"
+    phone: "(757) 261-6700"
+  SENTARA-MARTHA:
+    address: "500 Martha Jefferson Drive"
+    city: "Charlottesville"
+    zip: "22911"
+    phone: "(434) 654-7000"
+  SENTARA-NORFOLK:
+    address: "600 Gresham Dr"
+    city: "Norfolk"
+    zip: "23507"
+    phone: "(757) 388-3000"
+  SENTARA-NOVA:
+    address: "2300 Opitz Boulevard"
+    city: "Woodbridge"
+    zip: "22191"
+    phone: "(703) 523-1000"
+  SENTARA-OBICI:
+    address: "2800 Godwin Boulevard"
+    city: "Suffolk"
+    zip: "23434"
+    phone: "(757) 934-4000"
+  SENTARA-PRINCESS-ANNE:
+    address: "2025 Glenn Mitchell Drive"
+    city: "Virginia Beach"
+    zip: "23456"
+    phone: "(757) 507-1520"
+  SENTARA-RMH:
+    address: "2010 Health Campus Drive"
+    city: "Harrisonburg"
+    zip: "22801"
+    phone: "(540) 689-1000"
+  SENTARA-VBGH:
+    address: "1060 First Colonial Road"
+    city: "Virginia Beach"
+    zip: "23454"
+    phone: "(757) 395-8000"
+  SENTARA-WILLIAMSBURG:
+    address: "100 Sentara Circle"
+    city: "Williamsburg"
+    zip: "23185"
+    phone: "(757) 984-8137"
+  SOVAH-DANVILLE:
+    address: "142 South Main Street"
+    city: "Danville"
+    zip: "24541"
+    phone: "(434) 799-2100"
+  SPARROW-LANSING:
+    address: "1215 E Michigan Avenue"
+    city: "Lansing"
+    zip: "48912"
+    phone: "(517) 364-1000"
+  STRAITH-SOUTHFIELD:
+    address: "23901 Lahser"
+    city: "Southfield"
+    zip: "48033"
+    phone: "(248) 357-3360"
+  SUMMIT-SHOW-LOW:
+    address: "1800 East Florence Boulevard"
+    city: "Casa Grande"
+    zip: "85122"
+    phone: "(520) 381-6300"
+  SURGEONSCHOICE-SOUTHFIELD:
+    address: "22401 Foster Winter Drive"
+    city: "Southfield"
+    zip: "48075"
+    phone: "(248) 423-5110"
+  TENET-DELRAY:
+    address: "5352 Linton Blvd"
+    city: "Delray Beach"
+    zip: "33484"
+    phone: "(561) 498-4440"
+  TENET-GOOD-SAM:
+    address: "1309 N Flagler Dr"
+    city: "West Palm Beach"
+    zip: "33401"
+    phone: "(561) 655-5511"
+  TENET-PBG:
+    address: "3360 Burns Rd"
+    city: "Palm Beach Gardens"
+    zip: "33410"
+    phone: "(561) 622-1411"
+  TENET-ST-MARYS:
+    address: "901 45th St"
+    city: "West Palm Beach"
+    zip: "33407"
+    phone: "(561) 840-6202"
+  TENET-WEST-BOCA:
+    address: "21644 State Rd 7"
+    city: "Boca Raton"
+    zip: "33428"
+    phone: "(561) 488-8100"
+  TFHS-INCLINE-VILLAGE:
+    address: "880 Alder Street"
+    city: "Incline Village"
+    zip: "89451"
+    phone: "(775) 833-4100"
+  TGH-MAIN:
+    address: "1 Tampa General Cir"
+    city: "Tampa"
+    zip: "33606"
+    phone: "(813) 844-7000"
+  TMC-TUCSON:
+    address: "1003 Willow Creek Road"
+    city: "Prescott"
+    zip: "86301"
+    phone: "(928) 445-2700"
+  TMH-TALLAHASSEE:
+    address: "1300 Miccosukee Rd"
+    city: "Tallahassee"
+    zip: "32308"
+    phone: "(850) 431-1155"
+  TRINITY-ANNARBOR:
+    address: "5301 E Huron River Dr"
+    city: "Ann Arbor"
+    zip: "48106"
+    phone: "(734) 712-3456"
+  TRINITY-CHELSEA:
+    address: "775 S Main St"
+    city: "Chelsea"
+    zip: "48118"
+    phone: "(734) 475-3911"
+  TRINITY-GRANDRAPIDS:
+    address: "200 Jefferson Avenue Se"
+    city: "Grand Rapids"
+    zip: "49503"
+    phone: "(616) 685-5000"
+  TRINITY-LIVINGSTON:
+    address: "620 Byron Rd"
+    city: "Howell"
+    zip: "48843"
+    phone: "(517) 545-6000"
+  TRINITY-LIVONIA:
+    address: "36475 Five Mile Road"
+    city: "Livonia"
+    zip: "48154"
+    phone: "(734) 655-4800"
+  TRINITY-MUSKEGON:
+    address: "1500 E Sherman Blvd"
+    city: "Muskegon"
+    zip: "49441"
+    phone: "(231) 726-3511"
+  TRINITY-OAKLAND:
+    address: "44405 Woodward Ave"
+    city: "Pontiac"
+    zip: "48341"
+    phone: "(248) 858-3000"
+  UF-HEALTH-JAX:
+    address: "655 W 8th St"
+    city: "Jacksonville"
+    zip: "32209"
+    phone: "(904) 244-4000"
+  UF-HEALTH-SHANDS:
+    address: "1600 Sw Archer Rd"
+    city: "Gainesville"
+    zip: "32610"
+    phone: "(352) 265-8000"
+  UF-HEALTH-ST-JOHNS:
+    address: "400 Health Park Blvd"
+    city: "Saint Augustine"
+    zip: "32086"
+    phone: "(904) 819-5155"
+  UF-HEALTH-VILLAGES:
+    address: "1451 El Camino Real"
+    city: "The Villages"
+    zip: "32159"
+    phone: "(352) 751-8000"
+  UHS-DESERT-VIEW:
+    address: "360 South Lola Lane"
+    city: "Pahrump"
+    zip: "89048"
+    phone: "(775) 751-7500"
+  UHS-LAKEWOOD-RANCH:
+    address: "8330 Lakewood Ranch Blvd"
+    city: "Bradenton"
+    zip: "34202"
+    phone: "(941) 782-2100"
+  UHS-MANATEE-MEMORIAL:
+    address: "206 2nd St E"
+    city: "Bradenton"
+    zip: "34208"
+    phone: "(941) 746-5111"
+  UHS-NN-SIERRA:
+    address: "2375 E Prater Way"
+    city: "Sparks"
+    zip: "89434"
+    phone: "(775) 331-7000"
+  UHS-NNMC:
+    address: "2375 E Prater Way"
+    city: "Sparks"
+    zip: "89434"
+    phone: "(775) 331-7000"
+  UHS-WELLINGTON:
+    address: "10101 Forest Hill Blvd"
+    city: "Wellington"
+    zip: "33414"
+    phone: "(561) 798-8500"
+  UMC-LAS-VEGAS:
+    address: "1800 W Charleston Blvd"
+    city: "Las Vegas"
+    zip: "89102"
+    phone: "(702) 383-2000"
+  UMHEALTH-WEST:
+    address: "5900 Byron Center Avenue, Sw"
+    city: "Wyoming"
+    zip: "49519"
+    phone: "(616) 252-7200"
+  UMICH-MAIN:
+    address: "1500 E Medical Center Drive, Spc 5474"
+    city: "Ann Arbor"
+    zip: "48109"
+    phone: "(734) 764-1505"
+  UPHS-MARQUETTE:
+    address: "850 W Baraga Ave"
+    city: "Marquette"
+    zip: "49855"
+    phone: "(906) 228-9440"
+  UVA-CULPEPER:
+    address: "501 Sunset Lane"
+    city: "Culpeper"
+    zip: "22701"
+    phone: "(703) 829-4300"
+  UVA-HAYMARKET:
+    address: "15225 Healthcote Boulevard"
+    city: "Haymarket"
+    zip: "20169"
+    phone: "(571) 284-1000"
+  UVA-MAIN:
+    address: "1215 Lee Street"
+    city: "Charlottesville"
+    zip: "22908"
+    phone: "(434) 924-0000"
+  UVA-PRINCE-WILLIAM:
+    address: "8700 Sudley Rd"
+    city: "Manassas"
+    zip: "20110"
+    phone: "(703) 369-8736"
+  VALLEY-WARREN:
+    address: "351 Valley Health Way"
+    city: "Front Royal"
+    zip: "22630"
+    phone: "(540) 636-0299"
+  VALLEY-WINCHESTER:
+    address: "1840 Amherst St"
+    city: "Winchester"
+    zip: "22601"
+    phone: "(540) 536-8000"
+  VALLEYWISE-PHX:
+    address: "2601 East Roosevelt Street"
+    city: "Phoenix"
+    zip: "85008"
+    phone: "(602) 344-5011"
+  VCU-MAIN:
+    address: "1250 East Marshall Street"
+    city: "Richmond"
+    zip: "23298"
+    phone: "(804) 828-9000"
+  VHC-ARLINGTON:
+    address: "1701 North George Mason Drive"
+    city: "Arlington"
+    zip: "22205"
+    phone: "(703) 558-5000"
+  VHS-CENTENNIAL-HILLS:
+    address: "6900 N Durango Dr"
+    city: "Las Vegas"
+    zip: "89149"
+    phone: "(702) 835-9700"
+  VHS-HENDERSON:
+    address: "1050 West Galleria Drive"
+    city: "Henderson"
+    zip: "89011"
+    phone: "(702) 963-7000"
+  VHS-SPRING-VALLEY:
+    address: "5400 South Rainbow Blvd"
+    city: "Las Vegas"
+    zip: "89118"
+    phone: "(702) 853-3000"
+  VHS-SUMMERLIN:
+    address: "657 Town Center Drive"
+    city: "Las Vegas"
+    zip: "89144"
+    phone: "(702) 233-7500"
+  VHS-VALLEY:
+    address: "620 Shadow Lane"
+    city: "Las Vegas"
+    zip: "89106"
+    phone: "(702) 388-4000"
+  VHS-WEST-HENDERSON:
+    address: "1155 Raiders Way"
+    city: "Henderson"
+    zip: "89052"
+    phone: "(702) 369-7612"
+  WICKENBURG:
+    address: "520 Rose Lane"
+    city: "Wickenburg"
+    zip: "85390"
+    phone: "(928) 684-5421"
+  WMRMC-SPRINGERVILLE:
+    address: "118 South Mountain Avenue"
+    city: "Springerville"
+    zip: "85938"
+    phone: "(928) 333-4368"
+  YRMC-PRESCOTT:
+    address: "2000 West Bethany Home Road"
+    city: "Phoenix"
+    zip: "85015"
+    phone: "(602) 249-0212"
+  YUMA-REGIONAL:
+    address: "5301 East Grant Road"
+    city: "Tucson"
+    zip: "85712"
+    phone: "(520) 324-1399"
+  # Not in CMS Care Compare (new build, PPS-exempt, or no current row);
+  # taken from each hospital's own site, verified 2026-09-23.
+  ABRAZO-HEART:
+    address: "1930 E Thomas Rd"
+    city: "Phoenix"
+    zip: "85016"
+    phone: "(602) 532-1000"
+  HONOR-FLORENCE:
+    address: "4545 N Hunt Hwy"
+    city: "Florence"
+    zip: "85132"
+    phone: "(520) 868-3333"
+  SOVAH-MARTINSVILLE:
+    address: "320 Hospital Dr"
+    city: "Martinsville"
+    zip: "24115"
+    phone: "(276) 666-7200"
+  UHEALTH-TOWER:
+    address: "1400 NW 12th Ave"
+    city: "Miami"
+    zip: "33125"
+    phone: "(305) 325-5511"

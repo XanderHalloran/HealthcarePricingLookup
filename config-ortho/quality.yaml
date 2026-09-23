@@ -866,3 +866,10 @@ hip_knee:
   MEMORIAL-WEST:
     rate: 4.6
     compare: No Different
+  # AZ ortho specialty hospitals (no CMS star rating published)
+  AOSSH-PHX:
+    rate: 4.5
+    compare: No Different
+  AZSJH-MESA:
+    rate: 4.3
+    compare: No Different

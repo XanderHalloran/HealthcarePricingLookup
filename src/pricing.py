@@ -203,6 +203,17 @@ def load_geo(path):
     return out
 
 
+def load_contact(path):
+    """hospital_id -> {address, city, zip, phone}. Referral staff need something to hand a
+    patient; a price with no address is why they stay in a maps app. Empty when absent."""
+    if not os.path.exists(path):
+        return {}
+    with open(path, encoding="utf-8") as f:
+        data = yaml.safe_load(f) or {}
+    return {hid: {k: (v.get(k) or "") for k in ("address", "city", "zip", "phone")}
+            for hid, v in (data.get("hospitals") or {}).items() if v}
+
+
 # City centroids for freestanding imaging/ASC (which carry a city, not an id).
 CITY_COORDS = {
     "Phoenix": (33.4484, -112.0740), "Scottsdale": (33.4942, -111.9261),

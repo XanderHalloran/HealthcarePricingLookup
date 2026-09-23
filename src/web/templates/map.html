@@ -25,7 +25,7 @@
 {% include "_nav.html" %}
   <div class="hero">
     <h1>Facilities near an address</h1>
-    <p class="sub">Enter a street address or ZIP, pick a radius, and see every {{ state_name }} facility with a published price for the procedure inside it. Distance is straight-line from the address to the facility. The page never asks your browser for its location; only what you type here is used.</p>
+    <p class="sub">Enter a street address or ZIP, pick a radius, and see every {{ state_name }} facility with a published price for the procedure inside it. Pick the patient's insurance to price it for their plan. Distance is straight-line from the address to the facility. The page never asks your browser for its location; only what you type here is used.</p>
   </div>
 
   <form class="payerbar card" method="get" action="/map" role="group" aria-label="Choose procedure, address and radius">
@@ -42,6 +42,16 @@
     <select id="radius" name="radius">
       {% for r in radii %}<option value="{{ r }}" {% if r == radius %}selected{% endif %}>{{ r }} mi</option>{% endfor %}
     </select>
+    <label class="pb-lab" for="payer"><b>Insurance</b></label>
+    <select id="payer" name="payer">
+      <option value="">— typical rate —</option>
+      {% for p in payers %}<option value="{{ p }}" {% if p == sel %}selected{% endif %}>{{ p }}</option>{% endfor %}
+    </select>
+    <label class="pb-lab" for="ded"><b>Deductible left</b></label>
+    <input type="text" id="ded" name="ded" size="6" inputmode="numeric" placeholder="$" value="{{ ded }}">
+    <label class="pb-lab" for="coins"><b>Coins.</b></label>
+    <input type="text" id="coins" name="coins" size="3" inputmode="numeric" placeholder="20" value="{{ coins }}">
+    <span class="bar-sep"></span>
     <label class="pb-lab" for="metro"><b>Market</b></label>
     <select id="metro" name="metro">
       {% include "_area_options.html" %}
@@ -60,21 +70,24 @@
 
   <div class="card" style="margin-top:16px;overflow-x:auto">
     <div class="fac-h">{{ svc.desc }} <span class="mute">({{ svc.type }} {{ svc.code }})</span>
+      {% set qs = 'code=' ~ svc.code ~ '&q=' ~ q|urlencode ~ '&radius=' ~ radius ~ '&metro=' ~ (metro or state) ~ '&payer=' ~ sel|urlencode ~ '&ded=' ~ ded ~ '&coins=' ~ coins %}
       <span style="float:right">Sort:
-        <a class="btn-mini{% if sort != 'dist' %} on{% endif %}" href="/map?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&metro={{ metro or state }}&sort=price">Cheapest</a>
-        <a class="btn-mini{% if sort == 'dist' %} on{% endif %}" href="/map?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&metro={{ metro or state }}&sort=dist">Closest</a></span></div>
+        <a class="btn-mini{% if sort == 'price' %} on{% endif %}" href="/map?{{ qs }}&sort=price">Cheapest</a>
+        <a class="btn-mini{% if sort == 'dist' %} on{% endif %}" href="/map?{{ qs }}&sort=dist">Closest</a>
+        <a class="btn-mini{% if sort == 'quality' %} on{% endif %}" href="/map?{{ qs }}&sort=quality">Best hip/knee</a></span></div>
     {% if not rows %}
       <p>No facility within {{ radius }} miles publishes a price for this procedure. Widen the radius.</p>
     {% else %}
     <table class="fac-t nm">
-      <thead><tr><th>Facility</th><th>Type</th><th class="r">Distance</th><th class="r">Price</th><th class="r">vs Medicare</th><th>Quality</th></tr></thead>
+      <thead><tr><th>Facility</th><th>Contact</th><th class="r">Distance</th><th class="r">{{ sel if sel else 'Typical' }} price</th>{% if rows and rows[0].patient is not none %}<th class="r">Patient pays</th>{% endif %}<th class="r">vs Medicare</th><th>Quality</th></tr></thead>
       <tbody>
       {% for h in rows %}
         <tr class="{% if h.cheapest and rows|length > 1 %}best {% endif %}{% if own_ids and h.id in own_ids %}own{% endif %}">
           <td><span class="n">{{ loop.index }}</span>{{ h.name }}{% if own_ids and h.id in own_ids %} <span class="badge own">{{ brand.own.label }}</span>{% endif %}{% if h.cheapest and rows|length > 1 %} <span class="badge">lowest</span>{% endif %}{% if h.outlier == 'high' %} <span class="oflag hi">gross charge</span>{% elif h.outlier == 'low' %} <span class="oflag">⚠ likely error</span>{% endif %}</td>
-          <td class="mute">{{ h.type }}</td>
+          <td class="mute" style="font-size:12px">{% if h.contact and h.contact.phone %}{{ h.contact.phone }}<br>{% endif %}{% if h.contact and h.contact.city %}{{ h.contact.city }}{% else %}{{ h.type }}{% endif %}</td>
           <td class="r">{{ h.distance }} mi</td>
           <td class="r"><b>{% if h.price is not none %}${{ '{:,.0f}'.format(h.price) }}{% else %}—{% endif %}</b> <span class="mute" style="font-size:11px">{{ h.rate_type }}</span></td>
+          {% if rows and rows[0].patient is not none %}<td class="r"><b>{% if h.patient is not none %}${{ '{:,.0f}'.format(h.patient) }}{% else %}—{% endif %}</b></td>{% endif %}
           <td class="r">{% if medicare and h.price %}{{ (h.price / medicare)|round(2) }}×{% else %}—{% endif %}</td>
           <td>{% if h.hip_knee %}<span class="hk {{ 'good' if h.hip_knee.compare == 'Better' else ('bad' if h.hip_knee.compare == 'Worse' else '') }}">hip/knee complications {{ h.hip_knee.rate }}%</span>{% elif h.stars %}{{ '★' * h.stars }}{% else %}<span class="mute">—</span>{% endif %}</td>
         </tr>
@@ -106,7 +119,7 @@
   </script>
   {% endif %}
 
-  <p class="refreshed">Facility prices from CMS machine-readable files (refreshed {{ data_refreshed }}); geocoding by OpenStreetMap Nominatim and zippopotam.us. Distances are straight-line. Benchmarking estimates, not a quote.</p>
+  <p class="refreshed">Doing a patient lookup? <a href="/refer?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&metro={{ metro or state }}&payer={{ sel|urlencode }}">Use the referral finder</a> — same data, built to hand to a patient.<br>Facility prices from CMS machine-readable files (refreshed {{ data_refreshed }}); addresses and phone numbers from CMS Care Compare; geocoding by OpenStreetMap Nominatim and zippopotam.us. Distances are straight-line. Benchmarking estimates, not a quote.</p>
 </main>
 </body>
 </html>
