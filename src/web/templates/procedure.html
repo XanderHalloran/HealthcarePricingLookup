@@ -10,14 +10,14 @@
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ meta_desc }}">
 <meta property="og:url" content="{{ canonical }}">
-<meta property="og:site_name" content="Medical Price & Bill Coach">
-<meta property="og:image" content="{{ base }}/static/og.png">
+<meta property="og:site_name" content="{% if brand and brand.profile == 'ortho' %}{{ brand.name }}{% else %}Medical Price & Bill Coach{% endif %}">
+<meta property="og:image" content="{{ base }}/static/{% if brand and brand.profile == 'ortho' %}og-ortho.png{% else %}og.png{% endif %}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{{ title }}">
 <meta name="twitter:description" content="{{ meta_desc }}">
-<meta name="twitter:image" content="{{ base }}/static/og.png">
+<meta name="twitter:image" content="{{ base }}/static/{% if brand and brand.profile == 'ortho' %}og-ortho.png{% else %}og.png{% endif %}">
 <script type="application/ld+json">{{ ld|tojson }}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,7 +54,8 @@
         with hospitals ranging from ${{ '{:,.0f}'.format(r.result.neg_low) }} to
         ${{ '{:,.0f}'.format(r.result.neg_high) }} across {{ r.result.n_hospitals }} facilities.{% else %}hospital prices vary widely — compare each facility above.{% endif %}
       {% if not r.result.medicare_missing %}Medicare's benchmark rate is
-        <b>${{ '{:,.0f}'.format(r.result.medicare_rate) }}</b>, the floor to negotiate toward.{% endif %}
+        <b>${{ '{:,.0f}'.format(r.result.medicare_rate) }}</b>{% if brand and brand.profile == 'ortho' %}, the benchmark every
+        published rate is measured against.{% else %}, the floor to negotiate toward.{% endif %}{% endif %}
       The card above lists each hospital's price, cheapest first, with CMS quality stars.</p>
 
     <h2>Frequently asked questions</h2>
@@ -62,10 +63,17 @@
       <div class="faq"><h3>{{ f.q }}</h3><p>{{ f.a }}</p></div>
     {% endfor %}
 
+{% if brand and brand.profile == 'ortho' %}
+    <h2>Placing a referral for this?</h2>
+    <p>Enter the patient's ZIP and plan in the <a href="/map">facility finder</a> to see every
+      facility near them that publishes a price for {{ r.code }}, ranked, with the phone number
+      and an out-of-pocket estimate.</p>
+    {% else %}
     <h2>Got a bill for this?</h2>
     <p>If you were charged more than the fair price, you can usually negotiate it down.
       <a href="/">Paste your itemized bill</a> to get a personalized appeal letter, the exact
       numbers to cite, an AI negotiation coach, and a charity-care eligibility check — free.</p>
+    {% endif %}
 
     <h2>Compare other procedures in {{ city }}</h2>
     <div class="linkgrid">

@@ -24,7 +24,7 @@ from fastapi.templating import Jinja2Templates
 
 sys.path.insert(0, os.path.dirname(__file__))
 from medicare import build_reference_db, build_reference
-from pricing import (analyze, load_templates, load_services, load_hospital_names,
+from pricing import (CITY_COORDS, analyze, load_templates, load_services, load_hospital_names,
                      load_quality, load_hip_knee, load_freestanding, load_metros, load_geo,
                      load_contact,
                      payer_matrix, get_medicare_all, get_medicare, lookup)
@@ -802,6 +802,13 @@ def _geocode(q, state_name=""):
     return float(hit["lat"]), float(hit["lon"])
 
 
+def _pct_in(s):
+    """A user-entered coinsurance percentage, clamped to 0-100. '20' -> 20.0, '0.2' -> 0.2,
+    '200' -> 100.0. Unclamped this number is multiplied by a price and read aloud to a patient."""
+    v = to_float(s)
+    return None if v is None else max(0.0, min(100.0, v))
+
+
 def _patient_cost(price, ded_left, coins):
     """What the patient pays out of pocket, as a plain estimate: the remaining deductible
     first, then coinsurance on the rest. Both inputs optional; returns None without them.
@@ -812,40 +819,88 @@ def _patient_cost(price, ded_left, coins):
     return round(ded + (price - ded) * ((coins if coins is not None else 0) / 100.0))
 
 
-def _near(svc, state, q, radius, payer=None, sort="price"):
+def _radii(rad):
+    """The radius choices, always including the one in force -- otherwise a shared
+    ?radius=30 link renders a select showing '5 mi' while the results say 30."""
+    return sorted({5, 10, 25, 50, 100, rad})
+
+
+def _market_near(center):
+    """The market the searched point actually sits in, by nearest known facility.
+    The Area select cannot be trusted for this: a Richmond ZIP priced against Arizona
+    returns a confident 'no facility within 25 miles', which is the worst possible answer.
+    O(301) over coordinates already in memory -- no geocoder round trip."""
+    best, best_d = "", 1e18
+    for hid, coords in (STATE["geo"] or {}).items():
+        if not coords:
+            continue
+        d = (coords[0] - center[0]) ** 2 + (coords[1] - center[1]) ** 2
+        if d < best_d:
+            best, best_d = HOSP_STATE.get(hid, ""), d
+    return best if best in MARKETS else ""
+
+
+def _near(svc, state, q, radius, payer=None, sort="price", pinned=True):
     """Facilities within `radius` miles of an address/ZIP, priced for one insurer if given.
-    Shared by the map (analyst) and the referral finder (care management), so both always
-    show the same number for the same patient. -> (center, rows, err, medicare_rate)."""
+    Shared by /map and /refer, so both always show the same number for the same patient.
+    `pinned` = the user explicitly chose an area, so the geocoder may be biased to it.
+    -> (center, rows, err, radius, medicare_rate, state, moved) where `state` may differ from
+    the one passed in (the searched point wins) and `moved` names it when it does."""
     try:
         rad = min(max(int(radius), 5), 200)
     except (TypeError, ValueError):
         rad = 25
     center = err = None
+    moved = ""
     if (q or "").strip():
         try:
-            center = _geocode(q.strip(), MARKETS[state]["name"])
+            # Bias to the chosen market only when the user actually chose one. Biasing by
+            # default turned '1200 E Broad St, Richmond' into a point in Arizona.
+            center = _geocode(q.strip(), MARKETS[state]["name"] if pinned else "")
         except Exception:
             err = "Couldn't find that address or ZIP. Try a ZIP code or 'street, city'."
+    if center:
+        here = _market_near(center)
+        if here and here != state:
+            state, moved = here, MARKETS[here]["name"]
     rows, med_rate = [], None
     if center:
         d = _analyze(svc["code"], state, payer or None, None, center[0], center[1])
         hosp = d[0]["result"]["hospitals"] if d and d[0]["resolved"] else []
         rows = [h for h in hosp if h.get("distance") is not None and h["distance"] <= rad]
         for h in rows:
-            h["lat"], h["lon"] = STATE["geo"].get(h["id"]) or (None, None)
+            # freestanding/ASC rows carry id None; pricing.py already places them by city
+            # centroid for the distance column, so use the same fallback for the map
+            h["lat"], h["lon"] = (STATE["geo"].get(h["id"]) if h["id"]
+                                  else CITY_COORDS.get(h.get("city"))) or (None, None)
             h["hip_knee"] = STATE["hip_knee"].get(h["id"]) if h["id"] else None
             h["contact"] = STATE["contact"].get(h["id"]) if h["id"] else None
+        # the 'lowest' badge came from the state-wide breakdown and was then radius-filtered
+        # away, so a radius search often had no highlighted row at all. Re-flag inside the
+        # radius, and never crown a row price_stats already flagged as a likely data error.
+        for h in rows:
+            h["cheapest"] = False
+        sane = [h for h in rows if h["price"] is not None and h.get("outlier") != "low"]
+        if sane:
+            min(sane, key=lambda h: (h["price"], h["distance"], h["name"]))["cheapest"] = True
         # a facility with no published rate for THIS payer sorts last, never first
         big = 1e12
+        # Every sort ends in (distance, name) so it is a TOTAL order. Without it, the many
+        # facilities that share one payer's median price tied, the underlying row order was not
+        # stable across requests, and the same patient lookup ranked a different facility #1 on
+        # each refresh -- so a link shared between two people at the desk showed two answers.
+        def tie(h):
+            return (h["distance"], h["name"])
         if sort == "dist":
-            rows.sort(key=lambda h: h["distance"])
+            rows.sort(key=lambda h: tie(h))
         elif sort == "quality":
             # lowest complication rate first; unscored facilities after the scored ones
-            rows.sort(key=lambda h: (h["hip_knee"]["rate"] if h.get("hip_knee") else big, h["distance"]))
+            rows.sort(key=lambda h: (h["hip_knee"]["rate"] if h.get("hip_knee") else big,) + tie(h))
         else:
-            rows.sort(key=lambda h: h["price"] if h["price"] is not None else big)
+            rows.sort(key=lambda h: (h.get("outlier") == "low",
+                                     h["price"] if h["price"] is not None else big) + tie(h))
         med_rate, _ = get_medicare(STATE["con"], svc["code"], svc["type"])
-    return center, rows, err, rad, med_rate
+    return center, rows, err, rad, med_rate, state, moved
 
 
 @app.get("/map", response_class=HTMLResponse)
@@ -855,14 +910,17 @@ def near_map(request: Request, code: str = "", q: str = "", radius: str = "25", 
     svc = _svc(code)
     state, metro, _ = _area(metro)
     sel = payer if payer in PAYER_LIST else ""
-    center, rows, err, rad, med_rate = _near(svc, state, q, radius, sel, sort)
-    ded_v, coins_v = _money_in(ded), _money_in(coins)
+    center, rows, err, rad, med_rate, state, moved = _near(svc, state, q, radius, sel, sort,
+                                                           pinned=bool(metro))
+    if moved:
+        metro = ""
+    ded_v, coins_v = _money_in(ded), _pct_in(coins)
     for h in rows:
         h["patient"] = _patient_cost(h["price"], ded_v, coins_v)
     return templates.TemplateResponse(request, "map.html", {
         "svc": svc, "q": q, "radius": rad, "sort": sort, "center": center, "err": err, "rows": rows,
-        "medicare": med_rate, "radii": [5, 10, 25, 50, 100], "groups": _groups(), "cat_labels": CAT_LABELS,
-        "payers": PAYER_LIST, "sel": sel, "ded": ded, "coins": coins,
+        "medicare": med_rate, "radii": _radii(rad), "groups": _groups(), "cat_labels": CAT_LABELS,
+        "payers": PAYER_LIST, "sel": sel, "ded": ded, "coins": coins, "moved": moved,
         "brand": BRAND, "nav": "map", **_area_ctx(state, metro), "own_ids": OWN_IDS,
         "data_refreshed": DATA_REFRESHED})
 
@@ -875,8 +933,11 @@ def refer(request: Request, code: str = "", q: str = "", radius: str = "25", met
     svc = _svc(code)
     state, metro, _ = _area(metro)
     sel = payer if payer in PAYER_LIST else ""
-    center, rows, err, rad, med_rate = _near(svc, state, q, radius, sel, sort)
-    ded_v, coins_v = _money_in(ded), _money_in(coins)
+    center, rows, err, rad, med_rate, state, moved = _near(svc, state, q, radius, sel, sort,
+                                                           pinned=bool(metro))
+    if moved:
+        metro = ""
+    ded_v, coins_v = _money_in(ded), _pct_in(coins)
     for h in rows:
         h["patient"] = _patient_cost(h["price"], ded_v, coins_v)
     try:
@@ -886,8 +947,8 @@ def refer(request: Request, code: str = "", q: str = "", radius: str = "25", met
     shown, more = rows[:top], max(0, len(rows) - top)
     return templates.TemplateResponse(request, "refer.html", {
         "svc": svc, "q": q, "radius": rad, "sort": sort, "center": center, "err": err,
-        "rows": shown, "more": more, "n": top, "medicare": med_rate,
-        "radii": [5, 10, 25, 50, 100], "groups": _groups(), "cat_labels": CAT_LABELS,
+        "rows": shown, "more": more, "n": top, "medicare": med_rate, "moved": moved,
+        "radii": _radii(rad), "groups": _groups(), "cat_labels": CAT_LABELS,
         "payers": PAYER_LIST, "sel": sel, "ded": ded, "coins": coins,
         "brand": BRAND, "nav": "refer", **_area_ctx(state, metro), "own_ids": OWN_IDS,
         "data_refreshed": DATA_REFRESHED})

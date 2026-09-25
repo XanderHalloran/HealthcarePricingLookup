@@ -13,10 +13,10 @@
   .opt { display:grid; grid-template-columns:44px 1fr auto; gap:0 16px; align-items:start;
          background:var(--white); border:1px solid var(--line); border-radius:var(--r-sm);
          padding:16px 18px; margin-top:12px; }
-  .opt.own { border-color:#b45309; box-shadow:inset 3px 0 0 #b45309; }
+  .opt.own { border-color:var(--h-teal, #b45309); box-shadow:inset 3px 0 0 var(--h-teal, #b45309); }
   .opt .rk { width:34px; height:34px; border-radius:50%; background:var(--forest); color:#fff;
              font-weight:700; font-size:15px; display:flex; align-items:center; justify-content:center; }
-  .opt.own .rk { background:#b45309; }
+  .opt.own .rk { background:var(--h-teal, #b45309); }
   .opt h3 { margin:0 0 2px; font-size:17px; color:var(--ink); line-height:1.25; }
   .opt .meta { font-size:14px; color:var(--body); line-height:1.5; }
   .opt .meta a { color:var(--forest); }
@@ -28,13 +28,25 @@
   .chip { font-size:12px; padding:2px 9px; border-radius:9999px; background:var(--sage); color:var(--body); }
   .chip.good { background:var(--green-pale); color:#1a7f37; }
   .chip.bad { background:#fdecea; color:#b42318; }
-  .chip.own { background:#fff2e0; color:#92400e; font-weight:600; }
+  .chip.own { background:#E2F1EF; color:var(--h-teal, #b45309); font-weight:600; }
+  /* _styles.html defines .chip as an interactive pill (cursor:pointer + a :hover rule that
+     outranks a bare .chip here). These are static badges -- stop them looking clickable. */
+  .chips .chip { cursor:default; }
+  .chips .chip:hover { background:var(--sage); border-color:transparent; color:var(--body); }
+  .chips .chip.good:hover { background:#E2F1EF; color:var(--h-teal, #b45309); }
+  .chips .chip.bad:hover { background:#fdecea; color:#b42318; }
+  .chips .chip.own:hover { background:#E2F1EF; color:var(--h-teal, #b45309); }
+  /* the printed sheet is what leaves the building: it has to say what it is a quote for */
+  .psheet { display:none; }
+  .moved { background:#E7F1FA; border:1px solid #B6D3EC; color:var(--h-navy, var(--forest)); border-radius:var(--r-sm);
+           padding:9px 13px; margin-top:12px; font-size:13.5px; }
   .acts { display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; }
   .rf-note { font-size:13px; color:var(--mute); margin-top:14px; max-width:70ch; }
   .sortbar { font-size:13px; color:var(--mute); margin-top:14px; }
   .sortbar a { margin-left:6px; }
   @media print {
-    .payerbar, .acts, .onav, .sortbar, .refreshed, .rf-lede { display:none !important; }
+    .payerbar, .acts, .onav, .sortbar, .refreshed, .rf-lede, .moved { display:none !important; }
+    .psheet { display:block; margin-bottom:14px; font-size:13px; }
     .opt { break-inside:avoid; border:1px solid #999; box-shadow:none; }
     body { background:#fff; }
   }
@@ -55,35 +67,54 @@
   </div>
 
   <form class="payerbar card" method="get" action="/refer" role="group" aria-label="Find a facility for a patient">
+    <span class="pbf">
     <label class="pb-lab" for="code"><b>Procedure</b></label>
     <select id="code" name="code">
       {% for cat, items in groups %}<optgroup label="{{ cat_labels.get(cat, cat) }}">
         {% for s in items %}<option value="{{ s.code }}" {% if s.code == svc.code %}selected{% endif %}>{{ s.desc }}</option>{% endfor %}
       </optgroup>{% endfor %}
     </select>
+    </span>
     <span class="bar-sep"></span>
+    <span class="pbf">
     <label class="pb-lab" for="q"><b>Patient ZIP</b></label>
     <input type="text" id="q" name="q" size="16" placeholder="85015" value="{{ q }}" required>
+    </span>
+    <span class="pbf">
     <label class="pb-lab" for="payer"><b>Insurance</b></label>
     <select id="payer" name="payer">
       <option value="">— any / not known —</option>
       {% for p in payers %}<option value="{{ p }}" {% if p == sel %}selected{% endif %}>{{ p }}</option>{% endfor %}
     </select>
+    </span>
+    <span class="pbf">
     <label class="pb-lab" for="radius"><b>Within</b></label>
     <select id="radius" name="radius">
       {% for r in radii %}<option value="{{ r }}" {% if r == radius %}selected{% endif %}>{{ r }} mi</option>{% endfor %}
     </select>
+    </span>
     <span class="bar-sep"></span>
+    <span class="pbf">
     <label class="pb-lab" for="ded"><b>Deductible left</b></label>
     <input type="text" id="ded" name="ded" size="7" inputmode="numeric" placeholder="$" value="{{ ded }}">
+    </span>
+    <span class="pbf">
     <label class="pb-lab" for="coins"><b>Coinsurance</b></label>
     <input type="text" id="coins" name="coins" size="4" inputmode="numeric" placeholder="20" value="{{ coins }}">
-    <input type="hidden" name="metro" value="{{ metro or state }}">
+    </span>
+    <span class="pbf">
+    <label class="pb-lab" for="metro"><b>State</b></label>
+    <select id="metro" name="metro">
+      {% include "_area_options.html" %}
+    </select>
+    </span>
     <input type="hidden" name="sort" value="{{ sort }}">
     <button class="btn-mini" type="submit">Find facilities</button>
   </form>
 
   {% if err %}<div class="card" style="margin-top:16px;color:#b42318">{{ err }}</div>{% endif %}
+  {% if moved %}<div class="moved"><b>{{ q }}</b> is in {{ moved }} — showing {{ moved }} facilities.
+    Use <b>State</b> above to override.</div>{% endif %}
 
   {% if center and not rows %}
     <div class="card" style="margin-top:16px">No facility within {{ radius }} miles publishes a price
@@ -92,6 +123,11 @@
   {% endif %}
 
   {% if rows %}
+  <div class="psheet">
+    <b>{{ svc.desc }} ({{ svc.type }} {{ svc.code }})</b> — options within {{ radius }} miles of {{ q }}{% if sel %},
+    priced for {{ sel }}{% endif %}. Prepared {{ data_refreshed }}.
+    {% if ded or coins %}Patient estimate applies ${{ ded or 0 }} of remaining deductible then {{ coins or 0 }}% coinsurance.{% endif %}
+  </div>
   <div class="sortbar">Showing {{ rows|length }} of {{ rows|length + more }} within {{ radius }} miles ·
     Sort:
     <a class="btn-mini{% if sort == 'price' %} on{% endif %}" href="/refer?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&payer={{ sel|urlencode }}&ded={{ ded }}&coins={{ coins }}&metro={{ metro or state }}&sort=price">Lowest cost</a>
@@ -117,11 +153,12 @@
           {% if own_ids and h.id in own_ids %}<span class="chip own">{{ brand.own.label }} facility</span>{% endif %}
           <span class="chip">{{ h.type }}</span>
           {% if h.hip_knee %}<span class="chip {{ 'good' if h.hip_knee.compare == 'Better' else ('bad' if h.hip_knee.compare == 'Worse' else '') }}">hip/knee complications {{ h.hip_knee.rate }}%{% if h.hip_knee.compare != 'No Different' %} — {{ h.hip_knee.compare }} than national{% endif %}</span>{% endif %}
-          {% if h.outlier == 'high' %}<span class="chip bad">published price looks like a gross charge</span>{% endif %}
+          {% if h.outlier == 'high' %}<span class="chip bad">published price is a gross charge — no patient estimate shown</span>
+          {% elif h.outlier == 'low' %}<span class="chip bad">price looks like a data error</span>{% endif %}
         </div>
       </div>
       <div class="money">
-        {% if h.patient is not none %}
+        {% if h.patient is not none and h.outlier != 'high' %}
           <span class="lab">Patient pays approx.</span><b>${{ '{:,.0f}'.format(h.patient) }}</b>
           <div class="sub2">of ${{ '{:,.0f}'.format(h.price) }} {{ sel if sel else 'typical' }} rate</div>
         {% elif h.price is not none %}
@@ -136,6 +173,8 @@
   </div>
 
   <div class="acts">
+    {% if more %}<a class="btn-mini" href="/refer?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&payer={{ sel|urlencode }}&ded={{ ded|urlencode }}&coins={{ coins|urlencode }}&metro={{ metro or state }}&sort={{ sort }}&n=10">Show more options</a>{% endif %}
+    <a class="btn-mini" href="/map?code={{ svc.code }}&q={{ q|urlencode }}&radius={{ radius }}&payer={{ sel|urlencode }}&ded={{ ded|urlencode }}&coins={{ coins|urlencode }}&metro={{ metro or state }}">Back to the map</a>
     <button class="btn-mini" type="button" onclick="copyOptions(this)">Copy these options</button>
     <button class="btn-mini" type="button" onclick="window.print()">Print</button>
   </div>

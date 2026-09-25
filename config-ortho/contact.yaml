@@ -154,9 +154,9 @@ hospitals:
     zip: "85006"
     phone: "(602) 839-2000"
   BANNER-UMC-SOUTH:
-    address: "1625 North Campbell Avenue"
+    address: "2800 East Ajo Way"
     city: "Tucson"
-    zip: "85719"
+    zip: "85713"
     phone: "(520) 874-4189"
   BANNER-UMC-TUCSON:
     address: "1625 North Campbell Avenue"
@@ -359,9 +359,9 @@ hospitals:
     zip: "24501"
     phone: "(434) 200-4789"
   CENTRA-VIRGINIA-BAPTIST:
-    address: "1901 Tate Springs Road"
+    address: "3300 Rivermont Avenue"
     city: "Lynchburg"
-    zip: "24501"
+    zip: "24503"
     phone: "(434) 200-4789"
   CHESAPEAKE-REGIONAL:
     address: "736 Battlefield Blvd, North"
@@ -384,12 +384,12 @@ hospitals:
     zip: "85015"
     phone: "(602) 795-6020"
   COREWELL-BLODGETT:
-    address: "100 Michigan St Ne"
+    address: "1840 Wealthy Street Southeast"
     city: "Grand Rapids"
-    zip: "49503"
+    zip: "49506"
     phone: "(616) 391-1774"
   COREWELL-BUTTERWORTH:
-    address: "100 Michigan St Ne"
+    address: "100 Michigan Street Northeast"
     city: "Grand Rapids"
     zip: "49503"
     phone: "(616) 391-1774"
@@ -559,9 +559,9 @@ hospitals:
     zip: "33462"
     phone: "(561) 965-7300"
   HCA-JOHNSTON-WILLIS:
-    address: "7101 Jahnke Road"
-    city: "Richmond"
-    zip: "23225"
+    address: "1401 Johnston Willis Drive"
+    city: "North Chesterfield"
+    zip: "23235"
     phone: "(804) 483-0000"
   HCA-KENDALL:
     address: "11750 Bird Rd"
@@ -654,9 +654,9 @@ hospitals:
     zip: "33470"
     phone: "(561) 798-3300"
   HCA-PARHAM:
-    address: "1602 Skipwith Road"
+    address: "7700 East Parham Road"
     city: "Richmond"
-    zip: "23229"
+    zip: "23294"
     phone: "(804) 289-4500"
   HCA-RESTON:
     address: "1850 Town Center Parkway"
@@ -664,9 +664,9 @@ hospitals:
     zip: "20190"
     phone: "(703) 689-9000"
   HCA-RETREAT:
-    address: "1602 Skipwith Road"
+    address: "2621 Grove Avenue"
     city: "Richmond"
-    zip: "23229"
+    zip: "23220"
     phone: "(804) 289-4500"
   HCA-SARASOTA-DOCTORS:
     address: "5731 Bee Ridge Rd"
@@ -759,12 +759,12 @@ hospitals:
     zip: "48038"
     phone: "(586) 263-2300"
   HENRYFORD-PROVIDENCE-NOVI:
-    address: "16001 W Nine Mile Rd"
-    city: "Southfield"
-    zip: "48075"
+    address: "47601 Grand River Avenue"
+    city: "Novi"
+    zip: "48374"
     phone: "(248) 849-3000"
   HENRYFORD-PROVIDENCE-SOUTHFIELD:
-    address: "16001 W Nine Mile Rd"
+    address: "16001 West 9 Mile Road"
     city: "Southfield"
     zip: "48075"
     phone: "(248) 849-3000"
@@ -1079,9 +1079,9 @@ hospitals:
     zip: "85643"
     phone: "(520) 384-3541"
   NORTHWEST-HOUGHTON:
-    address: "6200 North La Cholla Boulevard"
+    address: "2200 South Houghton Road"
     city: "Tucson"
-    zip: "85741"
+    zip: "85748"
     phone: "(520) 469-8100"
   NORTHWEST-TUCSON:
     address: "6200 North La Cholla Boulevard"
@@ -1234,9 +1234,9 @@ hospitals:
     zip: "48033"
     phone: "(248) 357-3360"
   SUMMIT-SHOW-LOW:
-    address: "1800 East Florence Boulevard"
-    city: "Casa Grande"
-    zip: "85122"
+    address: "1150 East Deuce of Clubs"
+    city: "Show Low"
+    zip: "85901"
     phone: "(520) 381-6300"
   SURGEONSCHOICE-SOUTHFIELD:
     address: "22401 Foster Winter Drive"
@@ -1359,9 +1359,9 @@ hospitals:
     zip: "34208"
     phone: "(941) 746-5111"
   UHS-NN-SIERRA:
-    address: "2375 E Prater Way"
-    city: "Sparks"
-    zip: "89434"
+    address: "6500 Longley Lane"
+    city: "Reno"
+    zip: "89511"
     phone: "(775) 331-7000"
   UHS-NNMC:
     address: "2375 E Prater Way"

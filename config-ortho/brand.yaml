@@ -3,7 +3,7 @@ profile: ortho
 name: "Orthopedic Price Intelligence"
 short: "Ortho Price Intel"
 tagline: "What every hospital in Arizona, Virginia, Nevada, Michigan and Florida publishes for orthopedic and spine care: by procedure, by payer, and by site of care, benchmarked to Medicare and to our own facilities."
-audience: "Built for contracting, network strategy, and ASC development at HOPCo."
+audience: "Built for HOPCo: care management placing referrals, and contracting and network strategy."
 # Our own facilities: badged in every table and compared against the market on /position.
 # Payers hidden from this site (dropdown, rates matrix, CSV, position page). Data still ingests.
 exclude_payers: [Medicaid]

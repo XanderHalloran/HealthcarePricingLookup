@@ -144,7 +144,10 @@ def payer_matrix(con, rates_dir, payer_dir, code, state, names=None, metro_ids=N
             q = statistics.quantiles(vals, n=4) if len(vals) >= 4 else [vals[0], statistics.median(vals), vals[-1]]
             stats[col] = {"n": len(vals), "min": vals[0], "q1": q[0], "median": statistics.median(vals),
                           "q3": q[2], "max": vals[-1]}
-    out_rows = sorted(rows.values(), key=lambda r: (r["median"] is None, r["median"] or 0))
+    # name breaks the tie: `rows` is keyed by hospital id and filled in query order, which is
+    # not stable between processes, so without it a shared /rates link listed the facilities
+    # that share a median in a different order on someone else's screen.
+    out_rows = sorted(rows.values(), key=lambda r: (r["median"] is None, r["median"] or 0, r["name"]))
     return {"payers": payers, "rows": out_rows, "stats": stats}
 
 
@@ -325,7 +328,8 @@ def lookup(con, rates_dir, code, code_type, state, description="", multiplier=2.
             continue                            # ...nor a Tucson one
         breakdown.append({"id": None, "name": fs["name"], "stars": None, "cash": fs["price"],
                           "median": None, "price": fs["price"], "rate_type": "cash",
-                          "type": fs["type"], "city": fs.get("city", ""), "outlier": None})
+                          "type": fs["type"], "city": fs.get("city", ""), "outlier": None,
+                          "source": fs.get("source", "")})
 
     # Per-facility distance (hospitals by id, freestanding by city centroid).
     if user_loc and geo:
@@ -335,8 +339,13 @@ def lookup(con, rates_dir, code, code_type, state, description="", multiplier=2.
 
     priced = [b for b in breakdown if b["price"] is not None]
     if priced:
-        min(priced, key=lambda b: b["price"])["cheapest"] = True   # 'lowest' badge survives re-sort
-    breakdown.sort(key=lambda b: b["price"] if b["price"] is not None else 1e12)
+        # name breaks the tie here too: when several facilities share the lowest price, which
+        # one wore the 'lowest' badge otherwise changed between processes
+        min(priced, key=lambda b: (b["price"], b["name"]))["cheapest"] = True   # survives re-sort
+    # name breaks the tie: many facilities share one payer's median, and without a total
+    # order the row order varied between identical requests -- so the same lookup ranked a
+    # different facility first on each refresh and a shared link showed two different answers.
+    breakdown.sort(key=lambda b: (b["price"] if b["price"] is not None else 1e12, b["name"]))
     return {
         "code": code, "code_type": code_type, "state": state.upper(),
         "description": description, "payer": payer, "metro": metro,

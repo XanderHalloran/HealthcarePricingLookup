@@ -153,10 +153,153 @@ def test_referral_finder():
         assert k in client.get("/map", params={"code": "73721", "q": "85015"}).text
 
 
+def test_hopco_theme_is_ortho_only():
+    """The recolor is a server-side Jinja gate, not a body class: five ortho templates render
+    <body> with no class, so a class scope would leave them green."""
+    t = client.get("/").text
+    assert "#003A70" in t and "Manrope" in t              # HOPCo navy + typeface
+    for path in ("/rates?code=73721", "/site-of-care?code=73721", "/position", "/methodology",
+                 "/procedure/73721", "/payers", "/bundles?episode=tka", "/map", "/refer"):
+        assert "#003A70" in client.get(path).text, f"{path} did not get the HOPCo theme"
+    # the base sheet had no .fac-t rule at all, so seven ortho pages rendered default tables
+    assert ".fac-t {" in t and ".mute { color:var(--mute); }" in t
+
+
+def test_map_actually_initialises():
+    """Regression: `L.map(id, {})` with no center/zoom never calls setView, so every addLayer
+    defers and `ring.getBounds()` throws -- the map rendered as a blank grey box in production
+    with 0 tiles and 0 markers. Nothing in the old suite caught it, because nothing ran the JS."""
+    webapp._geocode = lambda q, st="": (33.48, -112.07)
+    t = client.get("/map", params={"code": "73721", "q": "85015", "radius": "25"}).text
+    js = t.split("L.map('map'")[1].split(")")[0]
+    assert "center:" in js and "zoom:" in js, f"L.map must be given a view at init, got: {js}"
+    # and the fit must frame the results, not the search ring
+    assert "ring.getBounds()" not in t and "fitBounds(L.latLngBounds(pts)" in t
+
+
+def test_map_never_puts_a_facility_name_into_html():
+    """`|tojson` escapes for the JS string context only. Both divIcon({html}) and
+    bindPopup(string) are innerHTML sinks, and 23 configured names already contain ' or &."""
+    webapp._geocode = lambda q, st="": (33.48, -112.07)
+    t = client.get("/map", params={"code": "73721", "q": "85015"}).text
+    assert "bindPopup" not in t                                   # the sink is gone entirely
+    assert "textContent" in t and "createElement" in t            # markers are built as DOM
+    assert "${f.name}" not in t and "${name}" not in t            # never interpolated into markup
+
+
+def test_zip_picks_the_market_so_four_states_are_not_unreachable():
+    """A Richmond ZIP priced against Arizona returned a confident 'no facility within 25 miles'.
+    The searched point now selects the market from the 301 coordinates already in memory."""
+    assert webapp._market_near((33.48, -112.07)) == "AZ"      # Phoenix
+    assert webapp._market_near((37.54, -77.44)) == "VA"       # Richmond
+    assert webapp._market_near((36.17, -115.14)) == "NV"      # Las Vegas
+    assert webapp._market_near((42.33, -83.05)) == "MI"       # Detroit
+    assert webapp._market_near((25.77, -80.19)) == "FL"       # Miami
+    webapp._geocode = lambda q, st="": (37.54, -77.44)        # a Virginia ZIP, market left at AZ
+    r = client.get("/refer", params={"code": "73721", "q": "23220"})
+    assert r.status_code == 200 and "Virginia" in r.text
+    assert 'name="metro"' in r.text and 'type="hidden" name="metro"' not in r.text   # and correctable
+
+
+def test_coinsurance_is_clamped_before_it_reaches_a_patient():
+    """It arrives from a free-text box and gets multiplied by a price that is read aloud."""
+    assert webapp._pct_in("20") == 20.0
+    assert webapp._pct_in("200") == 100.0        # not 200% of the bill
+    assert webapp._pct_in("-5") == 0.0
+    assert webapp._pct_in("") is None and webapp._pct_in("abc") is None
+    assert webapp._patient_cost(1000, 0, webapp._pct_in("200")) == 1000
+
+
+def test_lowest_badge_is_inside_the_radius_and_never_a_known_error():
+    """The flag came from the state-wide breakdown and was then radius-filtered away, so a
+    radius search often highlighted nothing; and a row flagged 'likely error' could win it."""
+    webapp._geocode = lambda q, st="": (33.48, -112.07)
+    _, rows, _, _, _, _, _ = webapp._near(webapp._svc("73721"), "AZ", "85015", "25")
+    flagged = [h for h in rows if h.get("cheapest")]
+    priced = [h for h in rows if h["price"] is not None and h.get("outlier") != "low"]
+    assert len(flagged) == (1 if priced else 0)        # exactly one badge, and only if earnable
+    if flagged:
+        assert flagged[0]["price"] == min(h["price"] for h in priced)
+        assert flagged[0].get("outlier") != "low"
+    assert not (rows and rows[0].get("outlier") == "low"), "a likely data error must not rank #1"
+
+
+def test_every_priced_row_can_be_pinned_and_phoned():
+    """Freestanding rows carry id None, so geo.get(None) missed and the cheapest option -- which
+    is usually a cash-priced freestanding site -- got no pin while still being counted."""
+    webapp._geocode = lambda q, st="": (33.48, -112.07)
+    _, rows, _, _, _, _, _ = webapp._near(webapp._svc("73721"), "AZ", "85015", "50")
+    nopin = [h["name"] for h in rows if h["lat"] is None]
+    assert not nopin, f"in the table but not on the map: {nopin[:4]}"
+
+
+def test_patient_column_is_not_gated_on_the_first_row():
+    """The whole out-of-pocket column was gated on rows[0].patient, so if the nearest facility
+    had no rate for the chosen plan it vanished for every facility that did."""
+    webapp._geocode = lambda q, st="": (33.48, -112.07)
+    t = client.get("/map", params={"code": "73721", "q": "85015", "ded": "500", "coins": "20"}).text
+    assert "rows[0]" not in t and "Patient pays" in t
+
+
+def test_nav_dropdown_is_not_served_open():
+    """An absolutely-positioned panel covering the search form was the first thing a user saw."""
+    for path in ("/map", "/rates?code=73721", "/payers", "/bundles?episode=tka"):
+        t = client.get(path).text
+        assert "<details class=\"onav-menu\">" in t, f"{path} serves the menu open"
+    assert "Escape" in client.get("/map").text          # and it can be dismissed
+
+
 def test_inline_script_parses():
     if not shutil.which("node"):
         return
     js = re.findall(r"<script>(.*?)</script>", client.get("/").text, re.S)[-1]
+    with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False, encoding="utf-8") as f:
+        f.write(js)
+    res = subprocess.run(["node", "--check", f.name], capture_output=True, text=True)
+    os.remove(f.name)
+    assert res.returncode == 0, res.stderr[:400]
+
+
+def test_no_facility_carries_another_facilitys_address():
+    """contact.yaml was built by matching CMS records to the manifest, and for multi-campus
+    systems the match fell through to a sibling: 19 facilities across 9 addresses ended up
+    with a different hospital's street address. SUMMIT-SHOW-LOW carried Banner Casa Grande's,
+    221 km away. Two campuses in one building may share an address; two that are a kilometre
+    apart may not."""
+    import math
+    import yaml
+    from collections import defaultdict
+
+    def load(n):
+        d = yaml.safe_load(open(f"config-ortho/{n}", encoding="utf-8")) or {}
+        return d.get("hospitals", d)
+
+    contact, geo = load("contact.yaml"), load("geo.yaml")
+
+    def km(a, b):
+        p1, p2 = math.radians(a[0]), math.radians(b[0])
+        h = (math.sin((p2 - p1) / 2) ** 2
+             + math.cos(p1) * math.cos(p2) * math.sin(math.radians(b[1] - a[1]) / 2) ** 2)
+        return 2 * 6371.0 * math.asin(math.sqrt(h))
+
+    by = defaultdict(list)
+    for k, v in contact.items():
+        if v.get("address"):
+            by[(v["address"].strip().lower(), v.get("city", "").strip().lower())].append(k)
+    bad = []
+    for addr, ids in by.items():
+        pts = [geo[i] for i in ids if geo.get(i)]
+        if len(ids) > 1 and max((km(p, q) for p in pts for q in pts), default=0) > 1.0:
+            bad.append(f"{addr[0]} shared by {ids}")
+    assert not bad, "facilities share an address but are far apart: " + "; ".join(bad)
+
+
+def test_map_inline_script_parses():
+    if not shutil.which("node"):
+        return
+    webapp._geocode = lambda q, st="": (33.48, -112.07)
+    t = client.get("/map", params={"code": "73721", "q": "85015"}).text
+    js = re.findall(r"<script>(.*?)</script>", t, re.S)[-1]
     with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False, encoding="utf-8") as f:
         f.write(js)
     res = subprocess.run(["node", "--check", f.name], capture_output=True, text=True)

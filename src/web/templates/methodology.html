@@ -139,7 +139,7 @@
       <text class="w" x="760" y="344">hospital outpatient vs ASC</text>
 
       <rect class="box out" x="748" y="376" width="230" height="52"/>
-      <text class="t w" x="760" y="398" style="fill:#fff">Bill analysis &amp; letter</text>
+      <text class="t w" x="760" y="398" style="fill:#fff">{% if brand and brand.profile == 'ortho' %}Payer &amp; site-of-care views{% else %}Bill analysis &amp; letter{% endif %}</text>
       <text class="w" x="760" y="416">paste a bill, get the numbers</text>
 
       <!-- arrows: sources -> pipeline (routed through the lane gap at x=263) -->

@@ -282,3 +282,154 @@
   @media (max-width:720px){ .shop { grid-template-columns:1fr; } .picker { position:static; max-height:none; }
     .sf-cols { grid-template-columns:1fr; } .how { grid-template-columns:1fr; } }
 </style>
+{% if brand and brand.profile == 'ortho' %}
+{# ---------------------------------------------------------------------------
+   HOPCo theme. Emitted ONLY on the ortho profile, so healthcare.traqqit.com's
+   CSS stays byte-identical. Palette scraped from hopco.com's live theme CSS:
+   #003A70 headings navy, #0C71C3 links, #1B365D footer navy, #00ADEF CTA cyan,
+   #00756A teal. Typeface Manrope, as hopco.com uses.
+   Gated server-side rather than on body.ortho: rates/site/position/procedure/
+   methodology render <body> with no class, so a class scope would miss them.
+   This block is LAST in the file, so equal-specificity rules above it lose.
+   --------------------------------------------------------------------------- #}
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* HOPCo brand, verbatim from hopco.com */
+    --h-navy:#003A70; --h-blue:#0C71C3; --h-slate:#1B365D; --h-cyan:#00ADEF;
+    --h-teal:#00756A; --h-deep:#07285E;
+    /* the existing tokens, remapped: every component inherits the new palette for free */
+    --forest:var(--h-navy); --green:var(--h-cyan); --green-hover:#33BDF2; --green-pale:#E7F1FA;
+    --sage:#EEF3F8; --ink:#0D1B2A; --body:#44566B; --mute:#6B7C90; --line:#CBD8E4;
+    --positive:var(--h-teal); --neg:#B42318; --warn-bg:#FFF4E0; --warn-ink:#7A4A0B;
+    --accent:var(--h-blue);            /* .onav a.on reads var(--accent,#1a7f37): green fallback, now defined */
+    --r:10px; --r-sm:8px;              /* enterprise corners, not consumer pill */
+    --shadow:0 1px 2px rgba(7,40,94,.06), 0 1px 3px rgba(7,40,94,.10);
+  }
+  body { font-family:Manrope, 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  main { max-width:1180px; padding-top:0; }
+  a { color:var(--h-blue); }
+
+  /* ---- app header: a product bar, not a row of links ---- */
+  /* 100vw includes the scrollbar gutter while main is centred in the narrower visible area,
+     so the bled bar overhangs the right edge and every page gets a horizontal scrollbar.
+     overflow-x:clip rather than hidden: clip creates no scroll container, so position:sticky
+     descendants keep sticking to the viewport. 570 = main's CONTENT box, so the wordmark
+     lines up with the page title rather than sitting 20px to its left. */
+  html, body { overflow-x:clip; }   /* html too: clipping body alone still leaves the root scrollable */
+  .onav { background:var(--h-navy); margin:0 calc(50% - 50vw) 20px; padding:0 max(20px, calc(50vw - 570px));
+          gap:2px; min-height:56px; box-shadow:inset 0 -1px 0 rgba(255,255,255,.12); }
+  .onav-brand { color:#fff !important; font-weight:800; font-size:16px; letter-spacing:-.01em;
+                margin-right:14px; padding:8px 0; }
+  .onav > a, .onav-menu > summary { color:#C9DCF0; padding:17px 13px; border-radius:0; font-size:14px; }
+  .onav > a:hover, .onav-menu > summary:hover { color:#fff; background:rgba(255,255,255,.08); }
+  .onav > a.on, .onav-menu > summary.on { color:#fff !important; background:rgba(255,255,255,.10);
+                box-shadow:inset 0 -3px 0 var(--h-cyan); border-bottom:0 !important; }
+  .onav-note { color:#9FBCDA; font-size:12px; }
+  .onav-drop { margin-top:0; border:0; border-radius:0 0 var(--r) var(--r); box-shadow:0 12px 28px rgba(7,40,94,.22); padding:8px; }
+  .onav-drop a { color:var(--body) !important; background:none !important; box-shadow:none !important; padding:9px 12px; border-radius:6px; }
+  .onav-drop a:hover { background:var(--green-pale); color:var(--h-navy) !important; }
+  .onav-drop a.on { color:var(--h-navy) !important; background:var(--green-pale) !important; font-weight:700; }
+
+  /* ---- type ---- */
+  .hero { margin-bottom:4px; }
+  .hero h1 { font-weight:800; font-size:clamp(24px,3.2vw,32px); color:var(--h-navy); letter-spacing:-.02em; }
+  .hero .sub { font-size:15px; }
+  .hero .market { background:var(--green-pale); color:var(--h-navy); border-radius:6px; font-size:12px; }
+  h2, h3 { color:var(--h-navy); }
+
+  /* ---- surfaces ---- */
+  .card { border:1px solid var(--line); box-shadow:var(--shadow); padding:20px; }
+  .fac-h { color:var(--h-slate); letter-spacing:.06em; }
+  .disclaimer { background:#EDF3FA; color:var(--h-deep);
+                border:1px solid #CBD8E4; border-left:3px solid var(--h-blue); border-radius:var(--r-sm); }
+
+  /* ---- controls: square, dense, unmistakably interactive ---- */
+  .payerbar { border-radius:var(--r); gap:10px 14px; padding:12px 16px; }
+  .pbf { display:flex; align-items:center; gap:8px; }        /* a label and its field wrap as one */
+  .pbf select, .pbf input[type=text] { min-height:40px; }
+  /* sort links are secondary next to Search; navy-filled they read as the primary action */
+  .srt .btn-mini, .sortbar .btn-mini { background:#fff; color:var(--h-navy); border-color:var(--line); }
+  .srt .btn-mini:hover, .sortbar .btn-mini:hover { background:var(--green-pale); border-color:var(--h-blue); color:var(--h-navy); }
+  .srt .btn-mini.on, .sortbar .btn-mini.on { background:var(--h-navy); color:#fff; border-color:var(--h-navy); }
+  .payerbar select, .payerbar input[type=text], input[type=text] {
+      border:1px solid var(--line); border-radius:6px; background:#fff; color:var(--ink); }
+  .payerbar select:hover, .payerbar input[type=text]:hover { border-color:var(--h-blue); }
+  .pb-lab b { color:var(--h-slate); font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.04em; }
+  .btn-mini { border-radius:6px; background:var(--h-navy); border-color:var(--h-navy); color:#fff; padding:9px 16px; }
+  .btn-mini:hover { background:var(--h-blue); border-color:var(--h-blue); color:#fff; }
+  .btn-mini.on { background:var(--green-pale); border-color:var(--h-blue); color:var(--h-navy); }
+  .btn, .btn-primary, .btn-ghost { border-radius:6px; }
+  .btn-primary { background:var(--h-navy); color:#fff; } .btn-primary:hover { background:var(--h-blue); }
+  .btn-ghost { background:#fff; border:1px solid var(--line); color:var(--h-navy); }
+  .pill, .chip, .toggle, .more-btn, .sortbtn { border-radius:6px; }
+  .sortbtn.on { background:var(--h-navy); color:#fff; border-color:var(--h-navy); }
+  .seg { border-radius:var(--r); border:1px solid var(--line); }
+  .seg label { border-radius:6px; }
+  #tab-shop:checked ~ .seg label[for=tab-shop], #tab-bill:checked ~ .seg label[for=tab-bill] { color:#fff; }
+
+  /* ---- data ---- */
+  .fac-table th, .fac-t th { color:var(--h-slate); }
+  .fac-table tr.best td, .nm tr.best td { background:var(--green-pale); box-shadow:inset 3px 0 0 var(--h-blue); }
+  .fac-table tr.best td.money { color:var(--h-navy); }
+  .badge { background:var(--h-navy); color:#fff; border-radius:4px; }   /* cyan on navy fails contrast; white passes */
+  .badge.own { background:var(--h-teal); color:#fff; }
+  .how-n { background:var(--h-navy); color:#fff; border-radius:6px; }
+  .savings { background:var(--h-slate); color:#D6E6F5; }
+  .sv-lab { color:var(--h-cyan); } .sv-save .sv-big { color:var(--h-cyan); }
+  .hk.good, .chip.good { color:var(--h-teal); }
+  .chip.good { background:#E2F1EF; }
+  .num.target .v, .ask-amt { color:var(--h-navy); }
+  .spec-bar { background:linear-gradient(90deg,#00756A 0%, #35A99C 22%, #E9B949 56%, #E08A2E 78%, #B42318 100%); }
+  .pin.fair { color:var(--h-navy); } .pin.fair .stem { background:var(--h-navy); }
+  .iqr { background:rgba(0,58,112,.10); border-color:var(--h-navy); }
+  .spec-ends .iqr-key { color:var(--h-navy); }
+  .mini-copy { background:var(--green-pale); border-color:var(--h-blue); color:var(--h-navy); border-radius:6px; }
+  .mini-copy:hover { background:#D3E6F7; }
+  .res:hover, .res:focus, .pick:has(input:checked) { background:var(--green-pale); }
+  .pick input { accent-color:var(--h-blue); }
+  .mlchip { background:var(--green-pale); color:var(--h-navy); border-radius:6px; }
+  .mlchip button { color:var(--h-navy); }
+  .ns-tag { background:var(--h-navy); color:#fff; border-radius:4px; }
+  .next-step { border-color:var(--h-blue); }
+  .sf-col a, .pill { color:var(--h-blue); }
+  a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+      outline-color:var(--h-blue); border-radius:4px; }
+  .issue.info { border-color:var(--h-blue); }
+  .charity-tier.good { background:#E2F1EF; color:var(--h-teal); }
+
+  /* the home page pointed at five contracting analyses and nothing at the referral tool */
+  .frontdoor { margin-top:16px; }
+  .fd-go { display:block; background:var(--h-navy); color:#fff !important; text-decoration:none;
+           border-radius:var(--r); padding:16px 20px; max-width:640px;
+           box-shadow:0 2px 10px rgba(7,40,94,.18); }
+  .fd-go:hover { background:var(--h-blue); }
+  .fd-go b { display:block; font-size:18px; font-weight:800; letter-spacing:-.01em; }
+  .fd-go span { display:block; margin-top:4px; font-size:13.5px; color:#C9DCF0; line-height:1.5; }
+  .fd-alt { margin:8px 0 0; font-size:13px; color:var(--mute); }
+
+  /* ---- three base defects, fixed for ortho only ---- */
+  /* 1. there is no `.fac-t` rule in this file, only `.fac-table` -- yet /rates, /payers,
+        /position, /bundles, /site-of-care, /methodology and /map all use `class="fac-t"`.
+        Seven pages have been rendering browser-default tables. */
+  .fac-t { width:100%; border-collapse:collapse; font-size:13px; }
+  .fac-t th { text-align:left; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.03em;
+              color:var(--h-slate); padding:0 10px 7px; border-bottom:1px solid var(--line); white-space:nowrap; }
+  .fac-t td { padding:8px 10px; border-bottom:1px solid var(--sage); vertical-align:middle; }
+  .fac-t tr:last-child td { border-bottom:0; }
+  .fac-t th.r, .fac-t td.r { text-align:right; font-variant-numeric:tabular-nums; }
+  .fac-t caption { caption-side:top; padding-bottom:8px; }
+  /* 2. `.mute` is only ever defined as `.fac-table .mute`, so 27 standalone uses -- including
+        the facility phone number -- rendered at full body ink. */
+  .mute { color:var(--mute); }
+  .fac-t .mute, .fac-table .mute { color:var(--mute); }
+  /* 3. the deliberate 44px tap target missed the sort links: `min-height` does nothing on an
+        inline box, and `.btn-mini` never set display. */
+  .btn-mini { display:inline-block; }
+  /* the 7 `font:` shorthands above hardcode Inter and so beat `body{font-family:Manrope}` */
+  .btn, .btn-mini, .btn-copy, .mini-copy, .sortbtn, .more-btn, .toggle,
+  input, select, textarea, button { font-family:Manrope, 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+  /* Manrope stops at 800; ask for it explicitly rather than relying on a 900 clamp */
+  .hero h1, .card .code, .ask-amt, .num .v, .fac-table td.money, .sv-big, .pin .val { font-weight:800; }
+</style>
+{% endif %}

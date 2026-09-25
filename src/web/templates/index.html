@@ -72,12 +72,12 @@
     <p class="sub">Compare hospital prices near you and negotiate your bill — with an AI coach and a ready-to-send appeal letter.</p>
     {% endif %}
     {% set _ml = (metro_list|selectattr('key','equalto',metro)|list) %}
-    <span class="market" id="market">📍 {{ _ml[0].label if _ml else 'All ' ~ state_name }} — {{ n_hosp }} hospitals statewide</span>
+    <span class="market" id="market">{% if brand.profile != 'ortho' %}📍 {% endif %}{{ _ml[0].label if _ml else 'All ' ~ state_name }} — {{ n_hosp }} hospitals statewide</span>
     <div class="trust">
       {% if brand.profile == 'ortho' %}
-      <span>📊 {{ payer_list|length }} payers' contracted rates</span>
-      <span>🎯 Medicare OPPS · IPPS · ASC benchmarks</span>
-      <span>🟢 {{ brand.own.label if brand.own else 'Our' }} facilities flagged</span>
+      <span>{{ payer_list|length }} payers' contracted rates</span>
+      <span>Medicare OPPS · IPPS · ASC benchmarks</span>
+      <span>{{ brand.own.label if brand.own else 'Our' }} facilities flagged</span>
       {% else %}
       <span>🔒 Free &amp; no signup</span>
       <span>🏥 {{ n_hosp }} {{ state_name }} hospitals</span>
@@ -85,6 +85,17 @@
       <span>💬 AI negotiation coach</span>
       {% endif %}
     </div>
+    {% if brand.profile == 'ortho' %}
+    <div class="frontdoor">
+      <a class="fd-go" href="/map">
+        <b>Find a facility for a referral →</b>
+        <span>Procedure, the patient's ZIP and their plan. Ranked options on a map, with the
+          phone number and an out-of-pocket estimate.</span>
+      </a>
+      <p class="fd-alt">Doing contracting or network analysis? Everything below, and under
+        <b>Analyses</b>, is the market view.</p>
+    </div>
+    {% endif %}
   </div>
   {% if brand.profile == 'ortho' %}
   <div class="disclaimer"><strong>Benchmarking data.</strong> Facility-published rates from CMS machine-readable files and
@@ -151,8 +162,8 @@
     <input type="radio" name="tab" id="tab-shop" {% if mode != 'bill' %}checked{% endif %}>
     <input type="radio" name="tab" id="tab-bill" {% if mode == 'bill' %}checked{% endif %}>
     <div class="seg">
-      <label for="tab-shop">{% if brand.profile == 'ortho' %}🔎 Market view{% else %}🔎 Shop a price{% endif %}</label>
-      <label for="tab-bill">{% if brand.profile == 'ortho' %}🧾 Price a code list{% else %}🧾 Analyze my bill{% endif %}</label>
+      <label for="tab-shop">{% if brand.profile == 'ortho' %}Market view{% else %}🔎 Shop a price{% endif %}</label>
+      <label for="tab-bill">{% if brand.profile == 'ortho' %}Price a code list{% else %}🧾 Analyze my bill{% endif %}</label>
     </div>
 
     <div class="panel" id="panel-shop">
@@ -594,14 +605,14 @@
     ['state-b', 'ask-state'].forEach(id => { const e = $(id); if (e) e.value = SHOP_STATE; });
     ['bill-metro', 'ask-metro'].forEach(id => { const e = $(id); if (e) e.value = ''; });
     const h1 = document.querySelector('.hero h1'); if (h1) h1.textContent = 'What should your care cost in ' + name + '?';
-    const mk = $('market'); if (mk) mk.textContent = '📍 All ' + name + ' — ' + N_HOSP + ' hospitals statewide';
+    const mk = $('market'); if (mk) mk.textContent = (ORTHO ? '' : '📍 ') + 'All ' + name + ' — ' + N_HOSP + ' hospitals statewide';
     try { history.replaceState(null, '', '/?state=' + encodeURIComponent(SHOP_STATE)); } catch(e){}
     refetchShop().then(applyDeductible);
   }
   function onMetroChange(){
     SHOP_METRO = $('metro').value;
     const sel = $('metro'), label = sel.options[sel.selectedIndex].text;
-    const mk = $('market'); if (mk) mk.textContent = '📍 ' + label + (SHOP_METRO ? ' — comparing local hospitals' : ' — ' + N_HOSP + ' hospitals statewide');
+    const mk = $('market'); if (mk) mk.textContent = (ORTHO ? '' : '📍 ') + label + (SHOP_METRO ? ' — comparing local hospitals' : ' — ' + N_HOSP + ' hospitals statewide');
     ['bill-metro', 'ask-metro'].forEach(id => { const e = $(id); if (e) e.value = SHOP_METRO; });
     refetchShop().then(applyDeductible);
   }
