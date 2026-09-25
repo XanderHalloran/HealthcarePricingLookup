@@ -294,6 +294,42 @@ def test_no_facility_carries_another_facilitys_address():
     assert not bad, "facilities share an address but are far apart: " + "; ".join(bad)
 
 
+def test_no_facility_carries_a_distant_facilitys_phone():
+    """Campuses of one licensed hospital legitimately share a switchboard -- Centra Lynchburg
+    and Virginia Baptist are 2.7 km apart on one CCN, and CMS itself lists one number for both
+    Dignity St. Rose campuses. What is never legitimate is two facilities in different towns
+    sharing a number: SUMMIT-SHOW-LOW carried Banner Casa Grande's, 221 km away, so a
+    coordinator calling the top result would have reached the wrong hospital in the wrong city.
+    The widest legitimate pair today is Northwest Tucson/Houghton at 26 km."""
+    import math
+    import yaml
+    from collections import defaultdict
+
+    def load(n):
+        d = yaml.safe_load(open(f"config-ortho/{n}", encoding="utf-8")) or {}
+        return d.get("hospitals", d)
+
+    contact, geo = load("contact.yaml"), load("geo.yaml")
+
+    def km(a, b):
+        p1, p2 = math.radians(a[0]), math.radians(b[0])
+        h = (math.sin((p2 - p1) / 2) ** 2
+             + math.cos(p1) * math.cos(p2) * math.sin(math.radians(b[1] - a[1]) / 2) ** 2)
+        return 2 * 6371.0 * math.asin(math.sqrt(h))
+
+    by = defaultdict(list)
+    for k, v in contact.items():
+        if (v.get("phone") or "").strip():
+            by[v["phone"].strip()].append(k)
+    bad = []
+    for phone, ids in by.items():
+        pts = [geo[i] for i in ids if geo.get(i)]
+        far = max((km(a, b) for a in pts for b in pts), default=0)
+        if len(ids) > 1 and far > 40:
+            bad.append(f"{phone} shared by {ids} ({far:.0f} km apart)")
+    assert not bad, "a phone number is shared across towns: " + "; ".join(bad)
+
+
 def test_map_inline_script_parses():
     if not shutil.which("node"):
         return

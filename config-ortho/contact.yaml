@@ -157,7 +157,7 @@ hospitals:
     address: "2800 East Ajo Way"
     city: "Tucson"
     zip: "85713"
-    phone: "(520) 874-4189"
+    phone: "(520) 874-2000"
   BANNER-UMC-TUCSON:
     address: "1625 North Campbell Avenue"
     city: "Tucson"
@@ -562,7 +562,7 @@ hospitals:
     address: "1401 Johnston Willis Drive"
     city: "North Chesterfield"
     zip: "23235"
-    phone: "(804) 483-0000"
+    phone: "(804) 483-5000"
   HCA-KENDALL:
     address: "11750 Bird Rd"
     city: "Miami"
@@ -657,7 +657,7 @@ hospitals:
     address: "7700 East Parham Road"
     city: "Richmond"
     zip: "23294"
-    phone: "(804) 289-4500"
+    phone: "(804) 747-5600"
   HCA-RESTON:
     address: "1850 Town Center Parkway"
     city: "Reston"
@@ -667,7 +667,7 @@ hospitals:
     address: "2621 Grove Avenue"
     city: "Richmond"
     zip: "23220"
-    phone: "(804) 289-4500"
+    phone: "(804) 254-5100"
   HCA-SARASOTA-DOCTORS:
     address: "5731 Bee Ridge Rd"
     city: "Sarasota"
@@ -762,7 +762,7 @@ hospitals:
     address: "47601 Grand River Avenue"
     city: "Novi"
     zip: "48374"
-    phone: "(248) 849-3000"
+    phone: "(248) 465-4100"
   HENRYFORD-PROVIDENCE-SOUTHFIELD:
     address: "16001 West 9 Mile Road"
     city: "Southfield"
@@ -1237,7 +1237,7 @@ hospitals:
     address: "1150 East Deuce of Clubs"
     city: "Show Low"
     zip: "85901"
-    phone: "(520) 381-6300"
+    phone: "(928) 537-4375"
   SURGEONSCHOICE-SOUTHFIELD:
     address: "22401 Foster Winter Drive"
     city: "Southfield"
