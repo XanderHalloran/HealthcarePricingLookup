@@ -292,11 +292,12 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
     r = rows[0]
     d = r["result"]
     desc = d.get("description") or code
+    phrase = _mid_sentence(desc)            # for use inside sentences; `desc` stays the name
     city, path = _metro_meta(metro, state)
     n = d.get("n_hospitals") or 0
     low, high = d.get("neg_low"), d.get("neg_high")
     price_bit = (f"from ${low:,.0f}" if low is not None else "prices")
-    meta = (f"Compare {desc} (CPT {code}) prices across {n} hospitals in {city} — {price_bit}. "
+    meta = (f"Compare {phrase} (CPT {code}) prices across {n} hospitals in {city} — {price_bit}. "
             f"See the fair cash price, each hospital's rate, the Medicare benchmark, and how to "
             f"negotiate. Free, no signup.")
     # Internal linking: this state's other metros + "All <State>", then every other state.
@@ -316,7 +317,7 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
         related = [{"desc": s["desc"], "code": s["code"],
                     "url": f"{BASE_URL}/{MARKETS[state]['slug']}/{metro}/{s['slug']}"}
                    for s in TOP_PROCS if s["code"] != code]
-    faqs = _build_faqs(desc, code, city, d)
+    faqs = _build_faqs(phrase, code, city, d)
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "MedicalProcedure", "name": desc, "url": canonical,
          "code": {"@type": "MedicalCode", "code": code, "codingSystem": "CPT"}},
@@ -329,12 +330,24 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
              "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in faqs]},
     ]}
     return templates.TemplateResponse(request, "procedure.html", {
-        "r": r, "city": city, "metro": metro, "desc": desc, "base": BASE_URL, "brand": BRAND,
+        "r": r, "city": city, "metro": metro, "desc": desc, "phrase": phrase, "base": BASE_URL, "brand": BRAND,
         "n_hosp": MARKETS[state].get("n", 0), "nav": "compare", "own_ids": OWN_IDS,
         "canonical": canonical, "faqs": faqs, "ld": ld, "data_refreshed": DATA_REFRESHED,
-        "title": f"How much does {desc} (CPT {code}) cost in {city}? | Price & Negotiation",
+        "title": f"How much does {phrase} (CPT {code}) cost in {city}? | Price & Negotiation",
         "meta_desc": meta, "siblings": siblings, "related": related,
     })
+
+
+_KEEP_CAPS = {"Achilles"}   # proper nouns that can open a procedure name
+
+
+def _mid_sentence(desc):
+    """'Total knee replacement' -> 'total knee replacement', for use inside a sentence.
+    Leaves acronyms (MRI, CT, X-ray, C-reactive, SARS-CoV-2) and proper nouns alone."""
+    first = desc.split(" ", 1)[0].rstrip(",")
+    if first in _KEEP_CAPS or not first[1:2].islower():
+        return desc
+    return desc[:1].lower() + desc[1:]
 
 
 def _build_faqs(desc, code, city, d):

@@ -92,6 +92,17 @@ def test_procedure_seo_page():
     assert "How much does" in r.text and "73721" in r.text and "canonical" in r.text
 
 
+def test_procedure_name_reads_mid_sentence():
+    m = webapp._mid_sentence
+    assert m("Total knee replacement (arthroplasty)") == "total knee replacement (arthroplasty)"
+    assert m("Colonoscopy, diagnostic") == "colonoscopy, diagnostic"
+    for keep in ("MRI brain, without contrast", "X-ray, knee", "C-reactive protein",
+                 "SARS-CoV-2 test", "Achilles tendon repair", "73721", ""):
+        assert m(keep) == keep
+    r = client.get("/procedure/73721")
+    assert "How much does MRI lower extremity" in r.text   # acronym untouched in the h1
+
+
 def test_procedure_unknown_404():
     assert client.get("/procedure/ZZZZZ").status_code == 404   # not a code pattern -> unresolved
 
