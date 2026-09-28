@@ -5,6 +5,7 @@ states:
   - { code: NV, name: Nevada, slug: nevada }
   - { code: MI, name: Michigan, slug: michigan }
   - { code: FL, name: Florida, slug: florida }
+  - { code: OH, name: Ohio, slug: ohio }
 
 metros:
   - key: phoenix
@@ -487,3 +488,140 @@ metros:
       - HEALTH-FIRST-CAPE-CANAVERAL
       - HEALTH-FIRST-VIERA
       - ORLANDO-HEALTH-MELBOURNE
+
+  # ===== Ohio =====
+  - key: cleveland
+    state: OH
+    label: "Cleveland Metro"
+    slug_city: "Cleveland, OH"
+    ids:
+      - ASHTABULA-COUNTY
+      - CCF-CLEVELAND-CLINIC
+      - CCF-CLEVELAND-CLINIC-AVON
+      - EUCLID
+      - FAIRVIEW
+      - GLENBEIGH-SOURCES
+      - HILLCREST
+      - LAKE
+      - LAKE-BEACHWOOD
+      - LUTHERAN
+      - MARYMOUNT
+      - MEDINA
+      - MERCY-LORAIN
+      - METRO-CLEVELAND
+      - PARMA
+      - SOUTH-POINTE
+      - UH-CLEVELAND
+      - UH-CHARDON
+      - UH-ST-JOHN
+      - UH-UNIVERSITY-ELYRIA
+      - UH-UNIVERSITY-AHUJA
+
+  - key: columbus
+    state: OH
+    label: "Columbus Metro"
+    slug_city: "Columbus, OH"
+    ids:
+      - BERGER
+      - DILEY-RIDGE
+      - DOCTORS
+      - DUBLIN-METHODIST
+      - FAIRFIELD
+      - GRADY
+      - GRANT
+      - KNOX
+      - LICKING
+      - MADISON
+      - MTCARMEL-MOUNT-DUBLIN
+      - MTCARMEL-MOUNT-EAST
+      - MTCARMEL-MOUNT-NEW
+      - MTCARMEL-MOUNT-ST
+      - STATE-UNIVERSITY
+      - RIVERSIDE-METHODIST
+      - MEMORIAL-UNION
+
+  - key: cincinnati
+    state: OH
+    label: "Cincinnati Metro"
+    slug_city: "Cincinnati, OH"
+    ids:
+      - ATRIUM
+      - TRIHEALTH-BETHESDA-NORTH
+      - FORT-HAMILTON
+      - GOOD-SAMARITAN
+      - MCCULLOUGH-HYDE
+      - MERCY-CLERMONT
+      - MERCY-FAIRFIELD
+      - MERCY-WEST
+      - MERCY-KINGS-MILLS
+      - MERCY-ANDERSON
+      - MERCY-JEWISH
+      - UNIVERSITY-CINCINNATI
+      - WEST-CHESTER
+
+  - key: toledo
+    state: OH
+    label: "Toledo Metro"
+    slug_city: "Toledo, OH"
+    ids:
+      - BAY-PARK
+      - BLANCHARD-VALLEY
+      - FREMONT
+      - MERCY-TIFFIN
+      - MERCY-ST-VINCENT
+      - PROMEDICA-TOLEDO
+      - WOOD-COUNTY
+      - UTOLEDO-MEDICAL
+
+  - key: dayton
+    state: OH
+    label: "Dayton Metro"
+    slug_city: "Dayton, OH"
+    ids:
+      - KETTERING-DAYTON
+      - KETTERING-GREENE
+      - KETTERING-MAIN
+      - KETTERING-MIAMISBURG
+      - KETTERING-TROY
+      - MARY-RUTAN
+      - MIAMI-VALLEY
+      - SOIN
+      - SPRINGFIELD
+      - UPPER-VALLEY
+      - WILSON
+
+  - key: akron
+    state: OH
+    label: "Akron Metro"
+    slug_city: "Akron, OH"
+    ids:
+      - AKRON
+      - CRYSTAL-CLINIC
+      - SUMMA-AKRON
+      - SUMMA-WESTERN-RESERVE
+      - UH-UNIVERSITY-PORTAGE
+
+  - key: canton
+    state: OH
+    label: "Canton Metro"
+    slug_city: "Canton, OH"
+    ids:
+      - ALLIANCE
+      - AULTMAN-CANTON
+      - MERCY-CANTON
+      - POMERENE
+      - UNION
+
+  - key: youngstown
+    state: OH
+    label: "Youngstown Metro"
+    slug_city: "Youngstown, OH"
+    ids:
+      - EAST-LIVERPOOL
+      - HMHP-ST
+      - INSIGHT-TRUMBULL
+      - MH-ST
+      - MH-ST-WARREN
+      - SALEM
+      - SURGICAL-SOUTHWOODS
+      - TRINITY-CTR-EAST

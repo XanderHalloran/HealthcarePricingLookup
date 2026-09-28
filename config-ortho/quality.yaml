@@ -262,6 +262,108 @@ ratings:
   MEMORIAL-REGIONAL: 3
   MEMORIAL-WEST: 3
   MEMORIAL-MIRAMAR: 5
+  # Ohio (added)
+  ADENA-CHILLICOTHE: 3
+  AKRON: 5
+  ALLIANCE: 4
+  ASHTABULA-COUNTY: 3
+  ATRIUM: 4
+  AULTMAN-CANTON: 4
+  AVITA-ONTARIO: 4
+  BAY-PARK: 3
+  BERGER: 3
+  TRIHEALTH-BETHESDA-NORTH: 3
+  BLANCHARD-VALLEY: 3
+  CCF-CLEVELAND-CLINIC: 4
+  CCF-CLEVELAND-CLINIC-AVON: 5
+  COSHOCTON: 4
+  CRYSTAL-CLINIC: 5
+  DOCTORS: 4
+  DUBLIN-METHODIST: 4
+  EAST-LIVERPOOL: 3
+  EUCLID: 4
+  FAIRFIELD: 2
+  FAIRVIEW: 5
+  FISHER-TITUS: 4
+  FORT-HAMILTON: 3
+  GENESIS: 5
+  GOOD-SAMARITAN: 4
+  GRADY: 4
+  GRAND-LAKE: 4
+  GRANT: 2
+  HILLCREST: 5
+  HMHP-ST: 2
+  INSIGHT-TRUMBULL: 2
+  KETTERING-DAYTON: 4
+  KETTERING-GREENE: 5
+  KETTERING-MAIN: 3
+  KETTERING-MIAMISBURG: 4
+  KETTERING-TROY: 5
+  KNOX: 3
+  LAKE: 3
+  LICKING: 2
+  LIMA: 3
+  LUTHERAN: 3
+  MADISON: 3
+  MARIETTA: 3
+  MARION: 4
+  MARY-RUTAN: 4
+  MARYMOUNT: 5
+  MCCULLOUGH-HYDE: 3
+  MEDINA: 5
+  FREMONT: 4
+  MERCER-COUNTY: 3
+  MERCY-CLERMONT: 4
+  MERCY-DEFIANCE: 4
+  MERCY-FAIRFIELD: 3
+  MERCY-TIFFIN: 3
+  MERCY-WEST: 4
+  MERCY-ST-RITAS: 4
+  MERCY-ANDERSON: 4
+  MERCY-CANTON: 3
+  MERCY-LORAIN: 2
+  MERCY-ST-VINCENT: 3
+  METRO-CLEVELAND: 3
+  MH-ST: 3
+  MH-ST-WARREN: 3
+  MIAMI-VALLEY: 3
+  MTCARMEL-MOUNT-EAST: 2
+  MTCARMEL-MOUNT-ST: 3
+  STATE-UNIVERSITY: 3
+  OHIOHEALTH-MANSFIELD: 3
+  OHIOHEALTH-BLENESS: 3
+  PARMA: 4
+  POMERENE: 3
+  PROMEDICA-TOLEDO: 4
+  RIVERSIDE-METHODIST: 4
+  SALEM: 3
+  SOIN: 4
+  SOUTH-POINTE: 5
+  SOUTHEASTERN: 4
+  SPRINGFIELD: 4
+  SUMMA-AKRON: 3
+  SUMMA-WESTERN-RESERVE: 3
+  SURGICAL-SOUTHWOODS: 4
+  MERCY-JEWISH: 4
+  TRIHEALTH-CLINTON: 2
+  TRINITY-CTR-EAST: 2
+  UH-CLEVELAND: 3
+  UH-CHARDON: 4
+  UH-ST-JOHN: 4
+  UNION: 3
+  UH-UNIVERSITY-ELYRIA: 4
+  UH-UNIVERSITY-AHUJA: 3
+  UH-UNIVERSITY-PORTAGE: 3
+  UH-UNIVERSITY-SAMARITAN: 4
+  UNIVERSITY-CINCINNATI: 3
+  UPPER-VALLEY: 4
+  VAN-WERT: 5
+  WEST-CHESTER: 3
+  WILSON: 2
+  WOOD-COUNTY: 4
+  # None (added)
+  UTOLEDO-MEDICAL: 3
+  MEMORIAL-UNION: 5
 hip_knee:
   BANNER-DESERT:
     rate: 4.6
@@ -873,3 +975,60 @@ hip_knee:
   AZSJH-MESA:
     rate: 4.3
     compare: No Different
+  ADENA-CHILLICOTHE: { rate: 3.5, compare: "No Different Than the National Rate" }
+  AKRON: { rate: 4.6, compare: "No Different Than the National Rate" }
+  ALLIANCE: { rate: 4.3, compare: "No Different Than the National Rate" }
+  ASHTABULA-COUNTY: { rate: 4.5, compare: "No Different Than the National Rate" }
+  TRIHEALTH-BETHESDA-NORTH: { rate: 4.4, compare: "No Different Than the National Rate" }
+  BLANCHARD-VALLEY: { rate: 7.2, compare: "No Different Than the National Rate" }
+  CCF-CLEVELAND-CLINIC: { rate: 3.6, compare: "No Different Than the National Rate" }
+  CCF-CLEVELAND-CLINIC-AVON: { rate: 5.5, compare: "No Different Than the National Rate" }
+  CRYSTAL-CLINIC: { rate: 3.6, compare: "No Different Than the National Rate" }
+  DUBLIN-METHODIST: { rate: 4.2, compare: "No Different Than the National Rate" }
+  FAIRFIELD: { rate: 4.6, compare: "No Different Than the National Rate" }
+  FORT-HAMILTON: { rate: 4.3, compare: "No Different Than the National Rate" }
+  GENESIS: { rate: 4.9, compare: "No Different Than the National Rate" }
+  GOOD-SAMARITAN: { rate: 4.1, compare: "No Different Than the National Rate" }
+  GRADY: { rate: 3.9, compare: "No Different Than the National Rate" }
+  GRANT: { rate: 4.2, compare: "No Different Than the National Rate" }
+  HILLCREST: { rate: 3.0, compare: "No Different Than the National Rate" }
+  HMHP-ST: { rate: 4.8, compare: "No Different Than the National Rate" }
+  KETTERING-DAYTON: { rate: 4.4, compare: "No Different Than the National Rate" }
+  LAKE: { rate: 5.8, compare: "No Different Than the National Rate" }
+  LAKE-BEACHWOOD: { rate: 4.0, compare: "No Different Than the National Rate" }
+  LICKING: { rate: 5.2, compare: "No Different Than the National Rate" }
+  LUTHERAN: { rate: 3.9, compare: "No Different Than the National Rate" }
+  MARION: { rate: 4.2, compare: "No Different Than the National Rate" }
+  MARYMOUNT: { rate: 3.4, compare: "No Different Than the National Rate" }
+  MEDINA: { rate: 3.8, compare: "No Different Than the National Rate" }
+  MERCY-FAIRFIELD: { rate: 4.3, compare: "No Different Than the National Rate" }
+  MERCY-WEST: { rate: 4.5, compare: "No Different Than the National Rate" }
+  MERCY-ST-RITAS: { rate: 4.3, compare: "No Different Than the National Rate" }
+  MERCY-ANDERSON: { rate: 3.6, compare: "No Different Than the National Rate" }
+  MERCY-CANTON: { rate: 4.0, compare: "No Different Than the National Rate" }
+  MERCY-LORAIN: { rate: 4.6, compare: "No Different Than the National Rate" }
+  MERCY-ST-VINCENT: { rate: 4.7, compare: "No Different Than the National Rate" }
+  METRO-CLEVELAND: { rate: 4.7, compare: "No Different Than the National Rate" }
+  MH-ST-WARREN: { rate: 4.2, compare: "No Different Than the National Rate" }
+  MIAMI-VALLEY: { rate: 3.0, compare: "No Different Than the National Rate" }
+  MTCARMEL-MOUNT-EAST: { rate: 4.2, compare: "No Different Than the National Rate" }
+  MTCARMEL-MOUNT-NEW: { rate: 4.5, compare: "No Different Than the National Rate" }
+  MTCARMEL-MOUNT-ST: { rate: 4.6, compare: "No Different Than the National Rate" }
+  STATE-UNIVERSITY: { rate: 3.9, compare: "No Different Than the National Rate" }
+  OHIOHEALTH-MANSFIELD: { rate: 3.9, compare: "No Different Than the National Rate" }
+  PROMEDICA-TOLEDO: { rate: 5.4, compare: "No Different Than the National Rate" }
+  RIVERSIDE-METHODIST: { rate: 3.8, compare: "No Different Than the National Rate" }
+  SPRINGFIELD: { rate: 4.5, compare: "No Different Than the National Rate" }
+  SUMMA-AKRON: { rate: 3.5, compare: "No Different Than the National Rate" }
+  SURGICAL-SOUTHWOODS: { rate: 3.7, compare: "No Different Than the National Rate" }
+  MERCY-JEWISH: { rate: 4.1, compare: "No Different Than the National Rate" }
+  TRINITY-CTR-EAST: { rate: 5.7, compare: "No Different Than the National Rate" }
+  UH-ST-JOHN: { rate: 5.2, compare: "No Different Than the National Rate" }
+  UH-UNIVERSITY-ELYRIA: { rate: 4.7, compare: "No Different Than the National Rate" }
+  UH-UNIVERSITY-AHUJA: { rate: 5.8, compare: "No Different Than the National Rate" }
+  UNIVERSITY-CINCINNATI: { rate: 4.2, compare: "No Different Than the National Rate" }
+  VAN-WERT: { rate: 3.6, compare: "No Different Than the National Rate" }
+  WEST-CHESTER: { rate: 5.1, compare: "No Different Than the National Rate" }
+  WOOD-COUNTY: { rate: 4.5, compare: "No Different Than the National Rate" }
+  IOS-LIMA: { rate: 4.7, compare: "No Different Than the National Rate" }
+  UTOLEDO-MEDICAL: { rate: 5.0, compare: "No Different Than the National Rate" }

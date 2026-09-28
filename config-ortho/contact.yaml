@@ -1510,3 +1510,544 @@ hospitals:
     city: "Miami"
     zip: "33125"
     phone: "(305) 325-5511"
+  # Ohio (CMS Care Compare, pulled 2026-09-28)
+  ADENA-CHILLICOTHE:
+    address: "272 Hospital Road"
+    city: "Chillicothe"
+    zip: "45601"
+    phone: "(740) 779-7500"
+  AKRON:
+    address: "1 Akron General Avenue"
+    city: "Akron"
+    zip: "44307"
+    phone: "(330) 344-6000"
+  ALLIANCE:
+    address: "200 East State Street"
+    city: "Alliance"
+    zip: "44601"
+    phone: "(330) 596-6000"
+  ASHTABULA-COUNTY:
+    address: "2420 Lake Avenue"
+    city: "Ashtabula"
+    zip: "44004"
+    phone: "(440) 997-2262"
+  ATRIUM:
+    address: "One Medical Center Drive"
+    city: "Franklin"
+    zip: "45005"
+    phone: "(513) 420-5102"
+  AULTMAN-CANTON:
+    address: "2600 Sixth Street Sw"
+    city: "Canton"
+    zip: "44710"
+    phone: "(330) 363-9911"
+  AVITA-ONTARIO:
+    address: "715 Richland Mall"
+    city: "Ontario"
+    zip: "44906"
+    phone: "(419) 462-4534"
+  BAY-PARK:
+    address: "2801 Bay Park Drive"
+    city: "Oregon"
+    zip: "43616"
+    phone: "(419) 690-7706"
+  BERGER:
+    address: "600 North Pickaway Street"
+    city: "Circleville"
+    zip: "43113"
+    phone: "(740) 420-8008"
+  TRIHEALTH-BETHESDA-NORTH:
+    address: "10500 Montgomery Road"
+    city: "Cincinnati"
+    zip: "45242"
+    phone: "(513) 865-1111"
+  BLANCHARD-VALLEY:
+    address: "1900 South Main Street"
+    city: "Findlay"
+    zip: "45840"
+    phone: "(419) 423-4500"
+  CCF-CLEVELAND-CLINIC:
+    address: "9500 Euclid Avenue"
+    city: "Cleveland"
+    zip: "44195"
+    phone: "(216) 952-9829"
+  CCF-CLEVELAND-CLINIC-AVON:
+    address: "33300 Cleveland Clinic Blvd"
+    city: "Avon"
+    zip: "44011"
+    phone: "(440) 695-5000"
+  COSHOCTON:
+    address: "1460 Orange Street"
+    city: "Coshocton"
+    zip: "43812"
+    phone: "(740) 622-6411"
+  CRYSTAL-CLINIC:
+    address: "444 North Main Street"
+    city: "Akron"
+    zip: "44310"
+    phone: "(330) 670-4152"
+  DILEY-RIDGE:
+    address: "7911 Diley Road"
+    city: "Canal Winchester"
+    zip: "43110"
+    phone: "(614) 838-7911"
+  DOCTORS:
+    address: "5100 West  Broad Street"
+    city: "Columbus"
+    zip: "43228"
+    phone: "(614) 544-2136"
+  DUBLIN-METHODIST:
+    address: "7500 Hospital Avenue"
+    city: "Dublin"
+    zip: "43016"
+    phone: "(614) 544-8000"
+  EAST-LIVERPOOL:
+    address: "425 West 5Th Street"
+    city: "East Liverpool"
+    zip: "43920"
+    phone: "(330) 385-7200"
+  EUCLID:
+    address: "18901 Lake Shore Boulevard"
+    city: "Euclid"
+    zip: "44119"
+    phone: "(216) 531-9000"
+  FAIRFIELD:
+    address: "401 North Ewing Street"
+    city: "Lancaster"
+    zip: "43130"
+    phone: "(740) 687-8000"
+  FAIRVIEW:
+    address: "18101 Lorain Avenue"
+    city: "Cleveland"
+    zip: "44111"
+    phone: "(216) 476-7000"
+  FISHER-TITUS:
+    address: "272 Benedict Avenue"
+    city: "Norwalk"
+    zip: "44857"
+    phone: "(419) 668-8101"
+  FORT-HAMILTON:
+    address: "630 Eaton Avenue"
+    city: "Hamilton"
+    zip: "45013"
+    phone: "(513) 867-2123"
+  GENESIS:
+    address: "2951 Maple Avenue"
+    city: "Zanesville"
+    zip: "43701"
+    phone: "(740) 454-5000"
+  GLENBEIGH-SOURCES:
+    address: "2863 State Route 45"
+    city: "Rock Creek"
+    zip: "44084"
+    phone: "(440) 563-3400"
+  GOOD-SAMARITAN:
+    address: "375 Dixmyth Avenue"
+    city: "Cincinnati"
+    zip: "45220"
+    phone: "(513) 862-2601"
+  GRADY:
+    address: "561 West Central Avenue"
+    city: "Delaware"
+    zip: "43015"
+    phone: "(740) 368-5145"
+  GRAND-LAKE:
+    address: "200 Saint Clair Street"
+    city: "Saint Marys"
+    zip: "45885"
+    phone: "(419) 394-3335"
+  GRANT:
+    address: "111 South Grant Avenue"
+    city: "Columbus"
+    zip: "43215"
+    phone: "(614) 566-9164"
+  HILLCREST:
+    address: "6780 Mayfield Road"
+    city: "Mayfield Heights"
+    zip: "44124"
+    phone: "(440) 312-4500"
+  HMHP-ST:
+    address: "8401 Market Street"
+    city: "Boardman"
+    zip: "44512"
+    phone: "(330) 729-2929"
+  INSIGHT-TRUMBULL:
+    address: "1350 East Market Street"
+    city: "Warren"
+    zip: "44482"
+    phone: "(330) 841-9011"
+  KETTERING-DAYTON:
+    address: "405 Grand Avenue"
+    city: "Dayton"
+    zip: "45405"
+    phone: "(937) 723-3410"
+  KETTERING-GREENE:
+    address: "1141 North Monroe Drive"
+    city: "Xenia"
+    zip: "45385"
+    phone: "(937) 352-2000"
+  KETTERING-MAIN:
+    address: "3535 Southern Boulevard"
+    city: "Kettering"
+    zip: "45429"
+    phone: "(937) 298-4331"
+  KETTERING-MIAMISBURG:
+    address: "4000 Miamisburg-Centerville Road"
+    city: "Miamisburg"
+    zip: "45342"
+    phone: "(937) 384-8760"
+  KETTERING-TROY:
+    address: "600 West Main Street"
+    city: "Troy"
+    zip: "45373"
+    phone: "(937) 980-7000"
+  KINGS-DAUGHTERS:
+    address: "1901 Argonne Road"
+    city: "Portsmouth"
+    zip: "45662"
+    phone: "(740) 991-4000"
+  KNOX:
+    address: "1330 Coshocton Road"
+    city: "Mount Vernon"
+    zip: "43050"
+    phone: "(740) 393-9000"
+  LAKE:
+    address: "7590 Auburn Road"
+    city: "Concord"
+    zip: "44077"
+    phone: "(440) 953-9600"
+  LAKE-BEACHWOOD:
+    address: "25501 Chagrin Boulevard"
+    city: "Beachwood"
+    zip: "44122"
+    phone: "(216) 545-4800"
+  LICKING:
+    address: "1320 West Main Street"
+    city: "Newark"
+    zip: "43055"
+    phone: "(740) 348-4000"
+  LIMA:
+    address: "1001 Bellefontaine Avenue"
+    city: "Lima"
+    zip: "45804"
+    phone: "(419) 998-4731"
+  LUTHERAN:
+    address: "1730 West 25Th Street"
+    city: "Cleveland"
+    zip: "44113"
+    phone: "(216) 696-4300"
+  MADISON:
+    address: "210 North Main Street"
+    city: "London"
+    zip: "43140"
+    phone: "(740) 845-7000"
+  MARIETTA:
+    address: "401 Matthew Street"
+    city: "Marietta"
+    zip: "45750"
+    phone: "(740) 374-1400"
+  MARION:
+    address: "1000 Mckinley Park Drive"
+    city: "Marion"
+    zip: "43302"
+    phone: "(740) 383-8400"
+  MARY-RUTAN:
+    address: "205 Palmer Avenue"
+    city: "Bellefontaine"
+    zip: "43311"
+    phone: "(937) 651-3257"
+  MARYMOUNT:
+    address: "12300 Mccracken Road"
+    city: "Garfield Heights"
+    zip: "44125"
+    phone: "(216) 587-8210"
+  MCCULLOUGH-HYDE:
+    address: "110 North Poplar Street"
+    city: "Oxford"
+    zip: "45056"
+    phone: "(513) 523-2111"
+  MEDINA:
+    address: "1000 East Washington Street"
+    city: "Medina"
+    zip: "44256"
+    phone: "(330) 725-1000"
+  FREMONT:
+    address: "715 South Taft Avenue"
+    city: "Fremont"
+    zip: "43420"
+    phone: "(419) 334-6617"
+  MERCER-COUNTY:
+    address: "800 West Main Street"
+    city: "Coldwater"
+    zip: "45828"
+    phone: "(419) 678-4843"
+  MERCY-CLERMONT:
+    address: "3000 Hospital Drive"
+    city: "Batavia"
+    zip: "45103"
+    phone: "(513) 732-8278"
+  MERCY-DEFIANCE:
+    address: "1404 East Second Street"
+    city: "Defiance"
+    zip: "43512"
+    phone: "(419) 782-8444"
+  MERCY-FAIRFIELD:
+    address: "3000 Mack Road"
+    city: "Fairfield"
+    zip: "45014"
+    phone: "(513) 870-7000"
+  MERCY-TIFFIN:
+    address: "45 St Lawrence Drive"
+    city: "Tiffin"
+    zip: "44883"
+    phone: "(419) 455-7000"
+  MERCY-WEST:
+    address: "3300 Mercy Health Blvd"
+    city: "Cincinnati"
+    zip: "45211"
+    phone: "(513) 215-5000"
+  MERCY-KINGS-MILLS:
+    address: "5440 Kings Island Drive"
+    city: "Mason"
+    zip: "45040"
+    phone: "(513) 637-9999"
+  MERCY-ST-RITAS:
+    address: "730 West Market Street"
+    city: "Lima"
+    zip: "45801"
+    phone: "(419) 227-3361"
+  MERCY-ANDERSON:
+    address: "7500 State Road"
+    city: "Cincinnati"
+    zip: "45255"
+    phone: "(513) 624-4500"
+  MERCY-CANTON:
+    address: "1320 Mercy Drive Nw"
+    city: "Canton"
+    zip: "44708"
+    phone: "(330) 489-1111"
+  MERCY-LORAIN:
+    address: "3700 Kolbe Road"
+    city: "Lorain"
+    zip: "44053"
+    phone: "(440) 960-4000"
+  MERCY-ST-VINCENT:
+    address: "2213 Cherry Street"
+    city: "Toledo"
+    zip: "43608"
+    phone: "(419) 251-3232"
+  METRO-CLEVELAND:
+    address: "2500 Metrohealth Drive"
+    city: "Cleveland"
+    zip: "44109"
+    phone: "(216) 778-7089"
+  MH-ST:
+    address: "1044 Belmont Avenue"
+    city: "Youngstown"
+    zip: "44501"
+    phone: "(330) 480-3022"
+  MH-ST-WARREN:
+    address: "667 Eastland Ave Se"
+    city: "Warren"
+    zip: "44484"
+    phone: "(330) 841-4016"
+  MIAMI-VALLEY:
+    address: "One Wyoming Street"
+    city: "Dayton"
+    zip: "45409"
+    phone: "(937) 208-3023"
+  MTCARMEL-MOUNT-DUBLIN:
+    address: "4105 Emerald Pkwy"
+    city: "Dublin"
+    zip: "43016"
+    phone: "(380) 898-9000"
+  MTCARMEL-MOUNT-EAST:
+    address: "6001 East Broad Street"
+    city: "Columbus"
+    zip: "43213"
+    phone: "(614) 234-5000"
+  MTCARMEL-MOUNT-NEW:
+    address: "7333 Smith'S Mill Road"
+    city: "New Albany"
+    zip: "43054"
+    phone: "(614) 775-6600"
+  MTCARMEL-MOUNT-ST:
+    address: "500 South Cleveland Avenue"
+    city: "Westerville"
+    zip: "43081"
+    phone: "(614) 546-4034"
+  STATE-UNIVERSITY:
+    address: "410 West 10Th Avenue"
+    city: "Columbus"
+    zip: "43210"
+    phone: "(614) 293-9700"
+  OHIOHEALTH-MANSFIELD:
+    address: "335 Glessner Avenue"
+    city: "Mansfield"
+    zip: "44903"
+    phone: "(419) 526-8000"
+  OHIOHEALTH-BLENESS:
+    address: "55 Hospital Drive"
+    city: "Athens"
+    zip: "45701"
+    phone: "(740) 593-5551"
+  PARMA:
+    address: "7007 Powers Boulevard"
+    city: "Parma"
+    zip: "44129"
+    phone: "(440) 743-3000"
+  POMERENE:
+    address: "981 Wooster Road"
+    city: "Millersburg"
+    zip: "44654"
+    phone: "(330) 674-1015"
+  PROMEDICA-TOLEDO:
+    address: "2142 North Cove Boulevard"
+    city: "Toledo"
+    zip: "43606"
+    phone: "(419) 291-7463"
+  RIVERSIDE-METHODIST:
+    address: "3535 Olentangy River Rd"
+    city: "Columbus"
+    zip: "43214"
+    phone: "(614) 566-5000"
+  SALEM:
+    address: "1995 East State Street"
+    city: "Salem"
+    zip: "44460"
+    phone: "(330) 332-7214"
+  SOIN:
+    address: "3535 Pentagon Park Blvd"
+    city: "Beaver Creek"
+    zip: "45431"
+    phone: "(937) 702-4000"
+  SOUTH-POINTE:
+    address: "20000 Harvard Road"
+    city: "Warrensville Heights"
+    zip: "44122"
+    phone: "(216) 491-6523"
+  SOUTHEASTERN:
+    address: "1341 North Clark Street"
+    city: "Cambridge"
+    zip: "43725"
+    phone: "(740) 439-8000"
+  SPRINGFIELD:
+    address: "100 Medical Center Drive"
+    city: "Springfield"
+    zip: "45504"
+    phone: "(937) 523-5500"
+  SUMMA-AKRON:
+    address: "525 East Market Street"
+    city: "Akron"
+    zip: "44309"
+    phone: "(330) 375-3000"
+  SUMMA-WESTERN-RESERVE:
+    address: "1900 23Rd Street"
+    city: "Cuyahoga Falls"
+    zip: "44223"
+    phone: "(330) 971-7000"
+  SURGICAL-SOUTHWOODS:
+    address: "7630 Southern Blvd"
+    city: "Youngstown"
+    zip: "44512"
+    phone: "(330) 729-8000"
+  MERCY-JEWISH:
+    address: "4777 East Galbraith Road"
+    city: "Cincinnati"
+    zip: "45236"
+    phone: "(513) 686-3000"
+  TRIHEALTH-CLINTON:
+    address: "610 West Main Street"
+    city: "Wilmington"
+    zip: "45177"
+    phone: "(937) 382-9335"
+  TRINITY-CTR-EAST:
+    address: "380 Summit Avenue"
+    city: "Steubenville"
+    zip: "43952"
+    phone: "(740) 264-7212"
+  UH-CLEVELAND:
+    address: "11100 Euclid Avenue"
+    city: "Cleveland"
+    zip: "44106"
+    phone: "(216) 844-1000"
+  UH-CHARDON:
+    address: "13207 Ravenna Road"
+    city: "Chardon"
+    zip: "44024"
+    phone: "(440) 285-6246"
+  UH-ST-JOHN:
+    address: "29000 Center Ridge Road"
+    city: "Westlake"
+    zip: "44145"
+    phone: "(440) 835-8000"
+  UNION:
+    address: "659 Boulevard"
+    city: "Dover"
+    zip: "44622"
+    phone: "(330) 343-3311"
+  UH-UNIVERSITY-ELYRIA:
+    address: "630 East River Street"
+    city: "Elyria"
+    zip: "44035"
+    phone: "(440) 329-7500"
+  UH-UNIVERSITY-AHUJA:
+    address: "3999 Richmond Road"
+    city: "Beachwood"
+    zip: "44122"
+    phone: "(216) 593-5511"
+  UH-UNIVERSITY-PORTAGE:
+    address: "6847 N Chestnut"
+    city: "Ravenna"
+    zip: "44266"
+    phone: "(330) 297-2300"
+  UH-UNIVERSITY-SAMARITAN:
+    address: "1025 Center St"
+    city: "Ashland"
+    zip: "44805"
+    phone: "(419) 289-0491"
+  UNIVERSITY-CINCINNATI:
+    address: "3188 Bellevue Avenue"
+    city: "Cincinnati"
+    zip: "45219"
+    phone: "(513) 584-1000"
+  UPPER-VALLEY:
+    address: "3130 N Dixie Highway"
+    city: "Troy"
+    zip: "45373"
+    phone: "(937) 440-7853"
+  VAN-WERT:
+    address: "1250 S Washington Street"
+    city: "Van Wert"
+    zip: "45891"
+    phone: "(419) 238-8627"
+  WEST-CHESTER:
+    address: "7700 University Drive"
+    city: "West Chester"
+    zip: "45069"
+    phone: "(513) 298-7701"
+  WILSON:
+    address: "915 West Michigan Street"
+    city: "Sidney"
+    zip: "45365"
+    phone: "(937) 498-5405"
+  WOOD-COUNTY:
+    address: "950 West Wooster Street"
+    city: "Bowling Green"
+    zip: "43402"
+    phone: "(419) 354-8900"
+  IOS-LIMA:
+    address: "801 Medical Drive, Suite B"
+    city: "Lima"
+    zip: "45804"
+    phone: "(419) 224-7586"
+  UTOLEDO-MEDICAL:
+    address: "3000 Arlington Avenue"
+    city: "Toledo"
+    zip: "43614"
+    phone: "(419) 383-3407"
+  MEMORIAL-UNION:
+    address: "500 London Avenue"
+    city: "Marysville"
+    zip: "43040"
+    phone: "(937) 644-6115"
