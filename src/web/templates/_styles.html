@@ -68,7 +68,18 @@
   .mini-copy { background:var(--green-pale); border:1px solid var(--green); color:var(--forest);
                border-radius:9999px; padding:5px 14px; font:700 13px Inter,sans-serif; cursor:pointer; }
   .mini-copy:hover { background:var(--green); }
-  .tip { display:inline-block; margin-left:4px; color:var(--mute); cursor:help; font-size:11px; }
+  /* info tip: a real button, explanation shown on hover/focus, hoverable, Esc hides it (SC 1.4.13) */
+  .tip { position:relative; display:inline-flex; align-items:center; justify-content:center; min-width:24px; min-height:24px;
+         margin-left:2px; padding:0; border:0; background:none; color:var(--mute); cursor:help; font:inherit; font-size:12px; vertical-align:middle; }
+  .tip-text { position:absolute; left:50%; bottom:calc(100% + 4px); transform:translateX(-50%); width:max-content; max-width:240px;
+              padding:8px 10px; border-radius:10px; background:var(--ink); color:var(--white); font-size:12px; font-weight:400;
+              line-height:1.4; text-align:left; text-transform:none; letter-spacing:0; z-index:20;
+              clip-path:inset(50%); opacity:0; pointer-events:none; }
+  .tip:hover .tip-text, .tip:focus-visible .tip-text { clip-path:none; opacity:1; pointer-events:auto; }
+  .tip.tip-x .tip-text { clip-path:inset(50%); opacity:0; pointer-events:none; }
+  .seg label { min-height:44px; display:inline-flex; align-items:center; }
+  #tab-shop:focus-visible ~ .seg label[for=tab-shop], #tab-bill:focus-visible ~ .seg label[for=tab-bill] { outline:2px solid var(--forest); outline-offset:2px; }
+  label:has(> #metded) { display:inline-flex; align-items:center; gap:8px; min-height:44px; cursor:pointer; }
 
   /* spectrum */
   .spectrum { position:relative; margin:40px 6px 30px; }
@@ -284,6 +295,12 @@
   @media (max-width:720px){ .shop { grid-template-columns:1fr; } .picker { position:static; max-height:none; }
     .sf-cols { grid-template-columns:1fr; } .how { grid-template-columns:1fr; } }
 </style>
+<script>
+  // Esc hides an open info tip until the pointer or focus leaves it
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') document.querySelectorAll('.tip').forEach(t => t.classList.add('tip-x')); });
+  document.addEventListener('focusout', e => e.target.classList && e.target.classList.remove('tip-x'));
+  document.addEventListener('mouseout', e => { const t = e.target.closest && e.target.closest('.tip'); if (t && !t.contains(e.relatedTarget)) t.classList.remove('tip-x'); });
+</script>
 {% if brand and brand.profile == 'ortho' %}
 {# ---------------------------------------------------------------------------
    HOPCo theme. Emitted ONLY on the ortho profile, so healthcare.traqqit.com's

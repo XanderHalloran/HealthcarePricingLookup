@@ -81,7 +81,7 @@
     {# ── Supporting stats (secondary to the action number above) ── #}
     <div class="nums mini">
       {% if d.your_price is not none %}<div class="num"><div class="k">You were charged</div><div class="v">{{ money(d.your_price) }}</div></div>{% endif %}
-      <div class="num"><div class="k">What Medicare pays<span class="tip" tabindex="0" role="button" aria-label="Medicare's published rate{% if not d.medicare_missing %}, source {{ d.medicare_source }}{% endif %}. The negotiation floor.">ⓘ</span></div><div class="v {% if d.medicare_missing %}gap{% endif %}">{% if d.medicare_missing %}no data{% else %}{{ money(d.medicare_rate) }}{% endif %}</div></div>
+      <div class="num"><div class="k">What Medicare pays<button type="button" class="tip"><span aria-hidden="true">ⓘ</span><span class="tip-text">Medicare's published rate{% if not d.medicare_missing %}, source {{ d.medicare_source }}{% endif %}. The negotiation floor.</span></button></div><div class="v {% if d.medicare_missing %}gap{% endif %}">{% if d.medicare_missing %}no data{% else %}{{ money(d.medicare_rate) }}{% endif %}</div></div>
       <div class="num"><div class="k">{% if d.payer %}{{ d.payer }} typical{% elif brand.profile == 'ortho' %}Market typical{% else %}Typical price near you{% endif %}</div><div class="v {% if d.neg_median is none %}gap{% endif %}">{% if d.neg_median is none %}no data{% else %}{{ money(d.neg_median) }}{% endif %}</div></div>
       <div class="num"><div class="k">Cash / self-pay price</div><div class="v {% if d.cash_price is none %}gap{% endif %}">{% if d.cash_price is none %}no data{% else %}{{ money(d.cash_price) }}{% endif %}</div></div>
     </div>
