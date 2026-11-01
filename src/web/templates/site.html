@@ -13,7 +13,7 @@
 <main>
 {% include "_nav.html" %}
   <div class="hero">
-    <h1>Site of care: {{ svc.desc }}</h1>
+    <h1 id="content">Site of care: {{ svc.desc }}</h1>
     <p class="sub">Hospital outpatient department (HOPD) prices versus ambulatory surgery centers, with Medicare's own HOPD-vs-ASC differential as the reference.
       <br><span class="mute" style="font-size:13px">ASCs are not required to publish prices: {{ published_codes|length }} of the tracked codes have a published non-hospital price in Arizona today. Where none exists, the ASC figure is an explicit estimate at the market's Medicare multiple. Add our own sites' rates to <code>config-ortho/freestanding.yaml</code> to replace estimates with actuals.</span></p>
   </div>

@@ -23,7 +23,7 @@
 <main>
 {% include "_nav.html" %}
   <div class="hero">
-    <h1>Payer scorecard{% if sel %}: {{ sel }}{% endif %}</h1>
+    <h1 id="content">Payer scorecard{% if sel %}: {{ sel }}{% endif %}</h1>
     <p class="sub">What each insurer's contracted rates run as a multiple of Medicare, procedure by procedure, across every {{ state_name }} facility that publishes one. The view to walk into a renewal with.</p>
   </div>
   <div class="disclaimer"><strong>Benchmarking data.</strong> Each cell is the median across facilities of that facility's median negotiated rate for the insurer (all its plans collapsed); rates below 25% of Medicare are treated as non-facility components and excluded. Medicare = OPPS for outpatient CPTs, IPPS for DRGs, PFS for office/therapy codes.</div>

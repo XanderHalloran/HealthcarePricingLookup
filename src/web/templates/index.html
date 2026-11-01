@@ -65,10 +65,10 @@
 {% include "_nav.html" %}
   <div class="hero">
     {% if brand.profile == 'ortho' %}
-    <h1>{{ brand.name }}</h1>
+    <h1 id="content">{{ brand.name }}</h1>
     <p class="sub">{{ brand.tagline }} {{ brand.audience }}</p>
     {% else %}
-    <h1>What should your care cost in {{ state_name }}?</h1>
+    <h1 id="content">What should your care cost in {{ state_name }}?</h1>
     <p class="sub">Compare hospital prices near you and negotiate your bill — with an AI coach and a ready-to-send appeal letter.</p>
     {% endif %}
     {% set _ml = (metro_list|selectattr('key','equalto',metro)|list) %}

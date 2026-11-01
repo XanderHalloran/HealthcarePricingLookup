@@ -13,7 +13,7 @@
 <main>
 {% include "_nav.html" %}
   <div class="hero">
-    <h1>What each payer pays for {{ svc.desc }}</h1>
+    <h1 id="content">What each payer pays for {{ svc.desc }}</h1>
     <p class="sub">Contracted (negotiated) rates per facility, straight from each hospital's CMS machine-readable file. {{ m.rows|length }} facilities{% if metro %} in {{ metro_label }}{% else %} statewide{% endif %}.</p>
   </div>
   <div class="disclaimer"><strong>Benchmarking data.</strong> Rates are what hospitals publish under the federal Hospital Price Transparency rule; a facility's median across an insurer's plans, not a specific contract. Payer names are canonicalized (all Aetna plans → Aetna).</div>

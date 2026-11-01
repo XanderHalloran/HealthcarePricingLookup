@@ -20,7 +20,7 @@
 <main>
 {% include "_nav.html" %}
   <div class="hero">
-    <h1>Episode pricing: {{ ep.label }}</h1>
+    <h1 id="content">Episode pricing: {{ ep.label }}</h1>
     <p class="sub">The whole episode, component by component: facility, surgeon, anesthesia, pre-op and rehab. Priced as an all-Medicare episode, a market hospital-based episode, and an ASC-based episode{% if own_col %}, beside one built on {{ own_label }}'s facility rate{% endif %}. Enter your bundle price to see the gap.</p>
   </div>
   <div class="disclaimer"><strong>Model, not a quote.</strong> Facility components come from published prices; professional components are Medicare fee-schedule amounts scaled by an editable commercial multiplier ({{ cfg.commercial_multiplier }}×). Implants are inside the facility rate. Adjust assumptions in <code>config-ortho/bundles.yaml</code>.</div>

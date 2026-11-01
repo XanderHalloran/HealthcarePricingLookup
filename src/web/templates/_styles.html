@@ -10,6 +10,8 @@
   body { margin:0; background:var(--sage); color:var(--ink);
          font:400 16px/1.5 Inter, system-ui, -apple-system, sans-serif; -webkit-font-smoothing:antialiased; }
   main { max-width:1040px; margin:0 auto; padding:28px 20px 72px; }
+  .skip { position:absolute; left:8px; top:-60px; z-index:1000; background:var(--white); color:var(--ink); padding:10px 14px; border-radius:12px; font-weight:600; }
+  .skip:focus { top:8px; }
   a { color:var(--forest); }
   .hero h1 { font-weight:900; font-size:clamp(28px,4.5vw,42px); line-height:1.06; letter-spacing:-0.02em; margin:0 0 6px; }
   .hero .sub { font-size:16px; color:var(--body); margin:0; }
