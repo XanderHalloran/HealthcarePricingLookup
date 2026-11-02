@@ -333,7 +333,7 @@
         {% for st in state_list if st.code != state %}<a href="/?state={{ st.code }}">{{ st.name }} hospital prices</a>{% endfor %}
       </div>{% endif %}
     </div>
-    <p class="refreshed">Hospital prices last refreshed {{ data_refreshed }} from official CMS machine-readable files. Medicare rates: CY2025 OPPS/PFS/CLFS. <a href="/methodology">How these numbers are built →</a></p>
+    <p class="refreshed">Hospital prices last refreshed {{ data_refreshed }} from official CMS machine-readable files. Medicare rates: CY2025 OPPS/PFS/CLFS. <a href="/methodology">How these numbers are built →</a> · <a href="https://traqqit.com/accessibility.html">Accessibility</a></p>
   </footer>
 </main>
 <script type="application/json" id="svc-data">{{ services|tojson }}</script>
