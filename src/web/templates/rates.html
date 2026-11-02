@@ -18,7 +18,7 @@
   </div>
   <div class="disclaimer"><strong>Benchmarking data.</strong> Rates are what hospitals publish under the federal Hospital Price Transparency rule; a facility's median across an insurer's plans, not a specific contract. Payer names are canonicalized (all Aetna plans → Aetna).</div>
 
-  <form class="payerbar card" method="get" action="/rates" role="group" aria-label="Choose procedure and area">
+  <form class="payerbar card" method="get" action="/rates" aria-label="Choose procedure and area">
     <label class="pb-lab" for="code"><b>Procedure</b></label>
     <select id="code" name="code" onchange="this.form.submit()">
       {% for cat, items in groups %}<optgroup label="{{ cat_labels.get(cat, cat) }}">
@@ -40,7 +40,7 @@
   {% if not m.rows %}
     <div class="card" style="margin-top:16px">No published rates for this code{% if metro %} in this area{% endif %} yet.</div>
   {% else %}
-  <div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="Market summary">
     <div class="fac-h">Market summary{% if medicare %} — Medicare benchmark {{ medicare_src }} <b>${{ '{:,.0f}'.format(medicare) }}</b>{% endif %}</div>
     <table class="fac-t rates-t">
       <thead><tr><th>Column</th><th class="r">Facilities</th><th class="r">Min</th><th class="r">25th</th><th class="r">Median</th><th class="r">75th</th><th class="r">Max</th>{% if medicare %}<th class="r">Median ×Medicare</th>{% endif %}{% if mine %}<th class="r">Your ${{ '{:,.0f}'.format(mine) }} is at</th>{% endif %}</tr></thead>
@@ -54,7 +54,7 @@
     </table>
   </div>
 
-  <div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="Facility × payer">
     <div class="fac-h">Facility × payer <span class="mute">(click a header to sort)</span></div>
     <table class="fac-t rates-t" id="matrix">
       <thead><tr><th onclick="sortBy(0)">Facility</th>{% for col in cols %}<th class="r" onclick="sortBy({{ loop.index }})">{{ col_label(col) }}</th>{% endfor %}</tr></thead>

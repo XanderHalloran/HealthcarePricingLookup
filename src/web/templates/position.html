@@ -24,7 +24,7 @@
   </div>
   <div class="disclaimer"><strong>Benchmarking data.</strong> All figures are facility-published medians from CMS machine-readable files; ours included. A percentile below 50 means we publish below most of the market for that column.</div>
 
-  <form class="payerbar card" method="get" action="/position" role="group" aria-label="Choose facility and area">
+  <form class="payerbar card" method="get" action="/position" aria-label="Choose facility and area">
     {% if own_list|length > 1 %}
     <label class="pb-lab" for="facility"><b>Our facility</b></label>
     <select id="facility" name="facility" onchange="this.form.submit()">
@@ -49,7 +49,7 @@
     {% if fac_note %}<div class="disclaimer" style="margin-top:10px"><strong>Read before comparing.</strong> {{ fac_note }}</div>{% endif %}
   </div>
 
-  <div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="Procedure by procedure">
     <div class="fac-h">Procedure by procedure <span class="mute">(competitors{% if metro %} in {{ metro_label }}{% else %} statewide{% endif %}; our row excluded from market figures)</span></div>
     {% if rows %}
     <table class="fac-t pos-t">

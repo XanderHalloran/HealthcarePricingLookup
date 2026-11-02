@@ -19,7 +19,7 @@
   </div>
   <div class="disclaimer"><strong>Benchmarking data.</strong> Hospital prices come from CMS machine-readable files; ASC prices are published self-pay/cash figures with their source. Not every code is ASC-payable, and ASCs are not required to publish prices.</div>
 
-  <form class="payerbar card" method="get" action="/site-of-care" role="group" aria-label="Choose procedure and area">
+  <form class="payerbar card" method="get" action="/site-of-care" aria-label="Choose procedure and area">
     <label class="pb-lab" for="code"><b>Procedure</b></label>
     <select id="code" name="code" onchange="this.form.submit()">
       {% for cat, items in groups %}<optgroup label="{{ cat_labels.get(cat, cat) }}">
@@ -61,7 +61,7 @@
     <div class="sv-note">Hospital figure = median of each facility's cash/negotiated price with mis-keyed outliers excluded; ASC figure = median of published cash prices at ASC, imaging, or office sites. MDsave bundles are listed below for reference but excluded from the shift math because they include surgeon and anesthesia fees.</div>
   </div>
 
-  <div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="Hospitals (outpatient)">
     <div class="fac-h">Hospitals (outpatient)</div>
     {% if hosp %}
     <table class="fac-t"><thead><tr><th>Facility</th><th class="r">Price</th><th class="r">×Medicare OPPS</th><th>Quality</th></tr></thead><tbody>
@@ -71,7 +71,7 @@
     {% else %}<div class="mute">No hospital prices for this code{% if metro %} in this area{% endif %}.</div>{% endif %}
   </div>
 
-  <div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="ASCs and freestanding sites">
     <div class="fac-h">ASCs, freestanding sites &amp; published bundles</div>
     {% if asc %}
     <table class="fac-t"><thead><tr><th>Facility</th><th>Type</th><th>City</th><th class="r">Published price</th><th class="r">×Medicare ASC</th></tr></thead><tbody>

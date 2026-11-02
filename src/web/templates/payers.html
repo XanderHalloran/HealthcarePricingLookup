@@ -28,7 +28,7 @@
   </div>
   <div class="disclaimer"><strong>Benchmarking data.</strong> Each cell is the median across facilities of that facility's median negotiated rate for the insurer (all its plans collapsed); rates below 25% of Medicare are treated as non-facility components and excluded. Medicare = OPPS for outpatient CPTs, IPPS for DRGs, PFS for office/therapy codes.</div>
 
-  <form class="payerbar card" method="get" action="/payers" role="group" aria-label="Choose payer and area">
+  <form class="payerbar card" method="get" action="/payers" aria-label="Choose payer and area">
     <label class="pb-lab" for="payer"><b>Highlight payer</b></label>
     <select id="payer" name="payer" onchange="this.form.submit()">
       <option value="">— all payers side by side —</option>
@@ -49,7 +49,7 @@
     </div>
   </div>
 
-  <div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="Procedure × payer">
     <div class="fac-h">Procedure × payer <span class="mute">(median $ · ×Medicare · facilities)</span></div>
     <table class="fac-t sc-t">
       <thead><tr><th>Procedure</th><th class="r">Medicare</th>{% for p in payers %}<th class="r {{ 'sel' if p == sel }}">{{ p }}</th>{% endfor %}{% if sel and own_label %}<th class="r sel">{{ own_label }} · {{ sel }}</th>{% endif %}</tr></thead>

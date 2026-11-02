@@ -49,7 +49,7 @@
     {% if cov.states|length > 1 %}<p class="mute" style="margin:10px 0 0;font-size:13px">By state: {% for s in cov.states %}{{ s.name }} {{ s.n }}{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
   </div>
 
-  <div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="Data flow">
     <div class="fac-h">Data flow</div>
     <svg class="flow" viewBox="0 0 1000 470" role="img" aria-labelledby="flow-title flow-desc">
       <title id="flow-title">Data flow from public sources to pages</title>

@@ -25,7 +25,7 @@
   </div>
   <div class="disclaimer"><strong>Model, not a quote.</strong> Facility components come from published prices; professional components are Medicare fee-schedule amounts scaled by an editable commercial multiplier ({{ cfg.commercial_multiplier }}×). Implants are inside the facility rate. Adjust assumptions in <code>config-ortho/bundles.yaml</code>.</div>
 
-  <form class="payerbar card" method="get" action="/bundles" role="group" aria-label="Choose episode and area">
+  <form class="payerbar card" method="get" action="/bundles" aria-label="Choose episode and area">
     <label class="pb-lab" for="episode"><b>Episode</b></label>
     <select id="episode" name="episode" onchange="this.form.submit()">
       {% for e in episodes %}<option value="{{ e.key }}" {% if e.key == ep.key %}selected{% endif %}>{{ e.label }}</option>{% endfor %}
@@ -50,7 +50,7 @@
     <div class="sv-note">Positive gap = your bundle is cheaper than that episode.</div>
   </div>
 
-  <div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="Components">
     <div class="fac-h">Components</div>
     <table class="fac-t bt">
       <thead><tr><th>Component</th><th>Basis</th>{% for col in cols %}<th class="r">{{ col.short }}</th>{% endfor %}</tr></thead>
