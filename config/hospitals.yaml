@@ -38,7 +38,7 @@ hospitals:
   # ===== Dignity Health / CommonSpirit (JSON) =====
   - { id: DIGNITY-CHANDLER,  name: "Dignity Chandler Regional Medical Center",  state: AZ, ccn: "030036", format: json, url: "https://www.commonspirit.org/content/dam/commonspiritorg/en/dharz/ceaz/finance/price-transparency/815009488-1700910189_dignity-community-care_standardcharges.json" }
   - { id: DIGNITY-MERCYGILBERT, name: "Dignity Mercy Gilbert Medical Center",   state: AZ, ccn: "030119", format: json, url: "https://www.commonspirit.org/content/dam/commonspiritorg/en/dharz/ceaz/finance/price-transparency/941196203-1992735088_dignity-health_standardcharges.json" }
-  - { id: DIGNITY-STJOSEPHS, name: "Dignity St. Joseph's Hospital (Phoenix)",   state: AZ, ccn: "030024", format: json, url: "https://www.commonspirit.org/content/dam/commonspiritorg/en/dharz/ceaz/finance/price-transparency/941196203-1982733655_dignity-health-st-josephs-hospital-and-medical-center_standardcharges.json" }
+  - { id: DIGNITY-STJOSEPHS, name: "Dignity St. Joseph's Hospital (Phoenix)",   state: AZ, ccn: "030024", format: json, url: "https://www.commonspirit.org/content/dam/commonspiritorg/en/dharz/ceaz/finance/price-transparency/941196203-1982733655_dignity-health_standardcharges.json" }
 
   # ===== Abrazo / Tenet (JSON) =====
   # Central, West, Scottsdale dropped: their MRFs publish only CDM/revenue/drug codes,
@@ -67,7 +67,7 @@ hospitals:
   # One combined CommonSpirit file covers both Yavapai campuses (Prescott + Prescott Valley).
   - { id: YRMC-PRESCOTT,     name: "Yavapai Regional Medical Center (Prescott & Prescott Valley)", state: AZ, ccn: "030030", format: json, url: "https://www.commonspirit.org/content/dam/commonspiritorg/en/dharz/ceaz/finance/price-transparency/860098923-1902897820_yavapai-community-hospital-association_standardcharges.json" }
   - { id: KINGMAN-RMC,       name: "Kingman Regional Medical Center",           state: AZ, ccn: "030026", url: "https://apps.para-hcfs.com/PTT/FinalLinks/Reports.aspx?dbName=dbKingmanRegionalMedCtr&type=CDMWithoutLabel&fileType=CSV" }
-  - { id: HAVASU-RMC,        name: "Havasu Regional Medical Center (Lake Havasu City)", state: AZ, unzip: true, url: "https://www.havasuregional.com/docs/ahhavasuregionalmedicalcenterlibraries/hcl/mrf2q26/205220956_havasu-regional-medical-center_standardcharges.csv.zip" }
+  - { id: HAVASU-RMC,        name: "Havasu Regional Medical Center (Lake Havasu City)", state: AZ, unzip: true, url: "https://www.havasuregional.com/docs/ahhavasuregionalmedicalcenterlibraries/hcl/mrf3q262/205220956_havasu-regional-medical-center_standardcharges.csv.zip" }
   - { id: SUMMIT-SHOW-LOW,   name: "Summit Healthcare Regional Medical Center (Show Low)", state: AZ, ccn: "030016", format: json, url: "https://cleverleypteusstatic.blob.core.windows.net/readable/860320447_summit-healthcare-regional-medical-center_standardcharges.json" }
   - { id: BANNER-PAGE,       name: "Banner Page Hospital (Page)",               state: AZ, url: "https://images.pricetransparency.healthcare/public-mrfs/banner/860394148_page-hospital_standardcharges.csv" }
   - { id: LCMC-WINSLOW,      name: "Little Colorado Medical Center (Winslow)",   state: AZ, ccn: "031311", url: "https://apim.services.craneware.com/api-pricing-transparency/api/public/75a0cb7c61513f26189187ede8493cd6/charges/mrf" }
@@ -384,4 +384,4 @@ hospitals:
   - { id: CLOVIS-COMMUNITY, name: "Clovis Community Medical Center (Clovis)", state: CA, url: "https://sthpiprd.blob.core.windows.net/machine-readable-files/8229/941156276-1316027709_fresno-community-hospital-and-medical-center_standardcharges.csv" }
 
   # ===== UTAH (UT) — addendum 2026-09-10 =====
-  - { id: UT-UOFU-HOSPITAL, name: "University of Utah Hospital & Huntsman Cancer (Salt Lake City)", state: UT, ccn: "460009", unzip: true, url: "https://md.utah.edu/pricing/876000525_University_of_Utah_Standard_Charges%2020260826.zip" }
+  - { id: UT-UOFU-HOSPITAL, name: "University of Utah Hospital & Huntsman Cancer (Salt Lake City)", state: UT, ccn: "460009", unzip: true, url: "https://md.utah.edu/pricing/876000525_UNIVERSITY-OF-UTAH-HOSPITAL-AND-CLINICS_standardcharges.zip" }   # stable name since 2026-10-23; the unzipped .csv in cms-hpt.txt is 33.7 GB, keep the zip
