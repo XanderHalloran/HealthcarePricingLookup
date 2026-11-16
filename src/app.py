@@ -1486,12 +1486,11 @@ def data_coverage(request: Request):
 
 
 @app.get("/corrections", response_class=HTMLResponse)
-def corrections(request: Request):
+def corrections(request: Request, sent: str = "", facility: str = "", procedure: str = "", page: str = ""):
+    """The page + form. ?facility=&procedure=&page= prefill it from a listing's 'correct this' link."""
     _consumer_only()
-    return _page(request, "corrections.html", f"Corrections & listings | {BRAND['short']}",
-                 "Report a wrong price or a missing facility. Every report is reviewed by a person; "
-                 "nothing is published automatically.", "/corrections",
-                 crumbs=[_home_crumb(), {"name": "Corrections"}], sla=CORRECTIONS_SLA)
+    return _corrections_page(request, f={"facility": facility[:200], "procedure": procedure[:200],
+                                         "page": page[:200], "kind": "wrong_price" if facility else ""}, sent=sent)
 
 
 def _services_by_category():
@@ -1774,6 +1773,64 @@ def hospital_profile(request: Request, state_slug: str, metro: str, slug: str):
                          {"name": "Hospitals", "url": f"/{MARKETS[st]['slug']}/hospitals"}, {"name": name}],
                  hid=hid, name=name, m=m, items=items, stars=STATE["hospital_stars"].get(hid),
                  mrf=HOSP_URL.get(hid, ""), ccn=HOSP_CCN.get(hid, ""), cat_labels=dict((c[0], c[1]) for c in hubs.CATEGORIES))
+
+
+# ---------- Review queue + newsletter (local SQLite only; nothing auto-publishes) ----------
+import community  # noqa: E402
+
+
+def _client_ip(request):
+    return request.client.host if request.client else "?"
+
+
+@app.post("/corrections", response_class=HTMLResponse)
+async def corrections_submit(request: Request):
+    """'Submit or correct a listing' -> review queue. Honeypot + per-IP rate limit."""
+    _consumer_only()
+    form = dict(await request.form())
+    if form.get("website"):                                  # bots fill every field
+        return RedirectResponse("/corrections?sent=1#form", status_code=303)
+    fields, err = community.validate(form, capture.valid_email)
+    if not err and not capture.allow("sub:" + _client_ip(request)):
+        err = "Too many submissions from your connection. Try again in an hour."
+    if err:
+        return _corrections_page(request, error=err, f=form, status=400)
+    sid = community.submit(fields, _client_ip(request))
+    return RedirectResponse(f"/corrections?sent={sid}#form", status_code=303)
+
+
+def _corrections_page(request, error="", f=None, sent="", status=200):
+    blank = {k: "" for k in ("kind", "role", "facility", "city", "procedure", "price", "source_url",
+                             "details", "email", "page")}
+    blank.update({k: v for k, v in (f or {}).items() if k in blank and isinstance(v, str)})
+    return _page(request, "corrections.html", f"Corrections & listings | {BRAND['short']}",
+                 "Report a wrong price or a missing provider. Every report is reviewed by a person; "
+                 "nothing is published automatically.", "/corrections",
+                 crumbs=[_home_crumb(), {"name": "Corrections"}], sla=CORRECTIONS_SLA, status=status,
+                 kinds=community.KINDS, roles=community.ROLES, f=blank, error=error,
+                 sent=sent if str(sent).isdigit() else "")
+
+
+@app.post("/newsletter", response_class=HTMLResponse)
+async def newsletter(request: Request):
+    """Store an email for future updates. No platform and no mail is sent yet."""
+    _consumer_only()
+    form = await request.form()
+    back = form.get("page") or "/"
+    back = back if isinstance(back, str) and back.startswith("/") and not back.startswith("//") else "/"
+    if form.get("website"):
+        return _page(request, "newsletter.html", "Signed up", "", "/newsletter", noindex=True, ok=True,
+                     email="", back=back)
+    email = capture.valid_email(form.get("email"))
+    if not email:
+        return _page(request, "newsletter.html", "Sign up", "", "/newsletter", noindex=True, ok=False,
+                     error="That email address doesn't look right.", back=back, status=400)
+    if not capture.allow("nl:" + _client_ip(request)):
+        return _page(request, "newsletter.html", "Sign up", "", "/newsletter", noindex=True, ok=False,
+                     error="Too many sign-ups from your connection. Try again in an hour.", back=back, status=429)
+    community.signup(email, DEFAULT_STATE, back, _client_ip(request))
+    return _page(request, "newsletter.html", f"You're on the list | {BRAND['short']}", "", "/newsletter",
+                 noindex=True, ok=True, email=email, back=back)
 
 
 # ---- catch-all hub routes: keep these LAST so every fixed path above wins ----

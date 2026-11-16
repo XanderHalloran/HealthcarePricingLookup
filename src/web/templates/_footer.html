@@ -11,6 +11,14 @@
     <a href="/privacy">Privacy</a>
     <a href="https://traqqit.com/accessibility.html">Accessibility</a>
   </nav>
+  <form class="tsignup" method="post" action="/newsletter" style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:0 0 12px">
+    <label for="nl-email" style="font-weight:600;color:var(--ink)">Get price updates by email</label>
+    <input id="nl-email" name="email" type="email" required maxlength="254" placeholder="you@example.com" style="border:1px solid var(--line);border-radius:9999px;padding:7px 14px;font:inherit;font-size:14px">
+    <input type="hidden" name="page" value="{{ request.url.path if request else '' }}">
+    <span class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></span>
+    <button class="btn" type="submit">Sign up</button>
+    <span style="font-size:12px;color:var(--mute)">Occasional updates when we add prices. Unsubscribe anytime; we never sell or share addresses.</span>
+  </form>
   <p>Hospital prices from each hospital's CMS machine-readable file{% if data_refreshed %}, last refreshed {{ data_refreshed }}{% endif %}. Independent cash prices from each provider's own public price list, with the date we checked it. Medicare rates: CY2025 OPPS/PFS/CLFS.</p>
   <p><b>No paid placement.</b> Nobody can pay to be listed, ranked, or featured. Estimates only, not a quote and not medical, legal, or financial advice.</p>
 </footer>

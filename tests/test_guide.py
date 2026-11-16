@@ -87,6 +87,31 @@ def test_every_cash_provider_has_a_profile():
         assert client.get(webapp._cash_url(p)).status_code == 200, p["slug"]
 
 
+def test_correction_goes_to_review_queue_not_the_site():
+    import community
+    r = client.post("/corrections", data={"kind": "wrong_price", "facility": "Test Imaging", "procedure": "73721",
+                                          "price": "$199", "source_url": "example.com/prices", "role": "patient"},
+                    follow_redirects=False)
+    assert r.status_code == 303 and "/corrections?sent=" in r.headers["location"]
+    q = community.pending()
+    assert q and q[-1]["facility"] == "Test Imaging" and q[-1]["status"] == "pending"
+    assert q[-1]["source_url"] == "https://example.com/prices"
+    assert "Test Imaging" not in client.get("/cash").text              # nothing auto-publishes
+    assert client.post("/corrections", data={"kind": "nope", "facility": "x"}).status_code == 400
+    bot = client.post("/corrections", data={"kind": "other", "facility": "Spam", "details": "x",
+                                            "website": "http://spam"}, follow_redirects=False)
+    assert bot.status_code == 303 and all(s["facility"] != "Spam" for s in community.pending())
+
+
+def test_newsletter_signup_is_stored_locally():
+    import community, sqlite3
+    r = client.post("/newsletter", data={"email": "Someone@Example.com", "page": "/cash"})
+    assert r.status_code == 200 and "on the list" in r.text
+    with sqlite3.connect(community.db_path()) as con:
+        assert con.execute("select count(*) from signups where email='someone@example.com'").fetchone()[0] == 1
+    assert client.post("/newsletter", data={"email": "bad"}).status_code == 400
+
+
 def _run_all():
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     for fn in fns:

@@ -11,6 +11,25 @@
   </ul>
   <h2>What happens next</h2>
   <p>Every report goes into a review queue that a person reads. Nothing is published automatically. We aim to review reports within {{ sla }}, and when a fix is confirmed it ships with the next site update. Facilities can't pay for placement, so a listing request is only about whether the price data is right.</p>
-  {% block form %}{% endblock %}
+  <h2 id="form">Submit or correct a listing</h2>
+  {% if sent %}<div class="note" role="status"><b>Thanks, it's in the review queue (#{{ sent }}).</b> A person will check it against the source; nothing changes on the site until then.</div>{% endif %}
+  {% if error %}<div class="note" role="alert" style="border-left-color:var(--neg)"><b>{{ error }}</b></div>{% endif %}
+  <form class="form" method="post" action="/corrections">
+    <label>What kind of change?
+      <select name="kind" required>{% for k, v in kinds.items() %}<option value="{{ k }}" {% if f.kind == k %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+    <label>Provider or hospital name <input name="facility" required maxlength="200" value="{{ f.facility }}"></label>
+    <label>City <input name="city" maxlength="80" value="{{ f.city }}"></label>
+    <label>Procedure or CPT code <input name="procedure" maxlength="200" value="{{ f.procedure }}" placeholder="e.g. MRI knee without contrast, 73721"></label>
+    <label>Correct cash price <input name="price" maxlength="40" value="{{ f.price }}" placeholder="$"></label>
+    <label>Public link that shows it <input name="source_url" type="url" maxlength="500" value="{{ f.source_url }}" placeholder="https://"></label>
+    <label>Details <textarea name="details" rows="4" maxlength="4000">{{ f.details }}</textarea></label>
+    <label>You are
+      <select name="role">{% for k, v in roles.items() %}<option value="{{ k }}" {% if f.role == k %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+    <label>Email, if you'd like a reply (optional) <input name="email" type="email" maxlength="254" value="{{ f.email }}"></label>
+    <div class="hp" aria-hidden="true"><label>Leave this empty <input name="website" tabindex="-1" autocomplete="off"></label></div>
+    <input type="hidden" name="page" value="{{ f.page }}">
+    <div><button class="btn" type="submit">Send for review</button></div>
+    <p class="refreshed" style="margin:0">Listing is free and stays free. Submitting a listing doesn't buy placement: we rank by price and data quality only.</p>
+  </form>
 </div>
 {% endblock %}
