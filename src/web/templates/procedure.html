@@ -10,7 +10,7 @@
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ meta_desc }}">
 <meta property="og:url" content="{{ canonical }}">
-<meta property="og:site_name" content="{% if brand and brand.profile == 'ortho' %}{{ brand.name }}{% else %}Medical Price & Bill Coach{% endif %}">
+<meta property="og:site_name" content="{{ brand.name }}">
 <meta property="og:image" content="{{ base }}/static/{% if brand and brand.profile == 'ortho' %}og-ortho.png{% else %}og.png{% endif %}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -31,7 +31,7 @@
   <nav class="crumb"><a href="/">Home</a> › {{ city }} › <span>{{ r.code }}</span></nav>
   <div class="hero">
     <h1 id="content">How much does {{ phrase }} cost in {{ city }}?</h1>
-    <p class="sub">CPT {{ r.code }} — the fair price, every hospital's price, and the Medicare benchmark for {{ city }}.</p>
+    <p class="sub">CPT {{ r.code }} — the fair price, {{ counts.phrase }} compared, and the Medicare benchmark for {{ city }}.</p>
   </div>
   <div class="disclaimer"><strong>Estimates only.</strong> Educational estimates from public Medicare
     benchmarks and hospital-published prices — not a guarantee, and not legal, medical, or financial advice.</div>
@@ -51,12 +51,12 @@
     <p>For <b>{{ phrase }}</b> (CPT {{ r.code }}) in {{ city }},
       {% if r.result.neg_median is not none %}a fair self-pay price is around
         <b>${{ '{:,.0f}'.format(r.result.neg_median) }}</b>,
-        with hospitals ranging from ${{ '{:,.0f}'.format(r.result.neg_low) }} to
-        ${{ '{:,.0f}'.format(r.result.neg_high) }} across {{ r.result.n_hospitals }} facilities.{% else %}hospital prices vary widely — compare each facility above.{% endif %}
+        and the middle half of the {{ counts.in_range }} hospital prices runs from ${{ '{:,.0f}'.format(r.result.neg_low) }} to
+        ${{ '{:,.0f}'.format(r.result.neg_high) }}. The table compares {{ counts.phrase }}.{% else %}hospital prices vary widely — compare all {{ counts.phrase }} above.{% endif %}
       {% if not r.result.medicare_missing %}Medicare's benchmark rate is
         <b>${{ '{:,.0f}'.format(r.result.medicare_rate) }}</b>{% if brand and brand.profile == 'ortho' %}, the benchmark every
         published rate is measured against.{% else %}, the floor to negotiate toward.{% endif %}{% endif %}
-      The card above lists each hospital's price, cheapest first, with CMS quality stars.</p>
+      The card above lists each facility's price, cheapest first, with CMS quality stars for hospitals.</p>
 
     <h2>Frequently asked questions</h2>
     {% for f in faqs %}

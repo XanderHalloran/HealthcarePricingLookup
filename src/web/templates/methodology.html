@@ -40,13 +40,13 @@
   <div class="card">
     <div class="fac-h">Coverage right now</div>
     <div class="kv">
-      <div><b>{{ cov.hospitals }}</b><span>facilities with prices{% if cov.states|length > 1 %} across {{ cov.states|length }} states{% else %} in {{ state_name }}{% endif %}</span></div>
+      <div><b>{{ cov.facilities }}</b><span>facilities with prices{% if cov.states|length > 1 %} across {{ cov.states|length }} states{% else %} in {{ state_name }}{% endif %}{% if cov.independent %} ({{ cov.hospitals }} hospitals + {{ cov.independent }} independent){% endif %}</span></div>
       <div><b>{{ cov.codes }}</b><span>procedure / DRG codes tracked</span></div>
-      <div><b>{{ cov.rows }}</b><span>facility × code price rows</span></div>
+      <div><b>{{ '{:,}'.format(cov.rows) }}</b><span>hospital × code price rows</span></div>
       <div><b>{{ cov.payers }}</b><span>insurers with facility-level negotiated rates</span></div>
       <div><b>{{ data_refreshed }}</b><span>last refresh (rebuilt weekly)</span></div>
     </div>
-    {% if cov.states|length > 1 %}<p class="mute" style="margin:10px 0 0;font-size:13px">By state: {% for s in cov.states %}{{ s.name }} {{ s.n }}{% if not loop.last %} · {% endif %}{% endfor %}</p>{% endif %}
+    <p class="mute" style="margin:10px 0 0;font-size:13px">{% if cov.states|length > 1 %}Hospitals by state: {% for s in cov.states %}{{ s.name }} {{ s.n }}{% if not loop.last %} · {% endif %}{% endfor %}. {% endif %}Full table: <a href="/data-coverage">data coverage</a>.</p>
   </div>
 
   <div class="card" style="margin-top:16px;overflow-x:auto" tabindex="0" role="region" aria-label="Data flow">

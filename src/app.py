@@ -52,9 +52,10 @@ CAT_LABELS = {
 POPULAR_CODES = ["73721", "74178", "70450", "77067", "45378", "27447",
                  "80053", "85027", "99285", "99213", "44970", "59400"]
 
-# When the hospital price dataset was last (re)ingested — surfaced for provenance/trust.
-# ponytail: hand-set on re-ingest; wire to the ingest timer only if it drifts in practice.
-DATA_REFRESHED = "November 2026"
+# When the hospital price dataset was last (re)built — surfaced for provenance/trust.
+# Derived from the dataset itself (see _vintage) so it can't go stale the way the old
+# hand-set "September 2026" string did. The DATA_REFRESHED env var pins it (tests, previews).
+DATA_REFRESHED_PIN = os.environ.get("DATA_REFRESHED", "").strip()
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # One codebase, two sites: APP_CONFIG=config (healthcare.traqqit.com, consumer) or
@@ -64,12 +65,32 @@ BASE_URL = os.environ.get("BASE_URL", "https://healthcare.traqqit.com").rstrip("
 SCHEMA = os.path.join(ROOT, "src", "schema.sql")
 RATES_DIR = os.path.join(ROOT, "data", "hospital_rates")
 PAYER_DIR = os.path.join(ROOT, "data", "payer_rates")
+SITE_HOST = urllib.parse.urlsplit(BASE_URL).netloc or "healthcare.traqqit.com"
+
+
+def _vintage():
+    """'November 15, 2026': when the live dataset was last swapped in. The weekly rebuild
+    builds each state partition in a staging dir and moves it into place, so the newest
+    partition directory's mtime is the last successful swap. A few stat() calls, no cache."""
+    if DATA_REFRESHED_PIN:
+        return DATA_REFRESHED_PIN
+    try:
+        parts = [e for e in os.scandir(RATES_DIR) if e.is_dir() and e.name.startswith("state=")]
+        ts = max(e.stat().st_mtime for e in parts)
+    except (OSError, ValueError):
+        return "date unavailable"
+    import datetime
+    d = datetime.datetime.fromtimestamp(ts)
+    return f"{d:%B} {d.day}, {d.year}"
 
 def _load_brand():
     """Site identity from <CFG>/brand.yaml; the consumer config has none -> defaults."""
     p = os.path.join(CFG, "brand.yaml")
-    b = {"profile": "consumer", "name": "Medical Price & Bill Coach", "short": "Bill Coach",
-         "tagline": "", "audience": ""}
+    # Consumer site: ONE product name in titles and chrome (methodology used to say "Bill Coach"
+    # while every other page said "Medical Price & Bill Coach"). SITE_NAME overrides it, since
+    # the site may move to a new domain/name; BASE_URL already carries the hostname.
+    name = os.environ.get("SITE_NAME", "").strip() or "Medical Price & Bill Coach"
+    b = {"profile": "consumer", "name": name, "short": name, "tagline": "", "audience": ""}
     if os.path.exists(p):
         with open(p, encoding="utf-8") as f:
             b.update(yaml.safe_load(f) or {})
@@ -294,7 +315,7 @@ def _ctx(rows, codes, state, mode, payer="", gfe=None, metro=""):
                            for m in STATE["metros"]["list"] if m["state"] in {x["code"] for x in _live_states()}],
             "market_n": {x["code"]: x.get("n", 0) for x in _live_states()},
             "market_names": {x["code"]: x["name"] for x in _live_states()},
-            "popular": STATE.get("popular", []), "data_refreshed": DATA_REFRESHED,
+            "popular": STATE.get("popular", []), "data_refreshed": _vintage(),
             "gfe": ("%.0f" % gfe) if gfe else "",
             "issues": detect_issues(rows, gfe) if rows else [],
             "savings": savings_summary(rows) if rows else None}
@@ -399,10 +420,10 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
     desc = d.get("description") or code
     phrase = _mid_sentence(desc)            # for use inside sentences; `desc` stays the name
     city, path = _metro_meta(metro, state)
-    n = d.get("n_hospitals") or 0
+    counts = _fac_counts(d)
     low, high = d.get("neg_low"), d.get("neg_high")
     price_bit = (f"from ${low:,.0f}" if low is not None else "prices")
-    meta = (f"Compare {phrase} (CPT {code}) prices across {n} hospitals in {city} — {price_bit}. "
+    meta = (f"Compare {phrase} (CPT {code}) prices across {counts['phrase']} in {city} — {price_bit}. "
             f"See the fair cash price, each hospital's rate, the Medicare benchmark, and how to "
             f"negotiate. Free, no signup.")
     # Internal linking: this state's other metros + "All <State>", then every other state.
@@ -422,7 +443,7 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
         related = [{"desc": s["desc"], "code": s["code"],
                     "url": f"{BASE_URL}/{MARKETS[state]['slug']}/{metro}/{s['slug']}"}
                    for s in TOP_PROCS if s["code"] != code]
-    faqs = _build_faqs(phrase, code, city, d)
+    faqs = _build_faqs(phrase, code, city, d, counts)
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "MedicalProcedure", "name": desc, "url": canonical,
          "code": {"@type": "MedicalCode", "code": code, "codingSystem": "CPT"}},
@@ -437,10 +458,25 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
     return templates.TemplateResponse(request, "procedure.html", {
         "r": r, "city": city, "metro": metro, "desc": desc, "phrase": phrase, "base": BASE_URL, "brand": BRAND,
         "n_hosp": MARKETS[state].get("n", 0), "nav": "compare", "own_ids": OWN_IDS,
-        "canonical": canonical, "faqs": faqs, "ld": ld, "data_refreshed": DATA_REFRESHED,
-        "title": f"How much does {phrase} (CPT {code}) cost in {city}? | Price & Negotiation",
+        "canonical": canonical, "faqs": faqs, "ld": ld, "data_refreshed": _vintage(), "counts": counts,
+        "title": f"How much does {phrase} (CPT {code}) cost in {city}? | {BRAND['short']}",
         "meta_desc": meta, "siblings": siblings, "related": related,
     })
+
+
+def _fac_counts(d):
+    """One facility count for a procedure page, used by title, meta, hero, table and FAQ alike.
+    The table lists hospitals AND independent imaging/surgery centers; the typical range is
+    computed over hospital prices only (n_hospitals). Saying '27 facilities' above a 31-row
+    table was the trust bug — so name both numbers."""
+    facs = d.get("hospitals") or []
+    n_h = sum(1 for h in facs if (h.get("type") or "hospital") == "hospital")
+    n_ind = len(facs) - n_h
+    phrase = (f"{len(facs)} facilities ({n_h} hospitals, {n_ind} independent "
+              f"{'center' if n_ind == 1 else 'centers'})" if n_ind else
+              f"{n_h} {'hospital' if n_h == 1 else 'hospitals'}")
+    return {"total": len(facs), "hospitals": n_h, "independent": n_ind,
+            "in_range": d.get("n_hospitals") or 0, "phrase": phrase}
 
 
 _KEEP_CAPS = {"Achilles"}   # proper nouns that can open a procedure name
@@ -455,19 +491,21 @@ def _mid_sentence(desc):
     return desc[:1].lower() + desc[1:]
 
 
-def _build_faqs(desc, code, city, d):
+def _build_faqs(desc, code, city, d, counts=None):
     """Visible + schema FAQ, grounded in this page's numbers."""
     def m(v):
         return f"${v:,.0f}" if v is not None else None
     low, med, high = d.get("neg_low"), d.get("neg_median"), d.get("neg_high")
-    mc, n = d.get("medicare_rate"), d.get("n_hospitals") or 0
+    mc = d.get("medicare_rate")
+    counts = counts or _fac_counts(d)
     faqs = []
     if med is not None:
         faqs.append({"q": f"How much does {desc} cost in {city}?",
                      "a": (f"A fair self-pay price for {desc} (CPT {code}) in {city} is around "
-                           f"{m(med)}, with hospital prices ranging from {m(low)} to {m(high)} "
-                           f"across {n} facilities. These are estimates from hospital-published "
-                           f"prices, not a guarantee.")})
+                           f"{m(med)}. The middle half of the {counts['in_range']} hospital prices "
+                           f"runs from {m(low)} to {m(high)}; the comparison table lists "
+                           f"{counts['phrase']}. These are estimates from published prices, "
+                           f"not a guarantee.")})
     else:
         faqs.append({"q": f"How much does {desc} cost in {city}?",
                      "a": (f"Hospital prices for {desc} (CPT {code}) in {city} vary widely. "
@@ -574,7 +612,7 @@ def rates(request: Request, code: str = "", metro: str = "", mine: str = ""):
         "metro_label": next((x["label"] for x in STATE["metros"]["list"] if x["key"] == metro), ""),
         "medicare": med_rate, "medicare_src": med_src, "mine": my, "mine_raw": mine, "pct": pct,
         "brand": BRAND, "nav": "rates", "own_ids": OWN_IDS,
-        "data_refreshed": DATA_REFRESHED})
+        "data_refreshed": _vintage()})
 
 
 @app.get("/rates.csv")
@@ -622,7 +660,7 @@ def site_of_care(request: Request, code: str = "", metro: str = ""):
         "svc": svc, "d": d, "hosp": hosp, "asc": asc, "asc_median": asc_median, "n_sites": len(sites),
         "implied": implied, "published_codes": published_codes, "med": med,
         "groups": _groups(), "cat_labels": CAT_LABELS, **_area_ctx(state, metro), "own_ids": OWN_IDS,
-        "brand": BRAND, "nav": "site", "data_refreshed": DATA_REFRESHED})
+        "brand": BRAND, "nav": "site", "data_refreshed": _vintage()})
 
 
 @app.get("/position", response_class=HTMLResponse)
@@ -687,7 +725,7 @@ def position(request: Request, facility: str = "", metro: str = ""):
         "file_note": (f"{STATE['hospital_names'].get(fac_id, fac_id)} publishes prices for {len(rows)} of the "
                       f"{len(STATE['services'])} tracked codes; the rest are not in its machine-readable file."),
         "fac_note": ((BRAND.get("own") or {}).get("notes") or {}).get(fac_id),
-        "data_refreshed": DATA_REFRESHED})
+        "data_refreshed": _vintage()})
 
 
 # ---------- Payer scorecard: every payer x every code, one parquet scan, cached per refresh ----------
@@ -767,7 +805,7 @@ def payer_scorecard(request: Request, payer: str = "", metro: str = ""):
     return templates.TemplateResponse(request, "payers.html", {
         "brand": BRAND, "nav": "payers", **_area_ctx(state, metro),
         "rows": rows, "payers": payers, "sel": sel, "ranking": ranking, "min_fac": MIN_FAC, "own_label": (BRAND.get("own") or {}).get("label") if OWN_IDS else "",
-        "data_refreshed": DATA_REFRESHED})
+        "data_refreshed": _vintage()})
 
 
 @app.get("/payers.csv")
@@ -884,32 +922,55 @@ def bundles(request: Request, episode: str = "", metro: str = "", mine: str = ""
         "brand": BRAND, "nav": "bundles", **_area_ctx(state, metro),
         "ep": ep, "episodes": eps, "cfg": BUNDLES, "cols": cols, "comps": comps, "drg_row": drg_row,
         "mine": my, "mine_raw": mine,
-        "own_label": own_label, "own_col": bool(own_fac), "data_refreshed": DATA_REFRESHED})
+        "own_label": own_label, "own_col": bool(own_fac), "data_refreshed": _vintage()})
 
 
 _COV_CACHE = {}
 
 
+def _independents(state=None):
+    """Independent (non-hospital) facilities with at least one published price: the inline
+    freestanding imaging/ASC list. They sit in the same compare tables, so they count."""
+    names = {(f["state"], f["name"]) for rows in STATE["freestanding"].values() for f in rows
+             if f.get("price") is not None and (state is None or f["state"] == state)}
+    return len(names)
+
+
 def _coverage(stamp):
-    """Live coverage numbers for the methodology page, cached per data refresh stamp.
+    """Live coverage numbers for /methodology and /data-coverage, cached per data refresh stamp.
     Only a non-empty result is cached: a read that lands mid-refresh or during warm-up
     used to pin '0 facilities' until the next data refresh changed the stamp."""
     if stamp in _COV_CACHE:
         return _COV_CACHE[stamp]
     from pricing import rates_source
     from pricing import _has_parquet
-    cov = {"hospitals": 0, "codes": len(STATE["services"]), "rows": 0, "payers": len(PAYER_LIST), "states": []}
+    cov = {"hospitals": 0, "codes": len(STATE["services"]), "rows": 0, "payers": len(PAYER_LIST),
+           "states": [], "independent": _independents(), "vintage": _vintage()}
+    payers = {}
+    if _has_parquet(PAYER_DIR):
+        payers = dict(_con().execute(
+            f"SELECT state, count(DISTINCT payer) FROM {rates_source(PAYER_DIR)} GROUP BY 1").fetchall())
     if _has_parquet(RATES_DIR):
-        for st, n, rows in _con().execute(
-                f"SELECT state, count(distinct hospital_id), count(*) FROM {rates_source(RATES_DIR)} GROUP BY 1 ORDER BY 1").fetchall():
+        for st, n, codes, rows in _con().execute(
+                f"SELECT state, count(DISTINCT hospital_id), count(DISTINCT code), count(*) "
+                f"FROM {rates_source(RATES_DIR)} GROUP BY 1 ORDER BY 1").fetchall():
             if st in MARKETS:
-                cov["states"].append({"code": st, "name": MARKETS[st]["name"], "n": n})
+                cov["states"].append({"code": st, "name": MARKETS[st]["name"], "slug": MARKETS[st]["slug"],
+                                      "n": n, "configured": MARKETS[st].get("n", 0), "codes": codes,
+                                      "rows": rows, "payers": payers.get(st, 0),
+                                      "independent": _independents(st)})
             cov["hospitals"] += n
             cov["rows"] += rows
+    cov["facilities"] = cov["hospitals"] + cov["independent"]
     if cov["hospitals"]:
         _COV_CACHE.clear()
         _COV_CACHE[stamp] = cov
     return cov
+
+
+def _cov():
+    # Keyed on the rate-table generation too, so a table rebuild refreshes the counts.
+    return _coverage((os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0, _TBL["gen"]))
 
 
 @lru_cache(maxsize=2048)
@@ -1049,7 +1110,7 @@ def near_map(request: Request, code: str = "", q: str = "", radius: str = "25", 
         "medicare": med_rate, "radii": _radii(rad), "groups": _groups(), "cat_labels": CAT_LABELS,
         "payers": PAYER_LIST, "sel": sel, "ded": ded, "coins": coins, "moved": moved,
         "brand": BRAND, "nav": "map", **_area_ctx(state, metro), "own_ids": OWN_IDS,
-        "data_refreshed": DATA_REFRESHED})
+        "data_refreshed": _vintage()})
 
 
 @app.get("/refer", response_class=HTMLResponse)
@@ -1078,7 +1139,7 @@ def refer(request: Request, code: str = "", q: str = "", radius: str = "25", met
         "radii": _radii(rad), "groups": _groups(), "cat_labels": CAT_LABELS,
         "payers": PAYER_LIST, "sel": sel, "ded": ded, "coins": coins,
         "brand": BRAND, "nav": "refer", **_area_ctx(state, metro), "own_ids": OWN_IDS,
-        "data_refreshed": DATA_REFRESHED})
+        "data_refreshed": _vintage()})
 
 
 @app.get("/methodology", response_class=HTMLResponse)
@@ -1087,12 +1148,11 @@ def methodology(request: Request):
     with open(os.path.join(CFG, "medicare.yaml"), encoding="utf-8") as f:
         med = yaml.safe_load(f) or {}
     med_sources = {s for (s,) in _con().execute("SELECT DISTINCT source FROM medicare_rates").fetchall()}
-    stamp = (os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0, _TBL["gen"])
     return templates.TemplateResponse(request, "methodology.html", {
-        "brand": BRAND, "base": BASE_URL, "nav": "method", "cov": _coverage(stamp),
+        "brand": BRAND, "base": BASE_URL, "nav": "method", "cov": _cov(),
         "state_name": MARKETS[DEFAULT_STATE]["name"], "n_hosp": MARKETS[DEFAULT_STATE].get("n", 0),
         "med_year": med.get("year", 2025), "pfs_cf": med.get("pfs_conversion_factor", ""),
-        "med_sources": med_sources, "has_hk": bool(STATE["hip_knee"]), "data_refreshed": DATA_REFRESHED,
+        "med_sources": med_sources, "has_hk": bool(STATE["hip_knee"]), "data_refreshed": _vintage(),
         "groups": _groups(), "cat_labels": CAT_LABELS, "state_slug": MARKETS[DEFAULT_STATE]["slug"],
         "first_metro": next((m["key"] for m in STATE["metros"]["list"] if m["state"] == DEFAULT_STATE), "")})
 
