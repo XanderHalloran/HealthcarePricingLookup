@@ -1,0 +1,43 @@
+{% extends "_layout.html" %}
+{% macro money(v) %}{% if v is not none %}${{ '{:,.0f}'.format(v) }}{% else %}—{% endif %}{% endmacro %}
+{% block content %}
+<div class="hero"><h1 id="content">{{ label }} cost in {{ city }}</h1>
+  <p class="sub">{{ blurb }}. Published hospital prices{% if n_cash %} and {{ n_cash }} independent cash prices{% endif %} for {{ place }}, updated {{ data_refreshed }}.</p>
+  <div class="tstrip"><span>✓ No paid placement</span><span>✓ Same numbers as each procedure page</span></div></div>
+<div class="card" style="overflow-x:auto">
+  <div class="fac-h">Every {{ label }} code we track in {{ place }}</div>
+  <table class="ptable">
+    <thead><tr><th>Procedure</th><th class="r">Typical</th><th class="r">Middle 50%</th>{% if metro %}<th class="r">{{ cov.states[0].name if cov.states else 'State' }} typical</th>{% endif %}<th class="r">Lowest cash</th><th class="r">Medicare</th><th class="r">Facilities</th></tr></thead>
+    <tbody>{% for r in rows %}<tr>
+      <td><a href="{{ r.url }}">{{ r.svc.desc }}</a><span class="sub">CPT {{ r.code }}</span></td>
+      <td class="r money">{{ money(r.sm.median) }}</td>
+      <td class="r">{% if r.sm.low is not none %}{{ money(r.sm.low) }} – {{ money(r.sm.high) }}<span class="sub">n = {{ r.sm.n_range }} hospitals</span>{% else %}—{% endif %}</td>
+      {% if metro %}<td class="r">{{ money(r.state_typical) }}</td>{% endif %}
+      <td class="r">{{ money(r.sm.cash_low) }}{% if r.sm.n_cash %}<span class="sub">{{ r.sm.n_cash }} publish cash</span>{% endif %}</td>
+      <td class="r">{{ money(r.sm.medicare) }}</td>
+      <td class="r">{{ r.sm.n_fac }}</td></tr>{% endfor %}</tbody>
+  </table>
+  <p class="refreshed"><b>Typical</b> = median across hospitals, using each hospital's published cash price where it has one and its negotiated (insurer) median otherwise, after removing implausible values. <b>Middle 50%</b> = 25th to 75th percentile of those hospital prices. <b>Lowest cash</b> = lowest published hospital cash price. Facility fee only; physician fees are often separate. <a href="/methodology">Methodology</a>.</p>
+</div>
+{% for r in lowest %}
+<div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="fac-h">Lowest published prices: {{ r.svc.desc }} (CPT {{ r.code }})</div>
+  <table class="ptable"><thead><tr><th>Facility</th><th class="r">Price</th></tr></thead>
+  <tbody>{% for h in r.sm.lowest %}<tr><td>{% set _u = fac_url(h) %}{% if _u %}<a href="{{ _u }}">{{ h.name }}</a>{% else %}{{ h.name }}{% endif %}<span class="sub">{{ 'Hospital' if (h.type or 'hospital') == 'hospital' else 'Independent ' ~ h.type }}</span></td>
+    <td class="r money">{{ money(h.price) }}<span class="sub"><span class="kind {{ 'cash' if h.rate_type == 'cash' else 'neg' }}">{{ 'cash' if h.rate_type == 'cash' else 'negotiated median' }}</span></span></td></tr>{% endfor %}</tbody></table>
+  <p class="refreshed"><a href="{{ r.url }}">All {{ r.sm.n_fac }} facilities for CPT {{ r.code }} →</a></p>
+</div>
+{% endfor %}
+{% if cash %}
+<div class="card" style="margin-top:16px;overflow-x:auto">
+  <div class="fac-h">Independent cash-pay prices{% if metro %} in and around {{ city }}{% endif %}, lowest first</div>
+  <table class="ptable"><thead><tr><th>Provider</th><th>Service as listed</th><th class="r">Price</th><th>Source</th></tr></thead>
+  <tbody>{% for r in cash %}{% set show_provider = true %}{% include "_cash_row.html" %}{% endfor %}</tbody></table>
+  <p class="refreshed">{% for g in cash_groups %}<a href="/cash?procedure={{ g }}">All {{ g|replace('-', ' ') }} cash prices →</a> {% endfor %}</p>
+</div>
+{% endif %}
+<div class="card" style="margin-top:16px"><div class="fac-h">{{ label }} in other areas</div>
+  <div class="linkgrid">{% for a in areas %}<a class="pill" href="{{ a.url }}">{{ a.label }}</a>{% endfor %}</div>
+  <div class="fac-h" style="margin-top:14px">Other categories</div>
+  <div class="linkgrid">{% for o in others %}<a class="pill" href="{{ o.url }}">{{ o.label }}</a>{% endfor %}</div></div>
+{% endblock %}

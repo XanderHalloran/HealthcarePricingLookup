@@ -1,0 +1,4 @@
+<a class="tile" href="{{ t.url }}"><b>{{ t.label }}</b>
+  {% if t.typical is not none %}<div class="amt">${{ '{:,.0f}'.format(t.typical) }}</div><small>typical hospital price, {{ t.desc }}</small>{% endif %}
+  {% if t.cash_low is not none %}<small>lowest published cash: <b>${{ '{:,.0f}'.format(t.cash_low) }}</b></small>{% endif %}
+  <small>{{ t.n_fac }} facilities · {{ t.n_codes }} codes</small></a>

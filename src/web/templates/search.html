@@ -3,7 +3,7 @@
 <div class="hero"><h1 id="content">{% if search_q %}Results for “{{ search_q }}”{% else %}Search procedures{% endif %}</h1></div>
 <div class="card">
 {% if hits %}
-  <div class="linkgrid">{% for s in hits %}<a class="pill" href="/procedure/{{ s.code }}">{{ s.desc }} <small>{{ s.code }}</small></a>{% endfor %}</div>
+  <div class="linkgrid">{% for s in hits %}<a class="pill" href="{{ hit_base }}{{ s.code }}">{{ s.desc }} <small>{{ s.code }}</small></a>{% endfor %}</div>
 {% elif search_q %}
   <p>No tracked procedure matches “{{ search_q }}”. Try a simpler word (MRI, colonoscopy, CBC) or a 5-digit CPT code, or <a href="/procedures">browse all procedures</a>.</p>
 {% else %}

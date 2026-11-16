@@ -28,9 +28,9 @@ CATEGORIES = [
      ["71046", "71045", "72110", "73562", "73610", "73130"]),
     ("ultrasound", "Ultrasound", "Abdominal, pelvic, vascular and OB ultrasound", "76700",
      ["76700", "76705", "76856", "76830", "93880", "76805", "76801"]),
-    ("mammogram", "Mammogram & bone density", "Screening and diagnostic mammograms, DEXA", "77067",
+    ("mammography", "Mammogram & bone density", "Screening and diagnostic mammograms, DEXA", "77067",
      ["77067", "77066", "77065", "77080"]),
-    ("colonoscopy", "Colonoscopy & endoscopy", "Screening and diagnostic scopes", "45378",
+    ("gi-endoscopy", "Colonoscopy & endoscopy", "Screening and diagnostic scopes", "45378",
      ["45378", "G0121", "45380", "45385", "43235", "43239"]),
     ("labs", "Lab tests", "Blood panels, A1c, thyroid, urinalysis", "80053",
      ["80053", "80048", "85025", "85027", "80061", "83036", "84443", "81001", "80050",
@@ -51,6 +51,12 @@ CATEGORIES = [
      ["59400", "59510", "76801", "58571", "58120", "57454"]),
 ]
 CAT_BY_SLUG = {c[0]: c for c in CATEGORIES}
+# Category slugs must never equal a procedure slug (allowlist `slug:`), because both live at
+# /arizona/phoenix/<slug>: hence 'mammography' (vs the 'mammogram' page) and 'gi-endoscopy'.
+# Hub category -> cash-pay directory groups (src/cashpay.py GROUPS) shown on that hub.
+CASH_GROUPS = {"mri": ["mri"], "ct": ["ct"], "x-ray": ["x-ray"], "ultrasound": ["ultrasound"],
+               "mammography": ["mammogram", "dexa"], "gi-endoscopy": ["colonoscopy"], "labs": ["labs"],
+               "office-visits": ["primary-care"]}
 
 # Everyday words people search with that the official descriptions don't contain.
 ALIASES = {

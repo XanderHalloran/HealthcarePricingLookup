@@ -344,8 +344,13 @@ def _analyze(codes, state, payer=None, metro=None, lat=None, lon=None):
 @app.get("/", response_class=HTMLResponse)
 def index(request: Request, state: str = "", metro: str = ""):
     """Home. `?state=CA` (or `?metro=denver`) pre-selects a market; unknown -> default."""
-    return templates.TemplateResponse(request, "index.html",
-                                      dict(_ctx(None, "", state, "shop", metro=metro), nav="home"))
+    ctx = dict(_ctx(None, "", state, "shop", metro=metro), nav="home")
+    if CONSUMER:
+        st = ctx["state"]
+        ctx["guide"] = {"tiles": _tiles(st), "state_slug": MARKETS[st]["slug"],
+                        "n_priced": next((x["n"] for x in _cov()["states"] if x["code"] == st), 0),
+                        "n_cash": len([p for p in _cash_providers(st) if p["n_priced"]])}
+    return templates.TemplateResponse(request, "index.html", ctx)
 
 
 @app.get("/card", response_class=HTMLResponse)
@@ -456,7 +461,9 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
             {"@type": "Question", "name": f["q"],
              "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in faqs]},
     ]}
+    detail = _procedure_detail(code, state, metro, d) if CONSUMER else None
     return templates.TemplateResponse(request, "procedure.html", {
+        "detail": detail,
         "r": r, "city": city, "metro": metro, "desc": desc, "phrase": phrase, "base": BASE_URL, "brand": BRAND,
         "n_hosp": MARKETS[state].get("n", 0), "nav": "compare", "own_ids": OWN_IDS,
         "canonical": canonical, "faqs": faqs, "ld": ld, "data_refreshed": _vintage(), "counts": counts,
@@ -465,6 +472,35 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
         "title": f"How much does {phrase} (CPT {code}) cost in {city}? | {BRAND['short']}",
         "meta_desc": meta, "siblings": siblings, "related": related,
     })
+
+
+def _procedure_detail(code, state, metro, d):
+    """Comparison context for a consumer procedure page: metro vs state typical with n,
+    insurer medians with hospital counts, and the category it belongs to."""
+    import hubs
+    out = {"state_name": MARKETS[state]["name"], "state_typical": None, "state_n": 0, "payers": [],
+           "cat": None, "cat_url": "", "related": []}
+    if metro:
+        srows = [r for r in _analyze(code, state, None, None) if r["resolved"]]
+        if srows:
+            out["state_typical"] = srows[0]["result"].get("neg_median")
+            out["state_n"] = srows[0]["result"].get("n_hospitals") or 0
+    try:
+        pm = payer_matrix(_con(), RATES_DIR, PAYER_DIR, code, state, STATE["hospital_names"],
+                          STATE["metros"]["ids"].get(metro) if metro else None, PAYER_LIST)
+        out["payers"] = sorted(({"payer": p, "median": pm["stats"][p]["median"], "n": pm["stats"][p]["n"]}
+                                for p in pm["payers"] if p in pm["stats"]), key=lambda x: x["median"])
+    except Exception:             # payer data is optional context; never fail the page on it
+        out["payers"] = []
+    cat = hubs.category_of(code)
+    if cat:
+        c = hubs.CAT_BY_SLUG[cat]
+        base = f"/{MARKETS[state]['slug']}" + (f"/{metro}" if metro else "")
+        out.update(cat=c[1], cat_url=f"{base}/{cat}")
+        proc_base = f"/{metro}/procedure/" if metro else f"{_state_path(state)}/procedure/"
+        out["related"] = [{"desc": _by_code[k]["desc"], "code": k, "url": f"{proc_base}{k}"}
+                          for k in c[4] if k != code and k in _by_code]
+    return out
 
 
 def _procedure_crumbs(state, metro, code, city, path):
@@ -525,8 +561,9 @@ def _build_faqs(desc, code, city, d, counts=None):
     faqs = []
     if med is not None:
         faqs.append({"q": f"How much does {desc} cost in {city}?",
-                     "a": (f"A fair self-pay price for {desc} (CPT {code}) in {city} is around "
-                           f"{m(med)}. The middle half of the {counts['in_range']} hospital prices "
+                     "a": (f"The typical hospital price for {desc} (CPT {code}) in {city} is about "
+                           f"{m(med)} (each hospital's published cash price where it has one, otherwise "
+                           f"its negotiated insurer median). The middle half of the {counts['in_range']} hospital prices "
                            f"runs from {m(low)} to {m(high)}; the comparison table lists "
                            f"{counts['phrase']}. These are estimates from published prices, "
                            f"not a guarantee.")})
@@ -585,10 +622,13 @@ def procedure_slug(request: Request, state_slug: str, metro: str, proc_slug: str
     """Readable SEO page for a top procedure: /arizona/phoenix/mri-brain.
     Registered AFTER /{area}/procedure/{code} so that pattern keeps winning."""
     state = MARKET_BY_SLUG.get(state_slug)
-    if not state or STATE["metros"]["state_of"].get(metro) != state or proc_slug not in SLUG_TO_CODE:
+    is_cat = CONSUMER and proc_slug in hubs.CAT_BY_SLUG
+    if not state or STATE["metros"]["state_of"].get(metro) != state or not (proc_slug in SLUG_TO_CODE or is_cat):
         return HTMLResponse("Unknown page.", status_code=404)
     if state != _market(state):
         return _coming_soon(state)
+    if proc_slug not in SLUG_TO_CODE:                     # /arizona/phoenix/mri: a category hub
+        return _category_hub(request, state, metro, proc_slug)
     return _procedure_page(request, SLUG_TO_CODE[proc_slug], metro)
 
 
@@ -1201,6 +1241,21 @@ def sitemap():
         if m["state"] in live:
             for s in TOP_PROCS:
                 urls.append(f"{BASE_URL}/{MARKETS[m['state']]['slug']}/{m['key']}/{s['slug']}")
+    if CONSUMER:
+        urls += [f"{BASE_URL}{p}" for p in ("/procedures", "/cash", "/data-coverage", "/trust", "/corrections",
+                                            "/faq", "/about", "/privacy")]
+        for st in live:
+            sl = MARKETS[st]["slug"]
+            urls += [f"{BASE_URL}/{sl}", f"{BASE_URL}/{sl}/hospitals"]
+            urls += [f"{BASE_URL}/{sl}/{c[0]}" for c in hubs.CATEGORIES]
+            for m in STATE["metros"]["list"]:
+                if m["state"] == st:
+                    urls.append(f"{BASE_URL}/{sl}/{m['key']}")
+                    if m["promote"]:
+                        urls += [f"{BASE_URL}/{sl}/{m['key']}/{c[0]}" for c in hubs.CATEGORIES]
+            urls += [f"{BASE_URL}{_hosp_url(h['id'])}" for h in _state_hospitals(st) if h["codes"] and h["url"]]
+        urls += [f"{BASE_URL}{_cash_url(p)}" for p in CASH["providers"]]
+        urls += [f"{BASE_URL}{_freestanding_url(e['name'])}" for e in FREESTANDING_SLUG.values() if e["state"] in live]
     body = ('<?xml version="1.0" encoding="UTF-8"?>'
             '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
             + "".join(f"<url><loc>{u}</loc></url>" for u in urls) + "</urlset>")
@@ -1518,12 +1573,13 @@ def procedures(request: Request):
 
 
 @app.get("/search", response_class=HTMLResponse)
-def search(request: Request, q: str = ""):
+def search(request: Request, q: str = "", area: str = ""):
     _consumer_only()
     qs = (q or "").strip()
     code = qs.upper()
+    area = area if area in STATE["metros"]["ids"] else ""
     if code in _by_code:
-        return RedirectResponse(f"/procedure/{code}", status_code=302)
+        return RedirectResponse(f"/{area}/procedure/{code}" if area else f"/procedure/{code}", status_code=302)
     words = [w for w in qs.lower().replace(",", " ").split() if w]
     hits = []
     if words:
@@ -1535,7 +1591,8 @@ def search(request: Request, q: str = ""):
                 hits.append(s)
     return _page(request, "search.html", f"Search: {qs} | {BRAND['short']}" if qs else f"Search | {BRAND['short']}",
                  "Search procedures by name or CPT code.", "/search", nav="procedures", noindex=True,
-                 crumbs=[_home_crumb(), {"name": "Search"}], hits=hits, search_q=qs)
+                 crumbs=[_home_crumb(), {"name": "Search"}], hits=hits, search_q=qs,
+                 hit_base=f"/{area}/procedure/" if area else "/procedure/")
 
 
 @app.get("/hospitals")
@@ -1575,8 +1632,34 @@ def _metro_hub(request, st, mk):
 
 
 def _hub_extra(st, mk):
-    """Cash-pay listings (and, below, category tiles) for a state or metro hub."""
-    return {"tiles": [], "cash_providers": _cash_providers(st, mk)}
+    """Category tiles + cash-pay listings for a state or metro hub."""
+    return {"tiles": _tiles(st, mk), "cash_providers": _cash_providers(st, mk)}
+
+
+def _cash_in_cat(st, mk, cat):
+    groups = set(hubs.CASH_GROUPS.get(cat, []))
+    return cashpay.rank([r for r in CASH["rows"] if r["group"] in groups and r["price"] is not None
+                         and r["provider"]["state"] == st and (mk is None or r["provider"]["metro"] in (mk, None))])
+
+
+def _tiles(st, mk=None):
+    """One tile per care category: typical hospital price for its anchor code, facility count,
+    and the lowest published cash price in the category (hospital or independent)."""
+    cat = _catalog(st, mk)
+    base = f"/{MARKETS[st]['slug']}" + (f"/{mk}" if mk else "")
+    out = []
+    for slug, label, blurb, rep, codes in hubs.CATEGORIES:
+        d = cat.get(rep)
+        if not d:
+            continue
+        sm = hubs.summarize(d)
+        cash = _cash_in_cat(st, mk, slug)
+        lows = [x for x in (sm["cash_low"], cash[0]["price"] if cash else None) if x is not None]
+        out.append({"slug": slug, "label": label, "blurb": blurb, "code": rep, "desc": _by_code[rep]["desc"],
+                    "typical": sm["median"], "n_fac": sm["n_fac"] + len({r["provider"]["slug"] for r in cash}),
+                    "cash_low": min(lows) if lows else None, "url": f"{base}/{slug}",
+                    "n_codes": sum(1 for c in codes if c in cat)})
+    return out
 
 
 def _hospital_index(request, st):
@@ -1833,6 +1916,70 @@ async def newsletter(request: Request):
                  noindex=True, ok=True, email=email, back=back)
 
 
+# ---------- Speed: rendered-page cache, warm-up, gzip ----------
+# Procedure, hub and methodology pages were taking 5-30 s on the 3.8 GB VPS (one 504). The
+# data only changes at the weekly swap, so a rendered page is reusable until RATES_DIR's
+# mtime changes (the swap) or PAGE_CACHE_TTL passes. Forms, search and geo lookups are never cached.
+import time as _time  # noqa: E402
+from collections import OrderedDict  # noqa: E402
+from fastapi.middleware.gzip import GZipMiddleware  # noqa: E402
+
+_UNDER_TEST = "pytest" in sys.modules
+PAGE_CACHE_TTL = int(os.environ.get("PAGE_CACHE_TTL", "0" if _UNDER_TEST else "3600"))
+PAGE_CACHE_MAX = int(os.environ.get("PAGE_CACHE_MAX", "3000"))
+_NO_CACHE = {"/corrections", "/search", "/newsletter", "/geo", "/map", "/refer", "/eob", "/ask", "/email", "/letter"}
+_PAGE_CACHE: "OrderedDict[tuple, tuple]" = OrderedDict()
+
+
+def _cache_stamp():
+    """Key for the page cache and the result/catalog memos: the dataset swap (top dir mtime)
+    plus the rate-table generation, so cached pages drop when the tables are rebuilt. Not
+    named _data_stamp: that is the table loader's own (fuller) change detector."""
+    return (os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0, _TBL["gen"])
+
+
+@app.middleware("http")
+async def page_cache(request: Request, call_next):
+    path = request.url.path
+    if (request.method != "GET" or PAGE_CACHE_TTL <= 0 or path in _NO_CACHE
+            or path.startswith("/static") or request.headers.get("authorization")):
+        return await call_next(request)
+    key, now, stamp = (path, request.url.query), _time.time(), _cache_stamp()
+    hit = _PAGE_CACHE.get(key)
+    if hit and hit[0] == stamp and now - hit[1] < PAGE_CACHE_TTL:
+        _PAGE_CACHE.move_to_end(key)
+        return Response(hit[2], media_type="text/html; charset=utf-8", headers={"X-Page-Cache": "HIT"})
+    resp = await call_next(request)
+    if resp.status_code != 200 or not resp.headers.get("content-type", "").startswith("text/html"):
+        return resp
+    body = b"".join([chunk async for chunk in resp.body_iterator])
+    _PAGE_CACHE[key] = (stamp, now, body)
+    while len(_PAGE_CACHE) > PAGE_CACHE_MAX:
+        _PAGE_CACHE.popitem(last=False)
+    return Response(body, media_type="text/html; charset=utf-8", headers={"X-Page-Cache": "MISS"})
+
+
+app.add_middleware(GZipMiddleware, minimum_size=1000)
+
+
+def _warm():
+    """Precompute what the guide pages read (coverage, per-hospital counts, the default
+    state's catalog and its promoted metros) right after start-up, off the request path."""
+    try:
+        _cov()
+        _hosp_stats()
+        _catalog(DEFAULT_STATE)
+        for m in STATE["metros"]["list"]:
+            if m["state"] == DEFAULT_STATE and m["promote"]:
+                _catalog(DEFAULT_STATE, m["key"])
+    except Exception as ex:   # warm-up is an optimization; the pages compute lazily anyway
+        print(f"warm-up skipped: {type(ex).__name__}: {ex}", file=sys.stderr)
+
+
+if CONSUMER and os.environ.get("WARM_CATALOG", "0" if _UNDER_TEST else "1") == "1":
+    threading.Thread(target=_warm, name="warm-catalog", daemon=True).start()
+
+
 # ---- catch-all hub routes: keep these LAST so every fixed path above wins ----
 @app.get("/{slug}", response_class=HTMLResponse)
 def one_segment(request: Request, slug: str):
@@ -1869,5 +2016,40 @@ def two_segments(request: Request, a: str, b: str):
 
 
 def _category_hub(request, st, mk, cat):
-    """Placeholder until the category hubs land: send visitors to the procedure catalog."""
-    raise HTTPException(status_code=404)
+    """/arizona/mri or /arizona/phoenix/mri: every tracked code in the family with typical,
+    middle-50% range and n (same numbers as the CPT pages), the lowest published prices for
+    the anchor codes, and independent cash listings for the category."""
+    slug, label, blurb, rep, codes = hubs.CAT_BY_SLUG[cat]
+    catalog, state_cat = _catalog(st, mk), (_catalog(st) if mk else None)
+    m = next((x for x in STATE["metros"]["list"] if x["key"] == mk), None) if mk else None
+    place = m["label"] if m else MARKETS[st]["name"]
+    city = m["city"].split(",")[0] if m else MARKETS[st]["name"]
+    proc_base = f"/{mk}/procedure/" if mk else f"{_state_path(st)}/procedure/"
+    rows = []
+    for c in codes:
+        d = catalog.get(c)
+        if not d:
+            continue
+        sm = hubs.summarize(d)
+        url = (f"/{MARKETS[st]['slug']}/{mk}/{CODE_TO_SLUG[c]}" if mk and c in CODE_TO_SLUG else f"{proc_base}{c}")
+        rows.append({"svc": _by_code[c], "code": c, "sm": sm, "url": url,
+                     "state_typical": hubs.summarize(state_cat[c])["median"] if state_cat and c in state_cat else None})
+    if not rows:
+        raise HTTPException(status_code=404)
+    lowest = [r for r in rows if r["sm"]["lowest"]][:3]
+    cash = _cash_in_cat(st, mk, cat)
+    base = f"/{MARKETS[st]['slug']}" + (f"/{mk}" if mk else "")
+    crumbs = [_home_crumb(), _state_crumb(st)]
+    if m:
+        crumbs.append({"name": m["label"], "url": f"/{MARKETS[st]['slug']}/{mk}"})
+    crumbs.append({"name": label})
+    others = [{"label": c[1], "url": f"{base}/{c[0]}"} for c in hubs.CATEGORIES if c[0] != cat]
+    areas = ([{"label": f"All {MARKETS[st]['name']}", "url": f"/{MARKETS[st]['slug']}/{cat}"}] if mk else []) + \
+        [{"label": x["label"], "url": f"/{MARKETS[st]['slug']}/{x['key']}/{cat}"}
+         for x in STATE["metros"]["list"] if x["state"] == st and x["key"] != mk]
+    return _page(request, "category.html", f"{label} cost in {city}: hospital and cash prices | {BRAND['short']}",
+                 f"{label} prices in {place}: {len(rows)} procedure codes with typical price, range and facility "
+                 f"count, plus the lowest published cash prices. No paid placement.",
+                 f"{base}/{cat}", nav="category", crumbs=crumbs, label=label, blurb=blurb, place=place,
+                 city=city, rows=rows, lowest=lowest, cash=cash[:12], n_cash=len(cash), metro=mk, st=st,
+                 cash_groups=hubs.CASH_GROUPS.get(cat, []), others=others, areas=areas)

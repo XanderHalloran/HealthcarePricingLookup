@@ -112,6 +112,50 @@ def test_newsletter_signup_is_stored_locally():
     assert client.post("/newsletter", data={"email": "bad"}).status_code == 400
 
 
+def test_home_is_a_clickable_price_guide():
+    t = client.get("/").text
+    assert 'class="tiles"' in t and 'href="/arizona/mri"' in t           # category tiles above the tools
+    assert "No paid placement" in t and "Negotiation Coach" in t        # bill tools still there
+
+
+def test_category_hubs_match_procedure_numbers():
+    r = client.get("/arizona/phoenix/mri")
+    assert r.status_code == 200 and "/arizona/phoenix/mri-brain" in r.text
+    d = [x for x in webapp._analyze("70551", "AZ", None, "phoenix") if x["resolved"]][0]["result"]
+    assert "${:,.0f}".format(d["neg_median"]) in r.text                 # same typical as the CPT page
+    assert client.get("/arizona/labs").status_code == 200
+    assert client.get("/phoenix/mri", follow_redirects=False).headers["location"] == "/arizona/phoenix/mri"
+    # category slugs never shadow procedure slugs
+    assert "CPT 77067" in client.get("/arizona/phoenix/mammogram").text
+    assert client.get("/arizona/phoenix/mammography").status_code == 200
+
+
+def test_procedure_page_has_comparison_context():
+    t = client.get("/phoenix/procedure/73721").text
+    assert "Middle 50%" in t and "Arizona typical" in t and "Good Faith Estimate" in t
+    assert 'href="/arizona/phoenix/mri"' in t
+
+
+def test_sitemap_lists_hubs_and_profiles():
+    sm = client.get("/sitemap.xml").text
+    for u in ("/arizona/phoenix", "/arizona/mri", "/cash", "/arizona/phoenix/hospitals/", "/facilities/"):
+        assert u in sm, u
+
+
+def test_page_cache_serves_repeat_requests():
+    old = webapp.PAGE_CACHE_TTL
+    webapp.PAGE_CACHE_TTL = 60
+    try:
+        webapp._PAGE_CACHE.clear()
+        a = client.get("/arizona")
+        b = client.get("/arizona")
+        assert a.headers.get("x-page-cache") == "MISS" and b.headers.get("x-page-cache") == "HIT"
+        assert a.text == b.text
+        assert client.get("/corrections").headers.get("x-page-cache") is None   # forms never cached
+    finally:
+        webapp.PAGE_CACHE_TTL = old
+
+
 def _run_all():
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     for fn in fns:
