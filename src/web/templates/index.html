@@ -106,7 +106,7 @@
     </form>
     <h2 id="guide-h" style="margin:22px 0 0">Browse {{ state_name }} prices</h2>
     <div class="tiles">{% for t in guide.tiles %}{% include "_tile.html" %}{% endfor %}</div>
-    <div class="tstrip"><span>🏥 {{ guide.n_priced }} hospitals with prices</span>{% if guide.n_cash %}<span>💵 {{ guide.n_cash }} independent cash-pay providers</span>{% endif %}<span>🗓 Updated {{ data_refreshed }}</span><span>✓ No paid placement</span>
+    <div class="tstrip"><span>🏥 {% if n_hosp and guide.n_priced != n_hosp %}{{ guide.n_priced }} of {{ n_hosp }} hospitals publish usable prices{% else %}{{ guide.n_priced }} hospitals with prices{% endif %}</span>{% if guide.n_cash %}<span>💵 {{ guide.n_cash }} independent cash-pay providers</span>{% endif %}<span>🗓 Updated {{ data_refreshed }}</span><span>✓ No paid placement</span>
       <span><a href="/{{ guide.state_slug }}">{{ state_name }} hub</a> · <a href="/cash">Cash prices</a> · <a href="/procedures">All procedures</a></span></div>
     <p style="margin:18px 0 0;color:var(--body)"><b>Have a bill, or want a price with your insurance?</b> Use the tools below: pick procedures and your plan, or paste an itemized bill for an appeal letter.</p>
   </section>
