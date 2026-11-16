@@ -1,0 +1,12 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">About {{ brand.name }}</h1></div>
+<div class="prose card">
+  <p>{{ brand.name }} is an independent price guide for {{ cov.states|map(attribute='name')|join(', ') or 'Arizona' }}. It turns the price files hospitals are required to publish, plus the cash price lists that independent imaging centers, labs, and clinics post on their own sites, into pages you can browse and compare.</p>
+  <p>It's also a negotiation tool. Every procedure page shows a Medicare benchmark and a suggested "ask", and if you already have a bill you can paste it on the <a href="/">home page</a> to get an appeal letter and the exact numbers to cite.</p>
+  <h2>Independence</h2>
+  <p>There is no paid placement and no advertising inside the price lists. Nobody can pay to be listed or ranked. See <a href="/trust">trust &amp; limits</a> for the full rules, and <a href="/methodology">methodology</a> for how every number is built.</p>
+  <h2>Who runs it</h2>
+  <p>{{ brand.name }} is a Traqqit project, built and maintained in Arizona.</p>
+</div>
+{% endblock %}

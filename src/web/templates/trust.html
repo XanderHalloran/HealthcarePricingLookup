@@ -1,0 +1,28 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">Trust &amp; limits</h1>
+  <p class="sub">What the numbers on this site are, what they aren't, and the rules we hold ourselves to.</p></div>
+<div class="prose card">
+  <h2>What we don't do</h2>
+  <ul>
+    <li><b>No paid placement.</b> No hospital, imaging center, lab, or clinic can pay to be listed, ranked higher, or featured. Lists are ordered by price, and ties by how complete and current the price data is. That's it.</li>
+    <li><b>No made-up prices.</b> Every dollar figure comes from a published source: a hospital's machine-readable price file, a provider's own price page or PDF, or a Medicare fee schedule. If a facility doesn't publish a price for a service, we say so; we don't estimate one.</li>
+    <li><b>No sign-up to browse.</b> Every price page is open without an account or health information.</li>
+  </ul>
+  <h2>The kinds of price you'll see</h2>
+  <ul>
+    <li><span class="kind cash">Cash</span> A published self-pay (discounted cash) price, from a hospital file or a provider's own price list.</li>
+    <li><span class="kind bundle">Prepaid bundle</span> A price you pay in advance through a marketplace such as MDsave. It usually bundles the facility and reading fees, and it can differ from a walk-in self-pay quote.</li>
+    <li><span class="kind neg">Negotiated</span> The median rate a hospital has agreed with insurers for that code. When a hospital publishes no cash price we show this instead, labeled, so you can see the going rate. It is not a cash quote.</li>
+    <li><b>Typical</b> The median across facilities in the area, after dropping implausible values (see <a href="/methodology">methodology</a>). <b>Ask</b> is the lower of 2× Medicare or the local cash price: a reasonable self-pay target to request.</li>
+  </ul>
+  <h2>Limits worth knowing</h2>
+  <ul>
+    <li>Hospital files usually price the facility fee only. Radiologist, surgeon, and anesthesia fees are often billed separately. Ask for a written Good Faith Estimate before you book.</li>
+    <li>Hospitals must publish prices; independent imaging centers, labs, surgery centers, and clinics don't have to. The independents listed here are the ones that post prices publicly, so the list is not every option near you.</li>
+    <li>Independent prices are checked by hand and dated. Some providers' price documents are older than the date we checked them; when the source shows its own date we display it.</li>
+    <li>Data covers {% for s in cov.states %}{{ s.name }}{% if not loop.last %}, {% endif %}{% endfor %} hospitals today; independent cash-pay listings are Arizona-only for now.</li>
+  </ul>
+  <p>Found something wrong? <a href="/corrections">Tell us</a>.</p>
+</div>
+{% endblock %}

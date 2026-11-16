@@ -1,0 +1,14 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">{{ m.label }} medical prices</h1>
+  <p class="sub">{{ n_priced }} hospitals with published prices{% if indep or cash_providers %} plus {{ indep|length + cash_providers|length }} independent cash-pay providers{% endif %} in the {{ m.label }}. Updated {{ data_refreshed }}.</p>
+  <div class="tstrip"><span>✓ No paid placement</span><span>✓ Every price sourced and dated</span></div></div>
+{% if tiles %}<h2>Prices by category in {{ city }}</h2><div class="tiles">{% for t in tiles %}{% include "_tile.html" %}{% endfor %}</div>{% endif %}
+<div class="card" style="margin-top:16px"><div class="fac-h">Popular procedures in {{ city }}</div>
+  <div class="linkgrid">{% for s in top %}<a class="pill" href="/{{ state_slug }}/{{ m.key }}/{{ s.slug }}">{{ s.desc }}</a>{% endfor %}
+  {% for s in popular if not s.slug %}<a class="pill" href="/{{ m.key }}/procedure/{{ s.code }}">{{ s.desc }}</a>{% endfor %}</div></div>
+<div class="card" style="margin-top:16px"><div class="fac-h">Hospitals in the {{ m.label }}</div>
+  {% include "_hosp_table.html" %}</div>
+{% if indep %}<div class="card" style="margin-top:16px"><div class="fac-h">Independent imaging &amp; surgery centers in hospital comparisons</div>
+  <ul>{% for f in indep %}<li>{{ f.name }} ({{ f.city }}) · {{ f.codes }} procedures priced</li>{% endfor %}</ul></div>{% endif %}
+{% endblock %}

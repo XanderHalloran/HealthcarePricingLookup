@@ -1,0 +1,7 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">Frequently asked questions</h1></div>
+<div class="prose">
+{% for f in faqs %}<div class="faq"><h3>{{ f.q }}</h3><p>{{ f.a|safe }}</p></div>{% endfor %}
+</div>
+{% endblock %}

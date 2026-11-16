@@ -1,0 +1,11 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">Procedures</h1>
+  <p class="sub">Every procedure we track. Pick one to compare published prices across {{ cov.states[0].name if cov.states else 'Arizona' }} hospitals and independent cash-pay providers.</p></div>
+{% for c, items in groups %}
+<div class="card" style="margin-top:14px">
+  <div class="fac-h">{% if c[0] != 'other' %}<a href="/{{ state_slug }}/{{ c[0] }}">{{ c[1] }}</a>{% else %}{{ c[1] }}{% endif %} ({{ items|length }})</div>
+  <div class="linkgrid">{% for s in items %}<a class="pill" href="/procedure/{{ s.code }}">{{ s.desc }} <small>{{ s.code }}</small></a>{% endfor %}</div>
+</div>
+{% endfor %}
+{% endblock %}

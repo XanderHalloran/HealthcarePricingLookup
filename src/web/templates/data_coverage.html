@@ -1,0 +1,29 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">Data coverage</h1>
+  <p class="sub">What's in the dataset right now. These are the same counts the <a href="/methodology">methodology</a> page and every hub use. Last rebuild: <b>{{ data_refreshed }}</b>.</p></div>
+<div class="card" style="overflow-x:auto">
+  <table class="ptable">
+    <thead><tr><th>State</th><th class="r">Hospitals with prices</th><th class="r">Hospitals configured</th><th class="r">Independent facilities</th><th class="r">Codes with prices</th><th class="r">Hospital × code rows</th><th class="r">Insurers with rates</th></tr></thead>
+    <tbody>
+    {% for s in cov.states %}
+      <tr><td><a href="/{{ s.slug }}">{{ s.name }}</a></td><td class="r">{{ s.n }}</td><td class="r">{{ s.configured }}</td>
+        <td class="r">{{ s.independent + (cash_counts.get(s.code, 0) if cash_counts is defined else 0) }}</td><td class="r">{{ s.codes }} of {{ cov.codes }}</td>
+        <td class="r">{{ '{:,}'.format(s.rows) }}</td><td class="r">{{ s.payers }}</td></tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  <p class="refreshed">Independent facilities = non-hospital imaging centers, surgery centers, labs, and clinics with at least one published cash price. Insurers = distinct insurers after plan names are collapsed (see methodology).</p>
+</div>
+<div class="prose">
+  <h2>Known gaps</h2>
+  <ul>
+    <li>Ambulatory surgery centers, physician offices, labs, and independent imaging centers don't have to publish price files. We list the ones that publish prices themselves, checked by hand.</li>
+    <li>Codes outside the {{ cov.codes }} tracked procedures are dropped from hospital files for now.</li>
+  {% for code, rows in gaps.items() %}{% if rows %}
+    <li>{{ rows|length }} configured {{ code }} {{ 'hospital has' if rows|length == 1 else 'hospitals have' }} no usable prices in this rebuild (file missing, unreadable, or without tracked codes):
+      {% for h in rows %}{{ h.name }}{% if not loop.last %}; {% endif %}{% endfor %}.</li>
+  {% endif %}{% endfor %}
+  </ul>
+</div>
+{% endblock %}

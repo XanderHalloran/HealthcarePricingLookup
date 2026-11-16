@@ -28,7 +28,7 @@
 <body>
 <main>
 {% include "_nav.html" %}
-  <nav class="crumb"><a href="/">Home</a> › {{ city }} › <span>{{ r.code }}</span></nav>
+  <nav class="crumb" aria-label="Breadcrumb">{% for c in crumbs %}{% if c.url %}<a href="{{ c.url }}">{{ c.name }}</a>{% else %}<span>{{ c.name }}</span>{% endif %}{% if not loop.last %} › {% endif %}{% endfor %}</nav>
   <div class="hero">
     <h1 id="content">How much does {{ phrase }} cost in {{ city }}?</h1>
     <p class="sub">CPT {{ r.code }} — the fair price, {{ counts.phrase }} compared, and the Medicare benchmark for {{ city }}.</p>
@@ -81,6 +81,7 @@
     </div>
     <p class="refreshed">Prices last refreshed {{ data_refreshed }} from each hospital's official CMS machine-readable file. Medicare rate: CY2025 OPPS/PFS/CLFS. Estimates only — not a guarantee.</p>
   </div>
+{% include "_footer.html" %}
 </main>
 <script>
   function flash(btn, msg){ if(!btn) return; const t=btn.textContent; btn.textContent=msg; setTimeout(()=>btn.textContent=t, 1400); }

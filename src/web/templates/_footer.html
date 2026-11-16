@@ -1,0 +1,17 @@
+{# Consumer trust footer: every page, consumer profile only. #}
+{% if not brand or brand.profile != 'ortho' %}
+<footer class="tfoot">
+  <nav aria-label="About this data">
+    <a href="/methodology">Methodology</a>
+    <a href="/data-coverage">Data coverage</a>
+    <a href="/trust">Trust &amp; limits</a>
+    <a href="/corrections">Corrections</a>
+    <a href="/faq">FAQ</a>
+    <a href="/about">About</a>
+    <a href="/privacy">Privacy</a>
+    <a href="https://traqqit.com/accessibility.html">Accessibility</a>
+  </nav>
+  <p>Hospital prices from each hospital's CMS machine-readable file{% if data_refreshed %}, last refreshed {{ data_refreshed }}{% endif %}. Independent cash prices from each provider's own public price list, with the date we checked it. Medicare rates: CY2025 OPPS/PFS/CLFS.</p>
+  <p><b>No paid placement.</b> Nobody can pay to be listed, ranked, or featured. Estimates only, not a quote and not medical, legal, or financial advice.</p>
+</footer>
+{% endif %}

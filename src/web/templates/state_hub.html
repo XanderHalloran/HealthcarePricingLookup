@@ -1,0 +1,14 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">{{ state_name }} medical prices</h1>
+  <p class="sub">Published prices from {{ n_priced }} {{ state_name }} hospitals{% if indep or cash_providers %} and {{ indep|length + cash_providers|length }} independent cash-pay providers{% endif %}. Updated {{ data_refreshed }}.</p>
+  <div class="tstrip"><span>✓ No paid placement</span><span>✓ Every price sourced and dated</span><span>✓ Free, no sign-up</span></div></div>
+{% if tiles %}<h2>Prices by category</h2><div class="tiles">{% for t in tiles %}{% include "_tile.html" %}{% endfor %}</div>{% endif %}
+<div class="card" style="margin-top:16px"><div class="fac-h">Cities and regions</div>
+  <div class="linkgrid">{% for m in metros %}<a class="pill" href="/{{ state_slug }}/{{ m.key }}">{{ m.label }} ({{ m.n }} hospitals)</a>{% endfor %}</div></div>
+<div class="card" style="margin-top:16px"><div class="fac-h">Popular procedures statewide</div>
+  <div class="linkgrid">{% for s in popular %}<a class="pill" href="{{ state_path }}/procedure/{{ s.code }}">{{ s.desc }}</a>{% endfor %}
+  <a class="pill" href="/procedures">All procedures →</a></div></div>
+<div class="card" style="margin-top:16px"><div class="fac-h">Hospitals ({{ n_priced }} with prices of {{ hosp|length }})</div>
+  {% include "_hosp_table.html" %}</div>
+{% endblock %}

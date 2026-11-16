@@ -1,0 +1,16 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">Corrections &amp; listings</h1>
+  <p class="sub">Report a wrong price, a missing facility, or a listing that should change.</p></div>
+<div class="prose card">
+  <h2>What to include</h2>
+  <ul>
+    <li>The page or facility, and the procedure or CPT code.</li>
+    <li>What's wrong and what it should say.</li>
+    <li>A public link that shows the right price (the facility's price page, PDF, or price-transparency file). We publish prices only from public sources, so a link is what lets us change it.</li>
+  </ul>
+  <h2>What happens next</h2>
+  <p>Every report goes into a review queue that a person reads. Nothing is published automatically. We aim to review reports within {{ sla }}, and when a fix is confirmed it ships with the next site update. Facilities can't pay for placement, so a listing request is only about whether the price data is right.</p>
+  {% block form %}{% endblock %}
+</div>
+{% endblock %}

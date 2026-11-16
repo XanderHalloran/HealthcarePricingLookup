@@ -345,7 +345,7 @@ def _analyze(codes, state, payer=None, metro=None, lat=None, lon=None):
 def index(request: Request, state: str = "", metro: str = ""):
     """Home. `?state=CA` (or `?metro=denver`) pre-selects a market; unknown -> default."""
     return templates.TemplateResponse(request, "index.html",
-                                      _ctx(None, "", state, "shop", metro=metro))
+                                      dict(_ctx(None, "", state, "shop", metro=metro), nav="home"))
 
 
 @app.get("/card", response_class=HTMLResponse)
@@ -444,13 +444,14 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
                     "url": f"{BASE_URL}/{MARKETS[state]['slug']}/{metro}/{s['slug']}"}
                    for s in TOP_PROCS if s["code"] != code]
     faqs = _build_faqs(phrase, code, city, d, counts)
+    crumbs = _procedure_crumbs(state, metro, code, city, path)
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "MedicalProcedure", "name": desc, "url": canonical,
          "code": {"@type": "MedicalCode", "code": code, "codingSystem": "CPT"}},
         {"@type": "BreadcrumbList", "itemListElement": [
-            {"@type": "ListItem", "position": 1, "name": "Home", "item": BASE_URL},
-            {"@type": "ListItem", "position": 2, "name": city, "item": f"{BASE_URL}{path}".rstrip("/")},
-            {"@type": "ListItem", "position": 3, "name": f"{desc} (CPT {code})", "item": canonical}]},
+            {"@type": "ListItem", "position": i + 1, "name": c["name"],
+             "item": f"{BASE_URL}{c['url']}" if c.get("url") else canonical}
+            for i, c in enumerate(crumbs)]},
         {"@type": "FAQPage", "mainEntity": [
             {"@type": "Question", "name": f["q"],
              "acceptedAnswer": {"@type": "Answer", "text": f["a"]}} for f in faqs]},
@@ -459,9 +460,31 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
         "r": r, "city": city, "metro": metro, "desc": desc, "phrase": phrase, "base": BASE_URL, "brand": BRAND,
         "n_hosp": MARKETS[state].get("n", 0), "nav": "compare", "own_ids": OWN_IDS,
         "canonical": canonical, "faqs": faqs, "ld": ld, "data_refreshed": _vintage(), "counts": counts,
+        "crumbs": crumbs,
         "title": f"How much does {phrase} (CPT {code}) cost in {city}? | {BRAND['short']}",
         "meta_desc": meta, "siblings": siblings, "related": related,
     })
+
+
+def _procedure_crumbs(state, metro, code, city, path):
+    """Home › Arizona › Phoenix Metro › MRI › CPT 73721 (consumer). Ortho keeps Home › area › code.
+    Hub links resolve on the consumer profile only."""
+    import hubs
+    if BRAND.get("profile") == "ortho":
+        return [{"name": "Home", "url": "/"}, {"name": city, "url": path.rstrip("/").rsplit("/procedure", 1)[0] or "/"},
+                {"name": code}]
+    st_slug = MARKETS[state]["slug"]
+    out = [{"name": "Home", "url": "/"}, {"name": MARKETS[state]["name"], "url": f"/{st_slug}"}]
+    base = f"/{st_slug}"
+    if metro:
+        m = next((x for x in STATE["metros"]["list"] if x["key"] == metro), None)
+        out.append({"name": m["label"] if m else city, "url": f"/{st_slug}/{metro}"})
+        base = f"/{st_slug}/{metro}"
+    cat = hubs.category_of(code)
+    if cat:
+        out.append({"name": hubs.CAT_BY_SLUG[cat][1], "url": f"{base}/{cat}"})
+    out.append({"name": f"CPT {code}" if code[:1].isdigit() or code[:1] == "G" else code})
+    return out
 
 
 def _fac_counts(d):
@@ -1263,3 +1286,350 @@ def letter(codes: str = Form(""), state: str = Form(""), gfe: str = Form("")):
     text = build_letter(_analyze(codes, state), _market(state), _money_in(gfe))
     return PlainTextResponse(
         text, headers={"Content-Disposition": "attachment; filename=negotiation-letter.txt"})
+
+
+# ---------- Consumer price guide: site chrome pages, hubs, facility index ----------
+# healthcare.traqqit.com only (ortho keeps its own nav; these routes 404 there, except
+# /privacy). Hostname and site name come from BASE_URL / SITE_NAME, so a domain move is
+# an env change, not a code change.
+import hubs  # noqa: E402
+from fastapi import HTTPException  # noqa: E402
+from fastapi.responses import RedirectResponse  # noqa: E402
+
+CONSUMER = BRAND.get("profile") != "ortho"
+CORRECTIONS_SLA = os.environ.get("CORRECTIONS_SLA", "7 days")
+HOSP_URL, HOSP_CCN = {}, {}
+with open(os.path.join(CFG, "hospitals.yaml"), encoding="utf-8") as _f:
+    for _h in yaml.safe_load(_f)["hospitals"]:
+        HOSP_URL[_h["id"]] = _h.get("url") or ""
+        HOSP_CCN[_h["id"]] = str(_h.get("ccn") or "")
+
+
+def _consumer_only():
+    if not CONSUMER:
+        raise HTTPException(status_code=404)
+
+
+def _crumb_ld(crumbs):
+    return {"@type": "BreadcrumbList", "itemListElement": [
+        {"@type": "ListItem", "position": i + 1, "name": c["name"],
+         **({"item": f"{BASE_URL}{c['url']}"} if c.get("url") else {})} for i, c in enumerate(crumbs)]}
+
+
+def _page(request, tpl, title, meta_desc, path, nav="", crumbs=None, ld=None, status=200, **ctx):
+    """Render a guide page through _layout.html with the shared chrome context."""
+    graph = [g for g in ([_crumb_ld(crumbs)] if crumbs else []) + ([ld] if ld else [])]
+    data = {"brand": BRAND, "base": BASE_URL, "site_host": SITE_HOST, "data_refreshed": _vintage(),
+            "title": title, "meta_desc": meta_desc, "canonical": f"{BASE_URL}{path}", "nav": nav,
+            "crumbs": crumbs or [], "cov": _cov(),
+            "ld": {"@context": "https://schema.org", "@graph": graph} if graph else None}
+    data.update(ctx)
+    return templates.TemplateResponse(request, tpl, data, status_code=status)
+
+
+def _home_crumb():
+    return {"name": "Home", "url": "/"}
+
+
+def _state_crumb(st):
+    return {"name": MARKETS[st]["name"], "url": f"/{MARKETS[st]['slug']}"}
+
+
+_HOSP_STATS = {}
+
+
+def _hosp_stats():
+    """hospital_id -> number of tracked codes it publishes a usable price for (per data stamp)."""
+    stamp = os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0
+    if stamp in _HOSP_STATS:
+        return _HOSP_STATS[stamp]
+    from pricing import rates_source
+    from pricing import _has_parquet
+    out = {}
+    if _has_parquet(RATES_DIR):
+        out = dict(_con().execute(
+            f"SELECT hospital_id, count(DISTINCT code) FROM {rates_source(RATES_DIR)} "
+            f"WHERE coalesce(cash_price, negotiated_median) > 0 GROUP BY 1").fetchall())
+    if out:
+        _HOSP_STATS.clear()
+        _HOSP_STATS[stamp] = out
+    return out
+
+
+def _hosp_slug(hid):
+    return hubs.slugify(hid)
+
+
+def _hosp_url(hid):
+    st = HOSP_STATE.get(hid)
+    mk = STATE["metros"]["of"].get(hid)
+    if not st or st not in MARKETS or not mk:
+        return ""
+    return f"/{MARKETS[st]['slug']}/{mk}/hospitals/{_hosp_slug(hid)}"
+
+
+def _state_hospitals(st):
+    """Every configured hospital in a state, priced ones first, with metro + profile link."""
+    stats = _hosp_stats()
+    rows = []
+    for hid, hst in HOSP_STATE.items():
+        if hst != st:
+            continue
+        mk = STATE["metros"]["of"].get(hid, "")
+        rows.append({"id": hid, "name": STATE["hospital_names"].get(hid, hid), "metro": mk,
+                     "metro_label": next((m["label"] for m in STATE["metros"]["list"] if m["key"] == mk), ""),
+                     "codes": stats.get(hid, 0), "stars": STATE["hospital_stars"].get(hid),
+                     "url": _hosp_url(hid)})
+    rows.sort(key=lambda r: (r["codes"] == 0, r["metro_label"], r["name"]))
+    return rows
+
+
+def _freestanding_list(st=None, metro=None):
+    """Independent facilities from config/freestanding.yaml: name -> {type, city, metro, n codes}."""
+    out = {}
+    for code, facs in STATE["freestanding"].items():
+        for f in facs:
+            if (st and f["state"] != st) or (metro and f.get("metro") != metro):
+                continue
+            e = out.setdefault(f["name"], {"name": f["name"], "type": f["type"], "city": f["city"],
+                                           "metro": f.get("metro"), "state": f["state"], "codes": 0})
+            e["codes"] += 1
+    return sorted(out.values(), key=lambda e: e["name"])
+
+
+@app.get("/privacy", response_class=HTMLResponse)
+def privacy(request: Request):
+    return _page(request, "privacy.html", f"Privacy | {BRAND['short']}",
+                 "What this site collects (very little), what it doesn't, and how to have your data removed.",
+                 "/privacy", crumbs=[_home_crumb(), {"name": "Privacy"}])
+
+
+@app.get("/trust", response_class=HTMLResponse)
+def trust(request: Request):
+    _consumer_only()
+    return _page(request, "trust.html", f"Trust & limits | {BRAND['short']}",
+                 "No paid placement, no made-up prices: what cash, prepaid, negotiated, typical, and ask "
+                 "prices mean on this site, and what they leave out.",
+                 "/trust", crumbs=[_home_crumb(), {"name": "Trust & limits"}])
+
+
+@app.get("/about", response_class=HTMLResponse)
+def about(request: Request):
+    _consumer_only()
+    return _page(request, "about.html", f"About | {BRAND['short']}",
+                 "An independent price guide built from hospital price files and providers' own cash price lists.",
+                 "/about", crumbs=[_home_crumb(), {"name": "About"}])
+
+
+def _faqs():
+    v = _vintage()
+    return [
+        {"q": "What's the difference between a cash price and an insurance price?",
+         "a": "A cash (self-pay) price is what a facility says it charges people paying for themselves. "
+              "An insurance or negotiated price is the rate a hospital agreed with an insurer; with insurance "
+              "you pay part of it through your deductible and coinsurance. Cash can be lower than your "
+              "insurance price, especially for imaging and labs, so compare both. Each price on this site "
+              "is labeled <b>cash</b>, <b>prepaid bundle</b>, or <b>negotiated</b>."},
+        {"q": "Does the price include the doctor?",
+         "a": "Usually not. Hospital price files mostly cover the facility fee. Radiologist reads, surgeon, "
+              "and anesthesia fees are often billed separately. Some independent cash prices and prepaid "
+              "bundles do include the read; the listing says so when the provider does. Ask for a written "
+              "Good Faith Estimate before you book."},
+        {"q": "How current is the data?",
+         "a": f"Hospital prices are rebuilt from every hospital's published file each week; the last "
+              f"rebuild was {v}. Independent cash prices are checked by hand, and each one shows the date we "
+              f"checked it and, when the source shows one, the date of the source document."},
+        {"q": "Why isn't my hospital or imaging center listed?",
+         "a": "Hospitals must publish price files, but some files are missing or unusable in a given week; "
+              "<a href='/data-coverage'>data coverage</a> lists them. Independent centers aren't required to "
+              "publish prices, so we can only list the ones that do. <a href='/corrections'>Send us</a> a "
+              "public price link and we'll review it."},
+        {"q": "Can a facility pay to be listed or ranked higher?",
+         "a": "No. There is no paid placement of any kind. Lists are ordered by price, then by how complete "
+              "and current the price data is."},
+        {"q": "How do I use the bill coach?",
+         "a": "Paste your itemized bill (or the codes and amounts) on the <a href='/'>home page</a> under "
+              "\"Analyze my bill\". You'll see what each line should cost, the Medicare benchmark, a "
+              "suggested ask, and a ready-to-send appeal letter. Nothing is required to browse prices."},
+        {"q": "Is this a quote?",
+         "a": "No. These are estimates from public data to help you compare and negotiate, not a quote, a "
+              "contract, or medical, legal, or financial advice. Confirm the price with the provider."},
+    ]
+
+
+@app.get("/faq", response_class=HTMLResponse)
+def faq(request: Request):
+    _consumer_only()
+    faqs = _faqs()
+    import re as _re
+    ld = {"@type": "FAQPage", "mainEntity": [
+        {"@type": "Question", "name": f["q"],
+         "acceptedAnswer": {"@type": "Answer", "text": _re.sub(r"<[^>]+>", "", f["a"])}} for f in faqs]}
+    return _page(request, "faq.html", f"FAQ | {BRAND['short']}",
+                 "Cash vs insurance prices, whether the doctor is included, how fresh the data is, and how "
+                 "to use the bill coach.", "/faq", crumbs=[_home_crumb(), {"name": "FAQ"}], ld=ld, faqs=faqs)
+
+
+@app.get("/data-coverage", response_class=HTMLResponse)
+def data_coverage(request: Request):
+    _consumer_only()
+    cov = _cov()
+    stats = _hosp_stats()
+    gaps = {s["code"]: [h for h in _state_hospitals(s["code"]) if not stats.get(h["id"])] for s in cov["states"]}
+    return _page(request, "data_coverage.html", f"Data coverage | {BRAND['short']}",
+                 "Hospitals and independent facilities with prices, codes tracked, price rows, insurers, "
+                 "and the last rebuild date, state by state.", "/data-coverage",
+                 crumbs=[_home_crumb(), {"name": "Data coverage"}], gaps=gaps)
+
+
+@app.get("/corrections", response_class=HTMLResponse)
+def corrections(request: Request):
+    _consumer_only()
+    return _page(request, "corrections.html", f"Corrections & listings | {BRAND['short']}",
+                 "Report a wrong price or a missing facility. Every report is reviewed by a person; "
+                 "nothing is published automatically.", "/corrections",
+                 crumbs=[_home_crumb(), {"name": "Corrections"}], sla=CORRECTIONS_SLA)
+
+
+def _services_by_category():
+    """[(category tuple, [service, ...])] in hub order, then any tracked code not in a hub."""
+    out, seen = [], set()
+    for c in hubs.CATEGORIES:
+        items = [_by_code[k] for k in c[4] if k in _by_code]
+        seen.update(s["code"] for s in items)
+        if items:
+            out.append((c, items))
+    rest = [s for s in STATE["services"] if s["code"] not in seen]
+    if rest:
+        out.append((("other", "Other procedures", "", "", []), rest))
+    return out
+
+
+@app.get("/procedures", response_class=HTMLResponse)
+def procedures(request: Request):
+    _consumer_only()
+    st = DEFAULT_STATE
+    return _page(request, "procedures.html", f"All procedures with {MARKETS[st]['name']} prices | {BRAND['short']}",
+                 f"Every procedure we track with hospital and cash prices in {MARKETS[st]['name']}, by category.",
+                 "/procedures", nav="procedures", crumbs=[_home_crumb(), {"name": "Procedures"}],
+                 groups=_services_by_category(), state=st, state_slug=MARKETS[st]["slug"])
+
+
+@app.get("/search", response_class=HTMLResponse)
+def search(request: Request, q: str = ""):
+    _consumer_only()
+    qs = (q or "").strip()
+    code = qs.upper()
+    if code in _by_code:
+        return RedirectResponse(f"/procedure/{code}", status_code=302)
+    words = [w for w in qs.lower().replace(",", " ").split() if w]
+    hits = []
+    if words:
+        for s in STATE["services"]:
+            cat = hubs.category_of(s["code"])
+            hay = (f"{s['desc']} {s['code']} {hubs.CAT_BY_SLUG[cat][1] if cat else ''} "
+                   f"{hubs.ALIASES.get(s['code'], '')}").lower()
+            if all(w in hay or (w.endswith("s") and w[:-1] in hay) for w in words):
+                hits.append(s)
+    return _page(request, "search.html", f"Search: {qs} | {BRAND['short']}" if qs else f"Search | {BRAND['short']}",
+                 "Search procedures by name or CPT code.", "/search", nav="procedures", noindex=True,
+                 crumbs=[_home_crumb(), {"name": "Search"}], hits=hits, search_q=qs)
+
+
+@app.get("/hospitals")
+def hospitals_redirect():
+    _consumer_only()
+    return RedirectResponse(f"/{MARKETS[DEFAULT_STATE]['slug']}/hospitals", status_code=301)
+
+
+def _state_hub(request, st):
+    hosp = _state_hospitals(st)
+    metros = [dict(m, n=len(STATE["metros"]["ids"].get(m["key"], ())))
+              for m in STATE["metros"]["list"] if m["state"] == st]
+    name = MARKETS[st]["name"]
+    return _page(request, "state_hub.html", f"{name} medical prices: hospitals and cash-pay providers | {BRAND['short']}",
+                 f"Compare published hospital and cash prices in {name}: {sum(1 for h in hosp if h['codes'])} "
+                 f"hospitals with prices, by procedure, city, and category. No paid placement.",
+                 f"/{MARKETS[st]['slug']}", nav="hub",
+                 crumbs=[_home_crumb(), {"name": name}], st=st, state_name=name,
+                 state_slug=MARKETS[st]["slug"], hosp=hosp, metros=metros,
+                 n_priced=sum(1 for h in hosp if h["codes"]), indep=_freestanding_list(st),
+                 top=[s for s in TOP_PROCS], popular=STATE.get("popular", []), state_path=_state_path(st),
+                 **_hub_extra(st, None))
+
+
+def _metro_hub(request, st, mk):
+    m = next(x for x in STATE["metros"]["list"] if x["key"] == mk)
+    hosp = [h for h in _state_hospitals(st) if h["metro"] == mk]
+    city = m["city"].split(",")[0]
+    return _page(request, "metro_hub.html", f"{city} medical prices: hospitals and cash-pay options | {BRAND['short']}",
+                 f"Published prices at {len(hosp)} {m['label']} hospitals plus independent cash-pay providers, "
+                 f"by procedure. Compare, then negotiate. No paid placement.",
+                 f"/{MARKETS[st]['slug']}/{mk}", nav="hub",
+                 crumbs=[_home_crumb(), _state_crumb(st), {"name": m["label"]}],
+                 st=st, state_name=MARKETS[st]["name"], state_slug=MARKETS[st]["slug"], m=m, city=city,
+                 hosp=hosp, n_priced=sum(1 for h in hosp if h["codes"]), indep=_freestanding_list(st, mk),
+                 top=TOP_PROCS, popular=STATE.get("popular", []), **_hub_extra(st, mk))
+
+
+def _hub_extra(st, mk):
+    """Hook for category tiles / cash listings on hubs (filled in by later sections)."""
+    return {"tiles": [], "cash_providers": []}
+
+
+def _hospital_index(request, st):
+    hosp = _state_hospitals(st)
+    name = MARKETS[st]["name"]
+    return _page(request, "hospitals.html", f"{name} hospitals and facilities with published prices | {BRAND['short']}",
+                 f"Every {name} hospital we track, how many procedures each publishes a usable price for, "
+                 f"plus independent cash-pay facilities.", f"/{MARKETS[st]['slug']}/hospitals", nav="hospitals",
+                 crumbs=[_home_crumb(), _state_crumb(st), {"name": "Hospitals"}], st=st, state_name=name,
+                 hosp=hosp, n_priced=sum(1 for h in hosp if h["codes"]), indep=_freestanding_list(st),
+                 cash_providers=_hub_extra(st, None)["cash_providers"])
+
+
+def _live_state_by_slug(slug):
+    st = MARKET_BY_SLUG.get(slug)
+    if not st:
+        return None, None
+    return st, (None if st == _market(st) else _coming_soon(st))
+
+
+# ---- catch-all hub routes: keep these LAST so every fixed path above wins ----
+@app.get("/{slug}", response_class=HTMLResponse)
+def one_segment(request: Request, slug: str):
+    """/arizona (state hub); /phoenix and other bare metro keys 301 to their canonical hub."""
+    _consumer_only()
+    st, soon = _live_state_by_slug(slug)
+    if st:
+        return soon or _state_hub(request, st)
+    if slug in STATE["metros"]["ids"]:
+        st = STATE["metros"]["state_of"][slug]
+        return RedirectResponse(f"/{MARKETS[st]['slug']}/{slug}", status_code=301)
+    raise HTTPException(status_code=404)
+
+
+@app.get("/{a}/{b}", response_class=HTMLResponse)
+def two_segments(request: Request, a: str, b: str):
+    """/arizona/phoenix (metro hub), /arizona/hospitals, /arizona/mri (category hub);
+    /phoenix/mri 301s to /arizona/phoenix/mri."""
+    _consumer_only()
+    st, soon = _live_state_by_slug(a)
+    if st:
+        if soon:
+            return soon
+        if b == "hospitals":
+            return _hospital_index(request, st)
+        if b in STATE["metros"]["ids"] and STATE["metros"]["state_of"][b] == st:
+            return _metro_hub(request, st, b)
+        if b in hubs.CAT_BY_SLUG:
+            return _category_hub(request, st, None, b)
+    elif a in STATE["metros"]["ids"] and b in hubs.CAT_BY_SLUG:
+        st = STATE["metros"]["state_of"][a]
+        return RedirectResponse(f"/{MARKETS[st]['slug']}/{a}/{b}", status_code=301)
+    raise HTTPException(status_code=404)
+
+
+def _category_hub(request, st, mk, cat):
+    """Placeholder until the category hubs land: send visitors to the procedure catalog."""
+    raise HTTPException(status_code=404)

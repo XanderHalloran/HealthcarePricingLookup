@@ -1,0 +1,18 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">Privacy</h1>
+  <p class="sub">Short version: you can browse every price without an account, and we don't sell or share anything you give us.</p></div>
+<div class="prose card">
+  <h2>Browsing</h2>
+  <p>No account, login, or health record is needed to look up a price. Page views are counted with a self-hosted, cookie-free analytics script (stats.traqqit.com), which records the page, referrer, browser type, and approximate country, not who you are.</p>
+  <h2>What you choose to send us</h2>
+  <ul>
+    <li><b>Bill text or a bill photo</b> you paste or upload to "Analyze my bill" is used to work out the codes and prices on that page. When photo reading or the AI coach is turned on, the image or question is sent to our AI provider to process it; this site doesn't keep a copy.</li>
+    <li><b>Your email address</b>, only if you ask us to email you a letter or comparison, sign up for price updates, or leave one with a correction. It's stored on our own server, used for that purpose only, and never sold or shared.</li>
+    <li><b>Listing submissions and corrections</b> go to a private review queue. Nothing you submit is published automatically.</li>
+  </ul>
+  <h2>Deleting your data</h2>
+  <p>To have an email address or submission removed, send a note through the <a href="/corrections">corrections form</a> with the address you used and we'll delete it.</p>
+  <p class="refreshed">{{ brand.name }} is run by Traqqit ({{ site_host }}).</p>
+</div>
+{% endblock %}
