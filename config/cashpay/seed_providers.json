@@ -1,0 +1,2689 @@
+{
+  "generated": "2026-11-15",
+  "timezone": "America/Phoenix",
+  "disclaimer": "Every cash price was read from a public source on the date_checked. No prices were invented. MDsave prices are prepaid marketplace bundles, not necessarily the same as a walk-in self-pay quote. Hospital-owned facilities were excluded. Phoenix Direct Care (phoenixdirectcare.com) was excluded because it is in Caribou, Maine, not Arizona.",
+  "counts": {
+    "providers": 43,
+    "providers_with_at_least_one_published_or_from_price": 42,
+    "providers_call_for_price_only": 1,
+    "providers_with_some_call_for_price_rows": 10,
+    "procedure_rows": 200,
+    "procedure_rows_with_price": 189,
+    "procedure_rows_call_for_price": 11,
+    "by_type": {
+      "independent_imaging": 29,
+      "cash_pay_program": 2,
+      "endoscopy_center": 3,
+      "lab": 2,
+      "direct_primary_care": 7
+    },
+    "by_city": {
+      "Phoenix": 16,
+      "Scottsdale": 2,
+      "Mesa": 4,
+      "Chandler": 5,
+      "Peoria": 3,
+      "Tucson": 8,
+      "Sierra Vista": 1,
+      "Green Valley": 1,
+      "Glendale": 2,
+      "Lake Havasu City": 1
+    },
+    "by_metro": {
+      "Phoenix": 29,
+      "Tucson": 8,
+      "Southern AZ (not Phoenix/Tucson metro core)": 1,
+      "Southern AZ (Tucson-adjacent)": 1,
+      "Phoenix / Tucson (statewide chain)": 1,
+      "Phoenix / Tucson (statewide)": 2,
+      "Statewide (including Phoenix and Tucson)": 1
+    }
+  },
+  "providers": [
+    {
+      "provider_name": "AZ Advanced Imaging - Phoenix (Peoria Ave)",
+      "chain": "AZ & TX Advanced Imaging",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "2225 W Peoria Ave, Suite 150",
+      "zip": "85029",
+      "metro": "Phoenix",
+      "price_page_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "MRI, CT, US, X-ray. Self-pay rates on chain PDF.",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any study as listed)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with contrast",
+          "cpt": "varies; e.g. 73722 / 72149 / 70552",
+          "cash_price": 400,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT without contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 225,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT with contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis without contrast",
+          "cpt": "74176",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis with contrast",
+          "cpt": "74177",
+          "cash_price": 325,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound (general)",
+          "cpt": "varies",
+          "cash_price": 100,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Vascular ultrasound",
+          "cpt": "varies; e.g. 93880 carotid",
+          "cash_price": 150,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "X-ray (per study)",
+          "cpt": "varies; e.g. 71046 chest 2-view",
+          "cash_price": 40,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "AZ Advanced Imaging - Phoenix (Osborn)",
+      "chain": "AZ & TX Advanced Imaging",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "444 W Osborn Rd, Suite 105",
+      "zip": "85013",
+      "metro": "Phoenix",
+      "price_page_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "MRI, CT, US, X-ray. Self-pay rates on chain PDF. PDF notes this Phoenix location is open 7 days.",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any study as listed)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with contrast",
+          "cpt": "varies; e.g. 73722 / 72149 / 70552",
+          "cash_price": 400,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT without contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 225,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT with contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis without contrast",
+          "cpt": "74176",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis with contrast",
+          "cpt": "74177",
+          "cash_price": 325,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound (general)",
+          "cpt": "varies",
+          "cash_price": 100,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Vascular ultrasound",
+          "cpt": "varies; e.g. 93880 carotid",
+          "cash_price": 150,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "X-ray (per study)",
+          "cpt": "varies; e.g. 71046 chest 2-view",
+          "cash_price": 40,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "AZ Advanced Imaging - Scottsdale",
+      "chain": "AZ & TX Advanced Imaging",
+      "type": "independent_imaging",
+      "city": "Scottsdale",
+      "state": "AZ",
+      "address": "9787 N 91st St, Suite 101",
+      "zip": "85258",
+      "metro": "Phoenix",
+      "price_page_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "PDF labels this location OPEN MRI ONLY; only MRI self-pay rates are attached.",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any study as listed)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with contrast",
+          "cpt": "varies; e.g. 73722 / 72149 / 70552",
+          "cash_price": 400,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "AZ Advanced Imaging - Mesa",
+      "chain": "AZ & TX Advanced Imaging",
+      "type": "independent_imaging",
+      "city": "Mesa",
+      "state": "AZ",
+      "address": "4566 E Inverness Ave, Suite 102",
+      "zip": "85206",
+      "metro": "Phoenix",
+      "price_page_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "MRI, CT, US, X-ray. Self-pay rates on chain PDF. PDF notes Mesa is open 6 days (MRI only hours note on PDF).",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any study as listed)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with contrast",
+          "cpt": "varies; e.g. 73722 / 72149 / 70552",
+          "cash_price": 400,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT without contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 225,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT with contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis without contrast",
+          "cpt": "74176",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis with contrast",
+          "cpt": "74177",
+          "cash_price": 325,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound (general)",
+          "cpt": "varies",
+          "cash_price": 100,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Vascular ultrasound",
+          "cpt": "varies; e.g. 93880 carotid",
+          "cash_price": 150,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "X-ray (per study)",
+          "cpt": "varies; e.g. 71046 chest 2-view",
+          "cash_price": 40,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "AZ Advanced Imaging - Chandler",
+      "chain": "AZ & TX Advanced Imaging",
+      "type": "independent_imaging",
+      "city": "Chandler",
+      "state": "AZ",
+      "address": "600 S Dobson Rd, Suite E42",
+      "zip": "85224",
+      "metro": "Phoenix",
+      "price_page_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "MRI, CT, US, X-ray. Self-pay rates on chain PDF.",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any study as listed)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with contrast",
+          "cpt": "varies; e.g. 73722 / 72149 / 70552",
+          "cash_price": 400,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT without contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 225,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT with contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis without contrast",
+          "cpt": "74176",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis with contrast",
+          "cpt": "74177",
+          "cash_price": 325,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound (general)",
+          "cpt": "varies",
+          "cash_price": 100,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Vascular ultrasound",
+          "cpt": "varies; e.g. 93880 carotid",
+          "cash_price": 150,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "X-ray (per study)",
+          "cpt": "varies; e.g. 71046 chest 2-view",
+          "cash_price": 40,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "AZ Advanced Imaging - Peoria",
+      "chain": "AZ & TX Advanced Imaging",
+      "type": "independent_imaging",
+      "city": "Peoria",
+      "state": "AZ",
+      "address": "6818 W Thunderbird Rd",
+      "zip": "85381",
+      "metro": "Phoenix",
+      "price_page_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "PDF labels this location OPEN MRI ONLY; only MRI self-pay rates are attached.",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any study as listed)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with contrast",
+          "cpt": "varies; e.g. 73722 / 72149 / 70552",
+          "cash_price": 400,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "AZ Advanced Imaging - Tucson (La Cholla)",
+      "chain": "AZ & TX Advanced Imaging",
+      "type": "independent_imaging",
+      "city": "Tucson",
+      "state": "AZ",
+      "address": "6261 N La Cholla Blvd, Suite 161",
+      "zip": "85741",
+      "metro": "Tucson",
+      "price_page_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "PDF lists MRI and X-ray only at this site; CT/US prices are not attached.",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any study as listed)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with contrast",
+          "cpt": "varies; e.g. 73722 / 72149 / 70552",
+          "cash_price": 400,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "X-ray (per study)",
+          "cpt": "varies; e.g. 71046 chest 2-view",
+          "cash_price": 40,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "AZ Advanced Imaging - Tucson (Campbell / Open MRI)",
+      "chain": "AZ & TX Advanced Imaging",
+      "type": "independent_imaging",
+      "city": "Tucson",
+      "state": "AZ",
+      "address": "3970 N Campbell Ave",
+      "zip": "85719",
+      "metro": "Tucson",
+      "price_page_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "OPEN MRI, CT, US, X-ray. Self-pay rates on chain PDF. Same street address as 'Advanced Open MRI of Tucson,' which posts no dollar prices of its own.",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any study as listed)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with contrast",
+          "cpt": "varies; e.g. 73722 / 72149 / 70552",
+          "cash_price": 400,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT without contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 225,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT with contrast (single study as listed)",
+          "cpt": "varies",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis without contrast",
+          "cpt": "74176",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis with contrast",
+          "cpt": "74177",
+          "cash_price": 325,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound (general)",
+          "cpt": "varies",
+          "cash_price": 100,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Vascular ultrasound",
+          "cpt": "varies; e.g. 93880 carotid",
+          "cash_price": 150,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "X-ray (per study)",
+          "cpt": "varies; e.g. 71046 chest 2-view",
+          "cash_price": 40,
+          "price_status": "published",
+          "price_notes": "Self-pay rates from the chain's posted insurance/payment PDF (filename dated Feb 2025; still the live document when checked). Contrast prices are as listed on the PDF.",
+          "includes": "",
+          "source_url": "https://azadvancedimaging.com/wp-content/uploads/2025/02/AAI-Insurance-List-copy.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SARA Tucson",
+      "chain": "Southern Arizona Radiology Associates (SARA)",
+      "type": "independent_imaging",
+      "city": "Tucson",
+      "state": "AZ",
+      "address": "2492 E River Rd",
+      "zip": "85718",
+      "metro": "Tucson",
+      "price_page_url": "https://www.sararadiology.com/self-pay-pricing/",
+      "source_type": "provider_site",
+      "notes": "Same posted self-pay list applies across SARA Tucson, Sierra Vista, and Green Valley pages.",
+      "procedures": [
+        {
+          "procedure_name": "Screening mammogram",
+          "cpt": "77067 (if 2D; site does not specify 2D vs 3D)",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Bilateral diagnostic mammogram",
+          "cpt": "77066",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Unilateral diagnostic mammogram",
+          "cpt": "77065",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Unilateral breast ultrasound",
+          "cpt": "76641",
+          "cash_price": 175,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Bilateral breast MRI",
+          "cpt": "77049",
+          "cash_price": 780,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound-guided biopsy",
+          "cpt": "19083",
+          "cash_price": 1260,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Stereotactic-guided biopsy",
+          "cpt": "19081",
+          "cash_price": 1260,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI-guided biopsy",
+          "cpt": "19085",
+          "cash_price": 1775,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Whole-body screening MRI",
+          "cpt": "",
+          "cash_price": 1000,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted). Requires a provider order.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "DEXA body composition analysis",
+          "cpt": "",
+          "cash_price": 75,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted). No provider order required, per the site.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Other radiology exams (non-breast)",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Site will quote self-pay pricing on request; no dollar prices posted for non-listed exams.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SARA Sierra Vista",
+      "chain": "Southern Arizona Radiology Associates (SARA)",
+      "type": "independent_imaging",
+      "city": "Sierra Vista",
+      "state": "AZ",
+      "address": "155 Calle Portal, Suite 500",
+      "zip": "85635",
+      "metro": "Southern AZ (not Phoenix/Tucson metro core)",
+      "price_page_url": "https://www.sararadiology.com/self-pay-pricing/",
+      "source_type": "provider_site",
+      "notes": "Same posted self-pay list applies across SARA Tucson, Sierra Vista, and Green Valley pages.",
+      "procedures": [
+        {
+          "procedure_name": "Screening mammogram",
+          "cpt": "77067 (if 2D; site does not specify 2D vs 3D)",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Bilateral diagnostic mammogram",
+          "cpt": "77066",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Unilateral diagnostic mammogram",
+          "cpt": "77065",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Unilateral breast ultrasound",
+          "cpt": "76641",
+          "cash_price": 175,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Bilateral breast MRI",
+          "cpt": "77049",
+          "cash_price": 780,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound-guided biopsy",
+          "cpt": "19083",
+          "cash_price": 1260,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Stereotactic-guided biopsy",
+          "cpt": "19081",
+          "cash_price": 1260,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI-guided biopsy",
+          "cpt": "19085",
+          "cash_price": 1775,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Whole-body screening MRI",
+          "cpt": "",
+          "cash_price": 1000,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted). Requires a provider order.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "DEXA body composition analysis",
+          "cpt": "",
+          "cash_price": 75,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted). No provider order required, per the site.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Other radiology exams (non-breast)",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Site will quote self-pay pricing on request; no dollar prices posted for non-listed exams.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SARA Green Valley",
+      "chain": "Southern Arizona Radiology Associates (SARA)",
+      "type": "independent_imaging",
+      "city": "Green Valley",
+      "state": "AZ",
+      "address": "121 W Esperanza Blvd, Suite 101",
+      "zip": "85614",
+      "metro": "Southern AZ (Tucson-adjacent)",
+      "price_page_url": "https://www.sararadiology.com/self-pay-pricing/",
+      "source_type": "provider_site",
+      "notes": "Same posted self-pay list applies across SARA Tucson, Sierra Vista, and Green Valley pages.",
+      "procedures": [
+        {
+          "procedure_name": "Screening mammogram",
+          "cpt": "77067 (if 2D; site does not specify 2D vs 3D)",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Bilateral diagnostic mammogram",
+          "cpt": "77066",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Unilateral diagnostic mammogram",
+          "cpt": "77065",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Unilateral breast ultrasound",
+          "cpt": "76641",
+          "cash_price": 175,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Bilateral breast MRI",
+          "cpt": "77049",
+          "cash_price": 780,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound-guided biopsy",
+          "cpt": "19083",
+          "cash_price": 1260,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Stereotactic-guided biopsy",
+          "cpt": "19081",
+          "cash_price": 1260,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI-guided biopsy",
+          "cpt": "19085",
+          "cash_price": 1775,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted).",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Whole-body screening MRI",
+          "cpt": "",
+          "cash_price": 1000,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted). Requires a provider order.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "DEXA body composition analysis",
+          "cpt": "",
+          "cash_price": 75,
+          "price_status": "published",
+          "price_notes": "Special breast-imaging self-pay prices posted on the practice site. Whole-body MRI and DEXA body-composition prices may change with overhead/demand. Other exams: request self-pay pricing via the site form (no dollar amount posted). No provider order required, per the site.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Other radiology exams (non-breast)",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Site will quote self-pay pricing on request; no dollar prices posted for non-listed exams.",
+          "includes": "",
+          "source_url": "https://www.sararadiology.com/self-pay-pricing/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "UR Precious Imaging",
+      "chain": "UR Precious",
+      "type": "independent_imaging",
+      "city": "Chandler",
+      "state": "AZ",
+      "address": "655 S Dobson Road, Building A, Unit 103",
+      "zip": "85224",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.urprecious.com/pricing.html",
+      "source_type": "provider_site",
+      "notes": "Independent breast and body imaging clinic in Chandler.",
+      "procedures": [
+        {
+          "procedure_name": "Screening mammogram 3D/2D with AI",
+          "cpt": "77067 / 77063",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Screening contrast-enhanced mammogram 3D/2D with AI, bilateral",
+          "cpt": "",
+          "cash_price": 295,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Diagnostic mammogram 3D/2D with AI, bilateral",
+          "cpt": "77066",
+          "cash_price": 390,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Diagnostic mammogram 3D/2D with AI, unilateral",
+          "cpt": "77065",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Single breast 3D/2D ultrasound with AI, color Doppler and shear-wave elastography",
+          "cpt": "76641",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Both breasts 3D/2D ultrasound with AI, color Doppler and shear-wave elastography",
+          "cpt": "76641-50 or 76642",
+          "cash_price": 390,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "REMS Echolight ultrasound bone densitometry",
+          "cpt": "",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Complete abdominal ultrasound with color Doppler and shear-wave elastography",
+          "cpt": "76700",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Limited abdominal ultrasound",
+          "cpt": "76705",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Kidneys and urinary bladder ultrasound",
+          "cpt": "76770",
+          "cash_price": 195,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Thyroid ultrasound (TIRADS report)",
+          "cpt": "76536",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Carotid ultrasound including CIMT",
+          "cpt": "93880",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Pelvic transabdominal and/or transvaginal ultrasound",
+          "cpt": "76856 / 76830",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Thyroid nodule FNA, first target",
+          "cpt": "60100 or 10005",
+          "cash_price": 350,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours. Each subsequent target $150.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ultrasound-guided core needle biopsy, first target",
+          "cpt": "19083",
+          "cash_price": 800,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours. Each subsequent target $500.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Stereotactic mammogram-guided core needle biopsy, first target",
+          "cpt": "19081",
+          "cash_price": 800,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours. Each subsequent target $500.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Second-opinion read",
+          "cpt": "",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Self-pay prices from the practice pricing page. Physician order required. All exams read by a board-certified radiologist; site says most instances have a same-day consult and a final report within 24–48 hours.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Cryoablation of breast cancer",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Site says cost will be discussed during consult; no dollar price posted.",
+          "includes": "",
+          "source_url": "https://www.urprecious.com/pricing.html",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - Thomas",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "2830 N 3rd St",
+      "zip": "85004",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-thomas-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. ",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 226,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-thomas-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "2D mammogram diagnostic unilateral",
+          "cpt": "77065",
+          "cash_price": 183,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-thomas-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI without contrast (any one body part, incl. knee/lumbar/brain)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 458,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance. CPT exclusions listed on the page: 70557, 77084.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-thomas-imaging-and-radiology/mri-without-contrast/d580f8c860d8",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI with and without contrast (any one body part, incl. brain)",
+          "cpt": "varies; e.g. 70553 brain",
+          "cash_price": 642,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-thomas-imaging-and-radiology/mri-with-and-without-contrast/d580f8c860df",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis with contrast",
+          "cpt": "74177",
+          "cash_price": 577,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-thomas-imaging-and-radiology/ct-scan-of-abdomen-and-pelvis-with-contrast/d580f8c863de",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - Phoenix 101",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "2620 N 3rd St, Suite 101",
+      "zip": "85004",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-phoenix-101-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. ",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 226,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-phoenix-101-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT with contrast (any one body part; not abdomen+pelvis combo or CTA)",
+          "cpt": "varies",
+          "cash_price": 381,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-phoenix-101-imaging-and-radiology/ct-scan-with-contrast/d580f8cc64df",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - Camelback",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "2141 E Camelback Rd, Suite 110",
+      "zip": "85016",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-camelback-imaging-and-radiology/mri-without-contrast/d580f8ca65df",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. ",
+      "procedures": [
+        {
+          "procedure_name": "MRI without contrast (any one body part)",
+          "cpt": "varies; e.g. 73721 knee, 72148 lumbar, 70551 brain",
+          "cash_price": 458,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance. CPT exclusions listed on the page: 70557, 77084.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-camelback-imaging-and-radiology/mri-without-contrast/d580f8ca65df",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - 19th Avenue",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "6707 N 19th Ave, Suite 108",
+      "zip": "85015",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-19th-avenue-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. This street address is also listed as a RadiologyAssist 'Diagnostic Imaging Center' participating site; RadiologyAssist program 'from' rates are seeded separately and are not SimonMed walk-up prices.",
+      "procedures": [
+        {
+          "procedure_name": "Chest X-ray",
+          "cpt": "71046 (typical 2-view; page does not name CPT)",
+          "cash_price": 74,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-19th-avenue-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - Kierland",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Scottsdale",
+      "state": "AZ",
+      "address": "14901 North Scottsdale Road, Suite 101",
+      "zip": "85254",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-kierland-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. ",
+      "procedures": [
+        {
+          "procedure_name": "Chest X-ray",
+          "cpt": "71046 (typical 2-view; page does not name CPT)",
+          "cash_price": 74,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-kierland-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - Sun Lakes",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Chandler",
+      "state": "AZ",
+      "address": "10440 E Riggs Rd, Suites 110 & 120",
+      "zip": "85248",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-sun-lakes-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. ",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 226,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-sun-lakes-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "2D mammogram diagnostic unilateral",
+          "cpt": "77065",
+          "cash_price": 183,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-sun-lakes-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - Dobson I",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Chandler",
+      "state": "AZ",
+      "address": "235 S Dobson Rd, Building L, Unit 1",
+      "zip": "85224",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-dobson-i-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. ",
+      "procedures": [
+        {
+          "procedure_name": "Chest X-ray",
+          "cpt": "71046 (typical 2-view; page does not name CPT)",
+          "cash_price": 74,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-dobson-i-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - Mesa Desert",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Mesa",
+      "state": "AZ",
+      "address": "1111 S Dobson Rd, Suite 105",
+      "zip": "85202",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-mesa-desert-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. ",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 226,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-mesa-desert-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging - Plaza Palomino",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Tucson",
+      "state": "AZ",
+      "address": "2990 N Swan Rd, Suite 145",
+      "zip": "85712",
+      "metro": "Tucson",
+      "price_page_url": "https://www.mdsave.com/p/simonmed-imaging-plaza-palomino-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging chain. Official SimonMed site says uninsured patients can get a cash quote by phone/chat (no dollar list on simonmed.com). Prices below are prepaid MDsave cash bundles verified on the linked pages. SimonMed has additional AZ locations not all seeded here. ",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 226,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/simonmed-imaging-plaza-palomino-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "SimonMed Imaging (official cash quote, all AZ sites)",
+      "chain": "SimonMed Imaging",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "",
+      "zip": "",
+      "metro": "Phoenix / Tucson (statewide chain)",
+      "price_page_url": "https://simonmed.com/patients/your-visit/faqs/",
+      "source_type": "provider_site",
+      "notes": "Not a separate facility. Official FAQ: uninsured patients are given a cash price; 'for an estimated quote, please call or chat.' No dollar list on the SimonMed site. Use MDsave location rows for published cash bundles.",
+      "procedures": [
+        {
+          "procedure_name": "Cash price quote for imaging",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Call or chat for a cash price; no dollar amounts posted on the official site.",
+          "includes": "",
+          "source_url": "https://simonmed.com/patients/your-visit/faqs/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Sun Radiology - Glendale",
+      "chain": "Sun Radiology",
+      "type": "independent_imaging",
+      "city": "Glendale",
+      "state": "AZ",
+      "address": "16222 N 59th Ave, Suite C150",
+      "zip": "85306",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/sun-radiology-glendale-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging center. MDsave prepaid cash bundles.",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 284,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/sun-radiology-glendale-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis with contrast",
+          "cpt": "74177",
+          "cash_price": 386,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/sun-radiology-glendale-imaging-and-radiology/ct-scan-of-abdomen-and-pelvis-with-contrast/d580f9cf62db",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Sun Radiology - Peoria",
+      "chain": "Sun Radiology",
+      "type": "independent_imaging",
+      "city": "Peoria",
+      "state": "AZ",
+      "address": "13943 N 91st Ave, Suite A102",
+      "zip": "85381",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/sun-radiology-peoria-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging center. MDsave prepaid cash bundles.",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 284,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/sun-radiology-peoria-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "2D mammogram diagnostic unilateral",
+          "cpt": "77065",
+          "cash_price": 231,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/sun-radiology-peoria-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Surgical Specialty Medical Imaging",
+      "chain": "Surgical Specialty Medical Imaging",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "6501 N 19th Ave",
+      "zip": "85015",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/surgical-speciality-medical-imaging-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Listed on MDsave as Surgical Speciality Medical Imaging (their spelling). Independent imaging.",
+      "procedures": [
+        {
+          "procedure_name": "Chest X-ray",
+          "cpt": "71046 (typical 2-view; page does not name CPT)",
+          "cash_price": 83,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/surgical-speciality-medical-imaging-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CT abdomen/pelvis with contrast",
+          "cpt": "74177",
+          "cash_price": 406,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/surgical-speciality-medical-imaging-imaging-and-radiology/ct-scan-of-abdomen-and-pelvis-with-contrast/d580f9cf65de",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Arizona Diagnostic Radiology Group - Westridge",
+      "chain": "Arizona Diagnostic Radiology Group",
+      "type": "independent_imaging",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "2302 N 75th Ave",
+      "zip": "85035",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-westridge-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging. MDsave prepaid cash bundles. Profile listed additional CT/MRA procedures without visible prices in the fetched HTML; only the visible dollar amount is seeded.",
+      "procedures": [
+        {
+          "procedure_name": "CT angiography",
+          "cpt": "varies (e.g. 71275 / 74175); page does not name CPT",
+          "cash_price": 620,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-westridge-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Arizona Diagnostic Radiology Group - Sun City / Peoria",
+      "chain": "Arizona Diagnostic Radiology Group",
+      "type": "independent_imaging",
+      "city": "Peoria",
+      "state": "AZ",
+      "address": "9069 W Thunderbird",
+      "zip": "85381",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-sun-city-peoria-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging. MDsave prepaid cash bundles.",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 448,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-sun-city-peoria-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Arizona Diagnostic Radiology Group - Westgate",
+      "chain": "Arizona Diagnostic Radiology Group",
+      "type": "independent_imaging",
+      "city": "Glendale",
+      "state": "AZ",
+      "address": "7330 N 99th Ave, Suite 125",
+      "zip": "85307",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-westgate-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging. MDsave prepaid cash bundles.",
+      "procedures": [
+        {
+          "procedure_name": "Carotid ultrasound/Doppler",
+          "cpt": "93880",
+          "cash_price": 451,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-westgate-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Arizona Diagnostic Radiology Group - Superstition Springs",
+      "chain": "Arizona Diagnostic Radiology Group",
+      "type": "independent_imaging",
+      "city": "Mesa",
+      "state": "AZ",
+      "address": "6811 E Superstition Springs Blvd",
+      "zip": "85209",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-superstition-springs-imaging-and-radiology",
+      "source_type": "mdsave",
+      "notes": "Independent imaging. MDsave prepaid cash bundles.",
+      "procedures": [
+        {
+          "procedure_name": "2D mammogram diagnostic bilateral",
+          "cpt": "77066",
+          "cash_price": 448,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-superstition-springs-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "2D mammogram diagnostic unilateral",
+          "cpt": "77065",
+          "cash_price": 368,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid bundle: facility/technical fee + radiologist interpretation + marketplace fee. Must purchase before care; provider will not file insurance.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/p/arizona-diagnostic-radiology-group-superstition-springs-imaging-and-radiology",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "RadiologyAssist Phoenix program (participating imaging centers)",
+      "chain": "RadiologyAssist / Assist Health Group",
+      "type": "cash_pay_program",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "Participating sites include: 6707 N 19th Ave Ste 108, Phoenix 85015; 701 W Glendale Ave, Phoenix 85021; 2502 E Camelback Rd Ste 160, Phoenix 85016",
+      "zip": "",
+      "metro": "Phoenix",
+      "price_page_url": "https://radiologyassist.com/facility-locations-rates/locations-by-city/mri/phoenix-az-mri/",
+      "source_type": "cash_program",
+      "notes": "Not a facility. Nationwide self-pay scheduling program; rates apply when booked through RadiologyAssist and include the radiologist report. The 6707 N 19th Ave Ste 108 site is the same address as SimonMed Imaging - 19th Avenue; do not treat as a second imaging center. 'From' prices are starting rates and vary by body part/contrast.",
+      "procedures": [
+        {
+          "procedure_name": "MRI lumbar spine without contrast",
+          "cpt": "72148",
+          "cash_price": 266.84,
+          "price_status": "from_price",
+          "price_notes": "Program starting/listed rate; book through RadiologyAssist.",
+          "includes": "All-inclusive of radiologist report, per the program page.",
+          "source_url": "https://radiologyassist.com/facility-locations-rates/locations-by-city/mri/phoenix-az-mri/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI cervical spine without contrast",
+          "cpt": "72141",
+          "cash_price": 266.4,
+          "price_status": "from_price",
+          "price_notes": "Program listed rate; book through RadiologyAssist.",
+          "includes": "All-inclusive of radiologist report, per the program page.",
+          "source_url": "https://radiologyassist.com/facility-locations-rates/locations-by-city/mri/phoenix-az-mri/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI knee without contrast",
+          "cpt": "73721",
+          "cash_price": 280.59,
+          "price_status": "from_price",
+          "price_notes": "Program listed rate; book through RadiologyAssist.",
+          "includes": "All-inclusive of radiologist report, per the program page.",
+          "source_url": "https://radiologyassist.com/facility-locations-rates/locations-by-city/mri/phoenix-az-mri/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI brain without contrast",
+          "cpt": "70551",
+          "cash_price": 273.71,
+          "price_status": "from_price",
+          "price_notes": "Program listed rate; book through RadiologyAssist.",
+          "includes": "All-inclusive of radiologist report, per the program page.",
+          "source_url": "https://radiologyassist.com/facility-locations-rates/locations-by-city/mri/phoenix-az-mri/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI abdomen without contrast",
+          "cpt": "74181",
+          "cash_price": 276.35,
+          "price_status": "from_price",
+          "price_notes": "Program listed rate; book through RadiologyAssist.",
+          "includes": "All-inclusive of radiologist report, per the program page.",
+          "source_url": "https://radiologyassist.com/facility-locations-rates/locations-by-city/mri/phoenix-az-mri/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "MRI without contrast (program starting rate)",
+          "cpt": "varies",
+          "cash_price": 265,
+          "price_status": "from_price",
+          "price_notes": "Header starting rate on the same page; body-part rates above are more specific.",
+          "includes": "",
+          "source_url": "https://radiologyassist.com/facility-locations-rates/locations-by-city/mri/phoenix-az-mri/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Mirage Health - Chandler",
+      "chain": "Mirage Health",
+      "type": "endoscopy_center",
+      "city": "Chandler",
+      "state": "AZ",
+      "address": "2201 W Fairview Street, Suite 5",
+      "zip": "85224",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+      "source_type": "provider_site",
+      "notes": "Independent GI practice with offices in Chandler and Mesa. Same posted cash list for both sites.",
+      "procedures": [
+        {
+          "procedure_name": "New-patient visit (60 min)",
+          "cpt": "99204 (typical; page does not name CPT)",
+          "cash_price": 399,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Follow-up visit (30 min)",
+          "cpt": "99214 (typical; page does not name CPT)",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Colonoscopy (polyp removal included)",
+          "cpt": "45378 / 45380 / 45385 as performed",
+          "cash_price": 3000,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Upper endoscopy / EGD",
+          "cpt": "43235 / 43239 as performed",
+          "cash_price": 2500,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Endoscopic ultrasound (EUS)",
+          "cpt": "43259 / 43242 as performed",
+          "cash_price": 15000,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "ERCP",
+          "cpt": "43264 / 43274 as performed",
+          "cash_price": 15000,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Feeding tube placement (PEG)",
+          "cpt": "43246",
+          "cash_price": 6999,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Anorectal manometry",
+          "cpt": "91122",
+          "cash_price": 3000,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "Bundled physician + testing.",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Lab work",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Quoted at visit; no dollar prices posted.",
+          "includes": "",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Mirage Health - Mesa",
+      "chain": "Mirage Health",
+      "type": "endoscopy_center",
+      "city": "Mesa",
+      "state": "AZ",
+      "address": "1910 S Stapley Dr, Suite 120",
+      "zip": "85204",
+      "metro": "Phoenix",
+      "price_page_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+      "source_type": "provider_site",
+      "notes": "Independent GI practice with offices in Chandler and Mesa. Same posted cash list for both sites.",
+      "procedures": [
+        {
+          "procedure_name": "New-patient visit (60 min)",
+          "cpt": "99204 (typical; page does not name CPT)",
+          "cash_price": 399,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Follow-up visit (30 min)",
+          "cpt": "99214 (typical; page does not name CPT)",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Colonoscopy (polyp removal included)",
+          "cpt": "45378 / 45380 / 45385 as performed",
+          "cash_price": 3000,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Upper endoscopy / EGD",
+          "cpt": "43235 / 43239 as performed",
+          "cash_price": 2500,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Endoscopic ultrasound (EUS)",
+          "cpt": "43259 / 43242 as performed",
+          "cash_price": 15000,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "ERCP",
+          "cpt": "43264 / 43274 as performed",
+          "cash_price": 15000,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Feeding tube placement (PEG)",
+          "cpt": "43246",
+          "cash_price": 6999,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "All-inclusive: physician, facility, sedation/anesthesia, devices, and pathology (as stated for each procedure).",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Anorectal manometry",
+          "cpt": "91122",
+          "cash_price": 3000,
+          "price_status": "published",
+          "price_notes": "Cash/self-pay GI practice; price confirmed before scheduling; pay at time of service. No insurance claim filed.",
+          "includes": "Bundled physician + testing.",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Lab work",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Quoted at visit; no dollar prices posted.",
+          "includes": "",
+          "source_url": "https://www.miragehealthaz.com/cash-self-pay-pricing",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Mesquite Gastroenterology and Surgery Center (Dr. Miguel A. Arenas)",
+      "chain": "Mesquite Gastroenterology and Surgery Center",
+      "type": "endoscopy_center",
+      "city": "Tucson",
+      "state": "AZ",
+      "address": "7445 E Tanque Verde Rd",
+      "zip": "85715",
+      "metro": "Tucson",
+      "price_page_url": "https://www.mdsave.com/procedures/colonoscopy/d783fdcd/arizona",
+      "source_type": "mdsave",
+      "notes": "MDsave Arizona colonoscopy listing: procedure offered by Mesquite Gastroenterology and Surgery Center; physician listed as Arenas, Miguel A, MD at this address. Independent GI/ASC (not a hospital campus).",
+      "procedures": [
+        {
+          "procedure_name": "Colonoscopy (screening or diagnostic, with or without polyp/specimen removal)",
+          "cpt": "45378 / 45380 / 45385 as performed",
+          "cash_price": 2310,
+          "price_status": "published",
+          "price_notes": "MDsave prepaid cash price as listed on the Arizona colonoscopy page.",
+          "includes": "",
+          "source_url": "https://www.mdsave.com/procedures/colonoscopy/d783fdcd/arizona",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "ColonoscopyAssist Phoenix program",
+      "chain": "ColonoscopyAssist / Assist Health Group",
+      "type": "cash_pay_program",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "",
+      "zip": "",
+      "metro": "Phoenix",
+      "price_page_url": "https://colonoscopyassist.com/locations-by-city/colonoscopy-locations/affordable-colonoscopy-in-phoenix-az/",
+      "source_type": "cash_program",
+      "notes": "Not a named facility. National cash program; Phoenix page lists a flat all-inclusive rate. The actual endoscopy center is assigned via their Facility Locator or by calling 855-542-6566. Page says pricing is subject to change and to use the locator for the most current rate.",
+      "procedures": [
+        {
+          "procedure_name": "Colonoscopy (screening or diagnostic; same rate)",
+          "cpt": "45378 / 45380 / 45385 as performed",
+          "cash_price": 1295,
+          "price_status": "published",
+          "price_notes": "Flat program rate for Phoenix. Facility name not published on this page.",
+          "includes": "All-inclusive per the page: physician, facility, sedation/anesthesia, unlimited polyp removal and biopsies, unlimited pathology, procedure reports.",
+          "source_url": "https://colonoscopyassist.com/locations-by-city/colonoscopy-locations/affordable-colonoscopy-in-phoenix-az/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Sonora Quest Laboratories - My Lab ReQuest",
+      "chain": "Sonora Quest Laboratories",
+      "type": "lab",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "Statewide patient service centers (Arizona)",
+      "zip": "",
+      "metro": "Phoenix / Tucson (statewide)",
+      "price_page_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+      "source_type": "provider_site_pdf",
+      "notes": "Arizona's major independent/regional lab (Quest joint venture). Consumer cash menu is My Lab ReQuest. QuestDirect is not used here: QuestDirect states it cannot be purchased in Arizona.",
+      "procedures": [
+        {
+          "procedure_name": "Kidney profile",
+          "cpt": "",
+          "cash_price": 41,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled on the form as Kidney Profile (803943) $41.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Basic metabolic panel (BMP)",
+          "cpt": "80048",
+          "cash_price": 25,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled as Basic Metabolic Panel (BMP) (900320) $25.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CBC/CMP panel",
+          "cpt": "80053+85025",
+          "cash_price": 43,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled as CBC/CMP (800084) $43.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Comprehensive metabolic panel + kidney profile",
+          "cpt": "80053+",
+          "cash_price": 57,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled as Comprehensive Metabolic Panel + Kidney Profile (804478) $57.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Basic metabolic panel + kidney profile",
+          "cpt": "80048+",
+          "cash_price": 53,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled as Basic Metabolic Panel + Kidney Profile (804479) $53.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Expanded health profile + kidney profile",
+          "cpt": "",
+          "cash_price": 82,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled (804607) $82.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Men's complete health profile + kidney profile",
+          "cpt": "",
+          "cash_price": 138,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled (804605) $138.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Women's complete health profile + kidney profile",
+          "cpt": "",
+          "cash_price": 138,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled (804606) $138.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Electrolyte panel",
+          "cpt": "80051",
+          "cash_price": 21,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $21.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Uric acid (gout test)",
+          "cpt": "84550",
+          "cash_price": 13,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $13.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Insulin, fasting",
+          "cpt": "83525",
+          "cash_price": 25,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $25.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ferritin",
+          "cpt": "82728",
+          "cash_price": 35,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled Ferritin Standalone (9210) $35.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Cortisol, total, serum",
+          "cpt": "82533",
+          "cash_price": 42,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $42.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Prolactin",
+          "cpt": "84146",
+          "cash_price": 50,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $50.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Estradiol",
+          "cpt": "82670",
+          "cash_price": 66,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $66.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Progesterone",
+          "cpt": "84144",
+          "cash_price": 51,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $51.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Celiac disease screen",
+          "cpt": "",
+          "cash_price": 91,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $91.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "H. pylori breath test (>3 years)",
+          "cpt": "83013",
+          "cash_price": 158,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $158.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "GLP-1 progress panel",
+          "cpt": "",
+          "cash_price": 139,
+          "price_status": "published",
+          "price_notes": "My Lab ReQuest direct-access testing. Arizona law: labs cannot bill health insurance for patient-ordered tests; full payment due at time of service. PDF footer: Prices subject to change. Rev. 07/06/2026. Drawn at Sonora Quest patient service centers statewide. Clearly labeled $139.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Standalone CMP or CBC",
+          "cpt": "80053 / 85025",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "CMP and CBC appear on the form, but the multi-column PDF extract did not attach a unambiguous standalone dollar amount to each. Use the clearly labeled CBC/CMP panel at $43, or confirm standalone prices from the live PDF/app before publishing.",
+          "includes": "",
+          "source_url": "https://www.sonoraquest.com/media/vfnlc4jp/my-lab-request_070626.pdf",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Labcorp OnDemand (draw at Arizona Labcorp locations)",
+      "chain": "Labcorp",
+      "type": "lab",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "Statewide Labcorp patient service centers (Arizona)",
+      "zip": "",
+      "metro": "Phoenix / Tucson (statewide)",
+      "price_page_url": "https://www.ondemand.labcorp.com/lab-tests/comprehensive-metabolic-panel",
+      "source_type": "provider_site",
+      "notes": "National consumer lab product; sample collected in person at a Labcorp location. Labcorp operates draw sites in AZ (locations.labcorp.com/az). These are national list prices, not AZ-specific. Ages 18-100.",
+      "procedures": [
+        {
+          "procedure_name": "Comprehensive metabolic panel (CMP)",
+          "cpt": "80053",
+          "cash_price": 49,
+          "price_status": "published",
+          "price_notes": "Labcorp OnDemand list price $49. Fast 12 hours. Blood draw at a Labcorp location.",
+          "includes": "",
+          "source_url": "https://www.ondemand.labcorp.com/lab-tests/comprehensive-metabolic-panel",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "CBC with differential",
+          "cpt": "85025",
+          "cash_price": 29,
+          "price_status": "published",
+          "price_notes": "Labcorp OnDemand list price $29. No special prep.",
+          "includes": "",
+          "source_url": "https://www.ondemand.labcorp.com/lab-tests/complete-blood-count",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Foothills Direct Primary Care (Erica Wadas, MD)",
+      "chain": "Foothills Direct Primary Care",
+      "type": "direct_primary_care",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "4425 East Agave Road, Suite 106",
+      "zip": "85044",
+      "metro": "Phoenix",
+      "price_page_url": "https://foothillsdirectprimarycare.com/",
+      "source_type": "provider_site",
+      "notes": "Does not bill insurance. Practice website said it is currently full and uses a waitlist (contact page). Address from https://foothillsdirectprimarycare.com/contact",
+      "procedures": [
+        {
+          "procedure_name": "Adult DPC membership (ages 18+)",
+          "cpt": "",
+          "cash_price": 150,
+          "price_status": "published",
+          "price_notes": "Monthly membership. $100 enrollment fee (first visit totals $250, then $150/mo). Includes unlimited necessary visits and medically necessary labs up to $100/year; additional labs at pre-negotiated cash rates quoted in advance.",
+          "includes": "",
+          "source_url": "https://foothillsdirectprimarycare.com/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Métier Wellness (Metier Clinical Services)",
+      "chain": "Métier Wellness",
+      "type": "direct_primary_care",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "3511 E Indian School Rd",
+      "zip": "85018",
+      "metro": "Phoenix",
+      "price_page_url": "https://metierclinicalservices.com/membership/",
+      "source_type": "provider_site",
+      "notes": "Direct primary care / membership clinic. Limited enrollment.",
+      "procedures": [
+        {
+          "procedure_name": "Individual membership (age 16+)",
+          "cpt": "",
+          "cash_price": 175,
+          "price_status": "published",
+          "price_notes": "Monthly. One-time enrollment fee $100. Includes up to 2 office visits per month plus listed membership benefits.",
+          "includes": "",
+          "source_url": "https://metierclinicalservices.com/membership/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Couples membership",
+          "cpt": "",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Monthly. One-time enrollment fee $100.",
+          "includes": "",
+          "source_url": "https://metierclinicalservices.com/membership/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Family plans",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Site says call for pricing.",
+          "includes": "",
+          "source_url": "https://metierclinicalservices.com/membership/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Sozo Lifestyle Medicine (Mary Young, DO)",
+      "chain": "Sozo Lifestyle Medicine",
+      "type": "direct_primary_care",
+      "city": "Phoenix",
+      "state": "AZ",
+      "address": "22044 N 44th St, Suite 120",
+      "zip": "85050",
+      "metro": "Phoenix",
+      "price_page_url": "https://sozolifestylemedicine.com/memberships/",
+      "source_type": "provider_site",
+      "notes": "Direct-pay DPC in north Phoenix (near Scottsdale). Does not bill commercial insurance. Month-to-month.",
+      "procedures": [
+        {
+          "procedure_name": "Adult primary care membership (ages 18+)",
+          "cpt": "",
+          "cash_price": 115,
+          "price_status": "published",
+          "price_notes": "Monthly. Full-spectrum primary care as described on the memberships page.",
+          "includes": "",
+          "source_url": "https://sozolifestylemedicine.com/memberships/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Teen primary care (ages 12-17)",
+          "cpt": "",
+          "cash_price": 45,
+          "price_status": "published",
+          "price_notes": "Monthly, or $20/mo added to a parent's membership.",
+          "includes": "",
+          "source_url": "https://sozolifestylemedicine.com/memberships/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Kids access care (ages 0-11)",
+          "cpt": "",
+          "cash_price": 45,
+          "price_status": "published",
+          "price_notes": "Monthly, or $20/mo added to a parent's membership. Urgent visits / sports physicals; site says keep a pediatrician for well-child visits and vaccines.",
+          "includes": "",
+          "source_url": "https://sozolifestylemedicine.com/memberships/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Family plan (up to 4 members)",
+          "cpt": "",
+          "cash_price": 250,
+          "price_status": "published",
+          "price_notes": "Monthly. Care for 2 adults plus up to 2 kids/teens; additional kids/teens $20/mo.",
+          "includes": "",
+          "source_url": "https://sozolifestylemedicine.com/memberships/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Medicare Lifestyle Plan",
+          "cpt": "",
+          "cash_price": 95,
+          "price_status": "published",
+          "price_notes": "Monthly. Site says covered medical services are billed to Medicare/Medigap; membership covers extras.",
+          "includes": "",
+          "source_url": "https://sozolifestylemedicine.com/memberships/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Primary Med Clinic",
+      "chain": "Primary Med Clinic",
+      "type": "direct_primary_care",
+      "city": "Tucson",
+      "state": "AZ",
+      "address": "3605 W Cortaro Farms Rd, Suite 157",
+      "zip": "85742",
+      "metro": "Tucson",
+      "price_page_url": "https://www.pm-clinic.com/membership",
+      "source_type": "provider_site",
+      "notes": "Direct care membership. Site also lists a Marana / NW Tucson and Oro Valley presence; the address above is the one on the membership page footer.",
+      "procedures": [
+        {
+          "procedure_name": "Children 2-18 yrs membership",
+          "cpt": "",
+          "cash_price": 50,
+          "price_status": "published",
+          "price_notes": "Monthly. Site notes sick visits only for children.",
+          "includes": "",
+          "source_url": "https://www.pm-clinic.com/membership",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ages 19-30 membership",
+          "cpt": "",
+          "cash_price": 75,
+          "price_status": "published",
+          "price_notes": "Monthly.",
+          "includes": "",
+          "source_url": "https://www.pm-clinic.com/membership",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Ages 30+ membership",
+          "cpt": "",
+          "cash_price": 100,
+          "price_status": "published",
+          "price_notes": "Monthly.",
+          "includes": "",
+          "source_url": "https://www.pm-clinic.com/membership",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Dr. Jatoi Direct Primary Care (Mansoor Jatoi, DO)",
+      "chain": "Dr. Jatoi Direct Primary Care",
+      "type": "direct_primary_care",
+      "city": "Tucson",
+      "state": "AZ",
+      "address": "",
+      "zip": "",
+      "metro": "Tucson",
+      "price_page_url": "https://drjatoidirectprimarycare.com/fee-schedule-new/",
+      "source_type": "provider_site",
+      "notes": "Official fee-schedule page lists Tucson, AZ but no street address. Public physician directories commonly list 7383 E Tanque Verde Rd, Tucson 85715; that street was not verified on the official fee page so it is omitted here. Non-member home visit is listed but the dollar amount did not render in the fetched page (left unpriced).",
+      "procedures": [
+        {
+          "procedure_name": "Single person membership, paid annually in full",
+          "cpt": "",
+          "cash_price": 1500,
+          "price_status": "published",
+          "price_notes": "Annual. Includes unlimited home visits (within reason), no copays, 24/7 direct access.",
+          "includes": "",
+          "source_url": "https://drjatoidirectprimarycare.com/fee-schedule-new/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Single person membership, monthly",
+          "cpt": "",
+          "cash_price": 130,
+          "price_status": "published",
+          "price_notes": "Monthly ($1,560/year). Same membership benefits.",
+          "includes": "",
+          "source_url": "https://drjatoidirectprimarycare.com/fee-schedule-new/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Married couple/partner membership, paid annually in full",
+          "cpt": "",
+          "cash_price": 2600,
+          "price_status": "published",
+          "price_notes": "Annual, two members.",
+          "includes": "",
+          "source_url": "https://drjatoidirectprimarycare.com/fee-schedule-new/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Married couple/partner membership, monthly",
+          "cpt": "",
+          "cash_price": 230,
+          "price_status": "published",
+          "price_notes": "Monthly ($2,760/year).",
+          "includes": "",
+          "source_url": "https://drjatoidirectprimarycare.com/fee-schedule-new/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Initial registration fee (per person)",
+          "cpt": "",
+          "cash_price": 75,
+          "price_status": "published",
+          "price_notes": "One-time. Only one fee if two people enroll at the same time.",
+          "includes": "",
+          "source_url": "https://drjatoidirectprimarycare.com/fee-schedule-new/",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Single home visit, non-member",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Listed as a cash visit scheduled case-by-case; dollar amount did not appear in the fetched page.",
+          "includes": "",
+          "source_url": "https://drjatoidirectprimarycare.com/fee-schedule-new/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Blueberry Direct Primary Care",
+      "chain": "Blueberry Direct Primary Care",
+      "type": "direct_primary_care",
+      "city": "Tucson",
+      "state": "AZ",
+      "address": "",
+      "zip": "",
+      "metro": "Tucson",
+      "price_page_url": "https://www.blueberrydpc.com/pricing",
+      "source_type": "provider_site",
+      "notes": "Official site lists Tucson, AZ and a 520 area code; no street address on the pricing or contact pages.",
+      "procedures": [
+        {
+          "procedure_name": "Blueberry membership (adult)",
+          "cpt": "",
+          "cash_price": 100,
+          "price_status": "published",
+          "price_notes": "Monthly. Special household pricing mentioned but not itemized. $75 one-time registration. Travel included within 10 miles; $0–$50 surcharge beyond.",
+          "includes": "",
+          "source_url": "https://www.blueberrydpc.com/pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Integrative medicine consult (90-120 min)",
+          "cpt": "",
+          "cash_price": 275,
+          "price_status": "published",
+          "price_notes": "Per visit.",
+          "includes": "",
+          "source_url": "https://www.blueberrydpc.com/pricing",
+          "date_checked": "2026-11-15"
+        },
+        {
+          "procedure_name": "Other services",
+          "cpt": "",
+          "cash_price": null,
+          "price_status": "call_for_price",
+          "price_notes": "Site: other cost will vary depending on service provided.",
+          "includes": "",
+          "source_url": "https://www.blueberrydpc.com/pricing",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    },
+    {
+      "provider_name": "Saguaro Direct Care (virtual DPC, Arizona)",
+      "chain": "Saguaro Direct Care",
+      "type": "direct_primary_care",
+      "city": "Lake Havasu City",
+      "state": "AZ",
+      "address": "Virtual-first; primary location listed as Lake Havasu City. Site also markets Phoenix, Tucson, and Tempe.",
+      "zip": "",
+      "metro": "Statewide (including Phoenix and Tucson)",
+      "price_page_url": "https://saguarodirectcare.com/direct-primary-care/",
+      "source_type": "provider_site",
+      "notes": "Virtual-first DPC for eligible adults across Arizona. Membership covers defined primary care; labs, imaging, specialists, and emergency care are separate.",
+      "procedures": [
+        {
+          "procedure_name": "Direct primary care membership",
+          "cpt": "",
+          "cash_price": 109,
+          "price_status": "published",
+          "price_notes": "Monthly. Telemedicine throughout Arizona.",
+          "includes": "",
+          "source_url": "https://saguarodirectcare.com/direct-primary-care/",
+          "date_checked": "2026-11-15"
+        }
+      ]
+    }
+  ]
+}

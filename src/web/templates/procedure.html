@@ -38,6 +38,16 @@
 
   {{ c.card(r, 0) }}
 
+  {% if cash_rows %}
+  <div class="card" style="margin-top:16px;overflow-x:auto" id="cash">
+    <div class="fac-h">Independent cash-pay prices for CPT {{ r.code }}{% if metro %} in and around {{ city }}{% endif %} — {{ cash_rows|length }} {{ 'listing' if cash_rows|length == 1 else 'listings' }}, lowest first</div>
+    <p style="margin:0 0 8px;font-size:14px;color:var(--body)">Self-pay prices posted by independent providers (not hospitals). Compare them with the hospital <span class="kind cash">cash</span> and <span class="kind neg">negotiated</span> prices above. Ordered by price, then data quality; nobody pays to be listed.</p>
+    <table class="ptable"><thead><tr><th>Provider</th><th>Service as listed</th><th class="r">Price</th><th>Source</th></tr></thead>
+    <tbody>{% for r in cash_rows %}{% set show_provider = true %}{% include "_cash_row.html" %}{% endfor %}</tbody></table>
+    <p class="refreshed"><a href="/cash">All independent cash prices →</a></p>
+  </div>
+  {% endif %}
+
   {# Sibling areas — internal links + lets a visitor jump to their own metro #}
   <div class="card" style="margin-top:16px">
     <div class="fac-h">See {{ phrase }} prices in another area</div>

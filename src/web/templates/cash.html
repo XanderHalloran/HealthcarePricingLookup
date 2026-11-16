@@ -1,0 +1,23 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">{% if label %}{{ label }}: cash prices{% else %}Cash prices from independent providers{% endif %}</h1>
+  <p class="sub">Self-pay prices that Arizona imaging centers, labs, endoscopy centers, and direct primary care practices post themselves. {{ provs|length }} providers, {{ rows|selectattr('price', 'ne', none)|list|length }} prices shown.</p>
+  <div class="tstrip"><span>✓ No paid placement: ordered by price, then data quality</span><span>✓ Source and date on every price</span></div></div>
+<form class="card filters" method="get" action="/cash">
+  <label>Procedure<select name="procedure"><option value="">All</option>{% for k, v in facets.groups %}<option value="{{ k }}" {% if sel.procedure == k %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+  <label>Type<select name="type"><option value="">All</option>{% for k, v in facets.types %}<option value="{{ k }}" {% if sel.type == k %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+  <label>City<select name="city"><option value="">All</option>{% for k, v in facets.cities %}<option value="{{ k }}" {% if sel.city == k %}selected{% endif %}>{{ v }}</option>{% endfor %}</select></label>
+  <button class="btn" type="submit">Filter</button>{% if filtered %} <a href="/cash">Clear</a>{% endif %}
+</form>
+<div class="note"><b>How to read these.</b> <span class="kind cash">Published cash price</span> is the provider's own self-pay price. <span class="kind bundle">Prepaid bundle (MDsave)</span> is paid in advance through MDsave and may differ from a walk-in quote. Prices usually cover the scan or test; ask whether the reading, visit, or supplies are extra. Hospital prices for the same codes are on each <a href="/procedures">procedure page</a>.</div>
+<div class="card" style="overflow-x:auto">
+  <table class="ptable">
+    <thead><tr><th>Provider</th><th>Service</th><th class="r">Price</th><th>Source</th></tr></thead>
+    <tbody>{% for r in rows %}{% set show_provider = true %}{% include "_cash_row.html" %}{% endfor %}</tbody>
+  </table>
+  {% if not rows %}<p>No listings match. <a href="/cash">Clear filters</a>.</p>{% endif %}
+</div>
+<div class="card" style="margin-top:16px"><div class="fac-h">Providers</div>
+  <div class="linkgrid">{% for p in provs|sort(attribute='name') %}<a class="pill" href="{{ cash_url(p) }}">{{ p.name }}</a>{% endfor %}</div></div>
+<p class="refreshed">{{ meta.disclaimer }} Missing a provider or see a wrong price? <a href="/corrections">Submit or correct a listing</a>.</p>
+{% endblock %}

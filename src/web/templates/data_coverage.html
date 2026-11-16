@@ -8,7 +8,7 @@
     <tbody>
     {% for s in cov.states %}
       <tr><td><a href="/{{ s.slug }}">{{ s.name }}</a></td><td class="r">{{ s.n }}</td><td class="r">{{ s.configured }}</td>
-        <td class="r">{{ s.independent + (cash_counts.get(s.code, 0) if cash_counts is defined else 0) }}</td><td class="r">{{ s.codes }} of {{ cov.codes }}</td>
+        <td class="r">{{ s.independent }}</td><td class="r">{{ s.codes }} of {{ cov.codes }}</td>
         <td class="r">{{ '{:,}'.format(s.rows) }}</td><td class="r">{{ s.payers }}</td></tr>
     {% endfor %}
     </tbody>

@@ -461,6 +461,7 @@ def _procedure_page(request, code, metro="", state=DEFAULT_STATE):
         "n_hosp": MARKETS[state].get("n", 0), "nav": "compare", "own_ids": OWN_IDS,
         "canonical": canonical, "faqs": faqs, "ld": ld, "data_refreshed": _vintage(), "counts": counts,
         "crumbs": crumbs,
+        "cash_rows": (cashpay.for_code(CASH, code, state, metro or None) if CONSUMER else []),
         "title": f"How much does {phrase} (CPT {code}) cost in {city}? | {BRAND['short']}",
         "meta_desc": meta, "siblings": siblings, "related": related,
     })
@@ -953,9 +954,11 @@ _COV_CACHE = {}
 
 def _independents(state=None):
     """Independent (non-hospital) facilities with at least one published price: the inline
-    freestanding imaging/ASC list. They sit in the same compare tables, so they count."""
+    freestanding imaging/ASC list (in the compare tables) plus the cash-pay directory."""
     names = {(f["state"], f["name"]) for rows in STATE["freestanding"].values() for f in rows
              if f.get("price") is not None and (state is None or f["state"] == state)}
+    cash = CASH["providers"] if "CASH" in globals() else []
+    names |= {(p["state"], p["name"]) for p in cash if p["n_priced"] and (state is None or p["state"] == state)}
     return len(names)
 
 
@@ -1573,8 +1576,8 @@ def _metro_hub(request, st, mk):
 
 
 def _hub_extra(st, mk):
-    """Hook for category tiles / cash listings on hubs (filled in by later sections)."""
-    return {"tiles": [], "cash_providers": []}
+    """Cash-pay listings (and, below, category tiles) for a state or metro hub."""
+    return {"tiles": [], "cash_providers": _cash_providers(st, mk)}
 
 
 def _hospital_index(request, st):
@@ -1593,6 +1596,184 @@ def _live_state_by_slug(slug):
     if not st:
         return None, None
     return st, (None if st == _market(st) else _coming_soon(st))
+
+
+# ---------- Cash-pay directory + facility profiles ----------
+import threading  # noqa: E402
+import cashpay  # noqa: E402
+
+CASH = cashpay.load(os.environ.get("CASHPAY_SEED") or os.path.join(CFG, "cashpay", "seed_providers.json"))
+FREESTANDING_SLUG = {}          # slug -> {name, type, city, metro, state, prices{code: price}}
+for _code, _facs in STATE["freestanding"].items():
+    for _f in _facs:
+        _e = FREESTANDING_SLUG.setdefault(hubs.slugify(_f["name"]), dict(_f, prices={}))
+        _e["prices"][_code] = _f["price"]
+
+
+def _cash_url(p):
+    return f"/{MARKETS.get(p['state'], MARKETS[DEFAULT_STATE])['slug']}/{p['city_slug']}/facilities/{p['slug']}"
+
+
+def _freestanding_url(name):
+    e = FREESTANDING_SLUG.get(hubs.slugify(name))
+    if not e or e["state"] not in MARKETS:
+        return ""
+    return f"/{MARKETS[e['state']]['slug']}/{e.get('metro') or 'phoenix'}/facilities/{hubs.slugify(name)}"
+
+
+def fac_url(h):
+    """Profile link for a compare-table row (consumer only): hospitals by id, independents by name."""
+    if not CONSUMER:
+        return ""
+    return _hosp_url(h["id"]) if h.get("id") else _freestanding_url(h.get("name") or "")
+
+
+templates.env.globals["fac_url"] = fac_url
+templates.env.globals["cash_url"] = _cash_url
+
+
+def _cash_providers(st, metro=None):
+    return [p for p in CASH["providers"] if p["state"] == st and (metro is None or p["metro"] in (metro, None))]
+
+
+_CAT, _CAT_LOCK = {}, threading.Lock()
+
+
+def _catalog(st, mk=None):
+    """{code: analyze() result} for every tracked code in a state (or metro), per data stamp.
+    Built once (a few seconds), then hubs, tiles and profiles read it without touching
+    Parquet, and they agree with the compare tables because it IS the compare computation."""
+    stamp = os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0
+    key = (stamp, st, mk)
+    hit = _CAT.get(key)
+    if hit is not None:
+        return hit
+    with _CAT_LOCK:
+        hit = _CAT.get(key)
+        if hit is not None:
+            return hit
+        out = {}
+        for s in STATE["services"]:
+            rows = [r for r in _analyze(s["code"], st, None, mk) if r["resolved"]]
+            if rows and (rows[0]["result"].get("hospitals") or rows[0]["result"].get("neg_median") is not None):
+                out[s["code"]] = rows[0]["result"]
+        for k in [k for k in _CAT if k[0] != stamp]:
+            del _CAT[k]
+        if out:
+            _CAT[key] = out
+        return out
+
+
+_HOSP_RANGE = {}
+
+
+def _hosp_ranges(hid):
+    """code -> (negotiated min, max) for one hospital, straight from its file rows."""
+    stamp = os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0
+    if (stamp, hid) in _HOSP_RANGE:
+        return _HOSP_RANGE[(stamp, hid)]
+    from pricing import rates_source
+    from pricing import _has_parquet
+    out = {}
+    if _has_parquet(RATES_DIR):
+        out = {c: (lo, hi) for c, lo, hi in _con().execute(
+            f"SELECT code, min(negotiated_min), max(negotiated_max) FROM {rates_source(RATES_DIR)} "
+            f"WHERE hospital_id = ? GROUP BY 1", [hid]).fetchall()}
+    if len(_HOSP_RANGE) > 500:
+        _HOSP_RANGE.clear()
+    _HOSP_RANGE[(stamp, hid)] = out
+    return out
+
+
+@app.get("/cash", response_class=HTMLResponse)
+def cash_directory(request: Request, type: str = "", city: str = "", procedure: str = ""):
+    """Filterable directory of independent cash-pay prices. Ordered by price, then data quality.
+    Nobody pays to be here and nothing else touches the order."""
+    _consumer_only()
+    f = cashpay.facets(CASH)
+    type_ = type if type in dict(f["types"]) else ""
+    city = city if city in dict(f["cities"]) else ""
+    group = procedure if procedure in dict(f["groups"]) else ""
+    rows = cashpay.filter_rows(CASH, type_, city, group)
+    provs = [p for p in CASH["providers"] if (not type_ or p["type"] == type_) and (not city or p["city_slug"] == city)
+             and (not group or group in p["groups"])]
+    label = " ".join(x for x in (dict(f["groups"]).get(group, ""), dict(f["types"]).get(type_, ""),
+                                 ("in " + dict(f["cities"])[city]) if city else "") if x)
+    filtered = bool(type_ or city or group)
+    return _page(request, "cash.html",
+                 f"{label + ' c' if label else 'C'}ash prices{'' if city else ' in Arizona'} from independent providers | {BRAND['short']}",
+                 "Self-pay prices that Arizona imaging centers, labs, endoscopy centers, and direct primary care "
+                 "practices publish themselves, with the source and date for every price. No paid placement.",
+                 "/cash", nav="cash", noindex=filtered,
+                 crumbs=[_home_crumb(), _state_crumb(DEFAULT_STATE), {"name": "Cash prices"}],
+                 facets=f, sel={"type": type_, "city": city, "procedure": group}, rows=rows, provs=provs,
+                 meta=CASH["meta"], label=label, filtered=filtered)
+
+
+def _cash_profile(request, st, place, slug):
+    p = CASH["by_slug"].get(slug)
+    if p and p["state"] == st and p["city_slug"] == place:
+        rows = cashpay.rank(p["rows"])
+        return _page(request, "facility.html", f"{p['name']} cash prices | {BRAND['short']}",
+                     f"{p['name']} ({p['city']}, {p['state']}): {p['n_priced']} published self-pay prices with "
+                     f"source and date.", _cash_url(p), nav="facility",
+                     crumbs=[_home_crumb(), _state_crumb(st), {"name": "Cash prices", "url": "/cash"}, {"name": p["name"]}],
+                     p=p, rows=rows, kind="cash")
+    e = FREESTANDING_SLUG.get(slug)
+    if e and e["state"] == st and (e.get("metro") or "phoenix") == place:
+        cat = _catalog(st)
+        items = [{"svc": _by_code[c], "code": c, "price": v, "medicare": (cat.get(c) or {}).get("medicare_rate"),
+                  "url": f"/{place}/procedure/{c}"} for c, v in sorted(e["prices"].items(), key=lambda kv: kv[1])
+                 if c in _by_code]
+        return _page(request, "facility.html", f"{e['name']} prices | {BRAND['short']}",
+                     f"{e['name']}: published cash prices for {len(items)} tracked procedures, compared with "
+                     f"Medicare.", _freestanding_url(e["name"]), nav="facility",
+                     crumbs=[_home_crumb(), _state_crumb(st), {"name": "Hospitals", "url": f"/{MARKETS[st]['slug']}/hospitals"},
+                             {"name": e["name"]}], e=e, items=items, kind="freestanding")
+    raise HTTPException(status_code=404)
+
+
+@app.get("/{state_slug}/{place}/facilities/{slug}", response_class=HTMLResponse)
+def facility_profile(request: Request, state_slug: str, place: str, slug: str):
+    _consumer_only()
+    st, soon = _live_state_by_slug(state_slug)
+    if not st or soon:
+        raise HTTPException(status_code=404)
+    return _cash_profile(request, st, place, slug)
+
+
+@app.get("/{state_slug}/{metro}/hospitals/{slug}", response_class=HTMLResponse)
+def hospital_profile(request: Request, state_slug: str, metro: str, slug: str):
+    """One hospital: every tracked code it prices, with the same figures as the compare tables."""
+    _consumer_only()
+    st, soon = _live_state_by_slug(state_slug)
+    hid = next((h for h, s in HOSP_STATE.items() if s == st and _hosp_slug(h) == slug), None) if st and not soon else None
+    if not hid or STATE["metros"]["of"].get(hid) != metro:
+        raise HTTPException(status_code=404)
+    cat, ranges = _catalog(st), _hosp_ranges(hid)
+    items = []
+    for code, d in cat.items():
+        h = next((x for x in d.get("hospitals") or [] if x.get("id") == hid), None)
+        if not h:
+            continue
+        lo, hi = ranges.get(code, (None, None))
+        mc = d.get("medicare_rate")
+        items.append({"svc": _by_code[code], "code": code, "cash": h.get("cash"), "median": h.get("median"),
+                      "price": h.get("price"), "rate_type": h.get("rate_type"), "outlier": h.get("outlier"),
+                      "neg_lo": lo, "neg_hi": hi, "medicare": mc,
+                      "xm": (h["price"] / mc) if (mc and h.get("price")) else None,
+                      "cat": hubs.category_of(code), "url": f"/{metro}/procedure/{code}"})
+    order = {c[0]: i for i, c in enumerate(hubs.CATEGORIES)}
+    items.sort(key=lambda i: (order.get(i["cat"], 99), i["svc"]["desc"]))
+    name = STATE["hospital_names"].get(hid, hid)
+    m = next(x for x in STATE["metros"]["list"] if x["key"] == metro)
+    return _page(request, "hospital.html", f"{name} prices for {len(items)} procedures | {BRAND['short']}",
+                 f"{name}: published cash and negotiated prices for {len(items)} common procedures, compared with "
+                 f"Medicare and the {m['label']}.", _hosp_url(hid), nav="facility",
+                 crumbs=[_home_crumb(), _state_crumb(st), {"name": m["label"], "url": f"/{MARKETS[st]['slug']}/{metro}"},
+                         {"name": "Hospitals", "url": f"/{MARKETS[st]['slug']}/hospitals"}, {"name": name}],
+                 hid=hid, name=name, m=m, items=items, stars=STATE["hospital_stars"].get(hid),
+                 mrf=HOSP_URL.get(hid, ""), ccn=HOSP_CCN.get(hid, ""), cat_labels=dict((c[0], c[1]) for c in hubs.CATEGORIES))
 
 
 # ---- catch-all hub routes: keep these LAST so every fixed path above wins ----

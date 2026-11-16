@@ -54,6 +54,39 @@ def test_methodology_title_and_vintage():
     assert "September 2026" not in t and webapp._vintage() in t
 
 
+def test_cash_directory_filters_and_labels():
+    r = client.get("/cash")
+    assert r.status_code == 200 and "Prepaid bundle (MDsave)" in r.text
+    assert "source document dated Feb 2025" in r.text                 # AAI PDF vintage shown
+    t = client.get("/cash", params={"procedure": "mri", "city": "phoenix"}).text
+    prices = [float(x.replace(",", "")) for x in re.findall(r'class="r money">(?:from )?\$([\d,.]+)', t)]
+    assert prices and prices == sorted(prices)                         # price order, nothing else
+
+
+def test_cash_rank_is_price_then_quality_only():
+    import cashpay
+    rows = cashpay.for_code(webapp.CASH, "73721", "AZ", "phoenix")
+    key = [(r["price"] is None, r["price"] or 0) for r in rows]
+    assert key == sorted(key)
+
+
+def test_shared_address_providers_stay_separate():
+    names = [p["name"] for p in webapp.CASH["providers"]]
+    assert any(n.startswith("RadiologyAssist") for n in names) and "SimonMed Imaging - 19th Avenue" in names
+
+
+def test_procedure_page_shows_cash_beside_hospitals_and_links_profiles():
+    t = client.get("/phoenix/procedure/73721").text
+    assert "Independent cash-pay prices for CPT 73721" in t
+    links = set(re.findall(r'class="fac-n"><a href="([^"]+)"', t))
+    assert links and all(client.get(u).status_code == 200 for u in links)
+
+
+def test_every_cash_provider_has_a_profile():
+    for p in webapp.CASH["providers"]:
+        assert client.get(webapp._cash_url(p)).status_code == 200, p["slug"]
+
+
 def _run_all():
     fns = [v for k, v in sorted(globals().items()) if k.startswith("test_")]
     for fn in fns:
