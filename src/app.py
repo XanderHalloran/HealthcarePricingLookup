@@ -782,9 +782,15 @@ def bundles(request: Request, episode: str = "", metro: str = "", mine: str = ""
         "own_label": own_label, "own_col": bool(own_fac), "data_refreshed": DATA_REFRESHED})
 
 
-@lru_cache(maxsize=1)
+_COV_CACHE = {}
+
+
 def _coverage(stamp):
-    """Live coverage numbers for the methodology page (cached per data refresh stamp)."""
+    """Live coverage numbers for the methodology page, cached per data refresh stamp.
+    Only a non-empty result is cached: a read that lands mid-refresh or during warm-up
+    used to pin '0 facilities' until the next data refresh changed the stamp."""
+    if stamp in _COV_CACHE:
+        return _COV_CACHE[stamp]
     from ingest import rates_source
     from pricing import _has_parquet
     cov = {"hospitals": 0, "codes": len(STATE["services"]), "rows": 0, "payers": len(PAYER_LIST), "states": []}
@@ -795,6 +801,9 @@ def _coverage(stamp):
                 cov["states"].append({"code": st, "name": MARKETS[st]["name"], "n": n})
             cov["hospitals"] += n
             cov["rows"] += rows
+    if cov["hospitals"]:
+        _COV_CACHE.clear()
+        _COV_CACHE[stamp] = cov
     return cov
 
 
