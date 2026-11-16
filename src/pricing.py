@@ -68,6 +68,18 @@ def rates_source(out_dir):
     return t[0] if t else ingest.rates_source(out_dir)
 
 
+def lookup_source(out_dir, state, code):
+    """Where to read one (state, code)'s rows: the loaded table when the app has one (callers
+    still filter on code and state), else just that hive partition's files instead of the
+    whole-dataset glob. None when there is nothing to read, so callers can skip the query."""
+    t = _RATE_TABLES.get(os.path.normpath(out_dir)) if out_dir else None
+    if t:
+        return t[0] if t[1] else None
+    if not out_dir or not os.path.isdir(out_dir):
+        return None
+    return ingest.partition_source(out_dir, state, code)
+
+
 def _parquet_on_disk(rates_dir):
     return os.path.isdir(rates_dir) and any(
         f.endswith(".parquet") for _, _, fs in os.walk(rates_dir) for f in fs
@@ -85,19 +97,23 @@ def get_hospital_breakdown(con, rates_dir, code, state, payer=None, payer_dir=No
     negotiated rate (from payer_rates); otherwise cash/self-pay where published,
     else the negotiated median."""
     if payer and payer_dir and _has_parquet(payer_dir):
+        src = lookup_source(payer_dir, state, code)
+        if src is None:
+            return []
         rows = con.execute(
             f"""SELECT hospital_id, TRY_CAST(negotiated_rate AS DOUBLE) r
-                FROM {rates_source(payer_dir)} WHERE code=? AND state=? AND payer=?
+                FROM {src} WHERE code=? AND state=? AND payer=?
                 ORDER BY r NULLS LAST""",
             [code, state.upper(), payer],
         ).fetchall()
         return [{"hospital_id": h, "cash": None, "median": r, "price": r, "rate_type": payer}
                 for h, r in rows if r is not None]
-    if not _has_parquet(rates_dir):
+    src = lookup_source(rates_dir, state, code)
+    if src is None:
         return []
     rows = con.execute(
         f"""SELECT hospital_id, TRY_CAST(cash_price AS DOUBLE), TRY_CAST(negotiated_median AS DOUBLE)
-            FROM {rates_source(rates_dir)} WHERE code=? AND state=?
+            FROM {src} WHERE code=? AND state=?
             ORDER BY coalesce(TRY_CAST(cash_price AS DOUBLE), TRY_CAST(negotiated_median AS DOUBLE)) NULLS LAST""",
         [code, state.upper()],
     ).fetchall()
@@ -149,10 +165,11 @@ def payer_matrix(con, rates_dir, payer_dir, code, state, names=None, metro_ids=N
             continue
         rows[h["hospital_id"]] = {"id": h["hospital_id"], "name": names.get(h["hospital_id"], h["hospital_id"]),
                                   "cash": h["cash"], "median": h["median"], "rates": {}}
-    if _has_parquet(payer_dir):
+    psrc = lookup_source(payer_dir, state, code) if payer_dir and os.path.isdir(payer_dir) else None
+    if psrc is not None:
         for hid, payer, rate in con.execute(
                 f"""SELECT hospital_id, payer, TRY_CAST(negotiated_rate AS DOUBLE)
-                    FROM {rates_source(payer_dir)} WHERE code=? AND state=?""", [code, state.upper()]).fetchall():
+                    FROM {psrc} WHERE code=? AND state=?""", [code, state.upper()]).fetchall():
             if rate is None or (metro_ids is not None and hid not in metro_ids):
                 continue
             rows.setdefault(hid, {"id": hid, "name": names.get(hid, hid), "cash": None, "median": None, "rates": {}})

@@ -48,6 +48,19 @@ def rates_source(out_dir: str) -> str:
             f"hive_types={{'state':'VARCHAR','code':'VARCHAR'}})")
 
 
+def partition_source(out_dir: str, state: str, code: str) -> str | None:
+    """Like rates_source(), but reads ONE hive partition (state=XX/code=YYYY) instead of
+    globbing every file in the dataset. Lookups for a single code were listing thousands of
+    Parquet files per query, which is most of a cold page's time on a slow disk. None when
+    that partition doesn't exist (no rows for the code), so callers can skip the query."""
+    part = os.path.join(out_dir, f"state={str(state).upper()}", f"code={code}")
+    if not os.path.isdir(part):
+        return None
+    glob = part.replace("\\", "/").rstrip("/") + "/*.parquet"
+    return (f"read_parquet('{glob}', hive_partitioning=true, "
+            f"hive_types={{'state':'VARCHAR','code':'VARCHAR'}})")
+
+
 def load_allowlist(path: str) -> set[tuple[str, str]]:
     """Return the set of (code, code_type) we keep. Reads config/allowlist.yaml."""
     import yaml

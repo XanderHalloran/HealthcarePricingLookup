@@ -1645,11 +1645,10 @@ def _cash_in_cat(st, mk, cat):
 def _tiles(st, mk=None):
     """One tile per care category: typical hospital price for its anchor code, facility count,
     and the lowest published cash price in the category (hospital or independent)."""
-    cat = _catalog(st, mk)
     base = f"/{MARKETS[st]['slug']}" + (f"/{mk}" if mk else "")
     out = []
     for slug, label, blurb, rep, codes in hubs.CATEGORIES:
-        d = cat.get(rep)
+        d = _result(rep, st, mk) if rep in _by_code else None
         if not d:
             continue
         sm = hubs.summarize(d)
@@ -1658,7 +1657,7 @@ def _tiles(st, mk=None):
         out.append({"slug": slug, "label": label, "blurb": blurb, "code": rep, "desc": _by_code[rep]["desc"],
                     "typical": sm["median"], "n_fac": sm["n_fac"] + len({r["provider"]["slug"] for r in cash}),
                     "cash_low": min(lows) if lows else None, "url": f"{base}/{slug}",
-                    "n_codes": sum(1 for c in codes if c in cat)})
+                    "n_codes": sum(1 for c in codes if c in _by_code)})
     return out
 
 
@@ -1718,15 +1717,31 @@ def _cash_providers(st, metro=None):
     return [p for p in CASH["providers"] if p["state"] == st and (metro is None or p["metro"] in (metro, None))]
 
 
-_CAT, _CAT_LOCK = {}, threading.Lock()
+_CAT, _CAT_LOCK, _RES = {}, threading.Lock(), {}
+
+
+def _result(code, st, mk=None):
+    """One code's compare result (the analyze() dict) for a state or metro, memoized per data
+    stamp. Tiles and category hubs only need a handful of codes, so they call this instead of
+    building a whole catalog: on a slow disk one analyze() can take ~2 s (laptop preview)."""
+    key = (_cache_stamp(), code, st, mk)
+    if key in _RES:
+        return _RES[key]
+    rows = [r for r in _analyze(code, st, None, mk) if r["resolved"]]
+    d = rows[0]["result"] if rows else None
+    if d is not None and not (d.get("hospitals") or d.get("neg_median") is not None):
+        d = None
+    if len(_RES) > 20000:
+        _RES.clear()
+    _RES[key] = d
+    return d
 
 
 def _catalog(st, mk=None):
     """{code: analyze() result} for every tracked code in a state (or metro), per data stamp.
-    Built once (a few seconds), then hubs, tiles and profiles read it without touching
-    Parquet, and they agree with the compare tables because it IS the compare computation."""
-    stamp = os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0
-    key = (stamp, st, mk)
+    Hospital profiles need all of it; it IS the compare computation, so they agree with
+    the compare tables. Warmed at start-up (see _warm)."""
+    key = (_cache_stamp(), st, mk)
     hit = _CAT.get(key)
     if hit is not None:
         return hit
@@ -1736,10 +1751,10 @@ def _catalog(st, mk=None):
             return hit
         out = {}
         for s in STATE["services"]:
-            rows = [r for r in _analyze(s["code"], st, None, mk) if r["resolved"]]
-            if rows and (rows[0]["result"].get("hospitals") or rows[0]["result"].get("neg_median") is not None):
-                out[s["code"]] = rows[0]["result"]
-        for k in [k for k in _CAT if k[0] != stamp]:
+            d = _result(s["code"], st, mk)
+            if d is not None:
+                out[s["code"]] = d
+        for k in [k for k in _CAT if k[0] != key[0]]:
             del _CAT[k]
         if out:
             _CAT[key] = out
@@ -1803,8 +1818,7 @@ def _cash_profile(request, st, place, slug):
                      p=p, rows=rows, kind="cash")
     e = FREESTANDING_SLUG.get(slug)
     if e and e["state"] == st and (e.get("metro") or "phoenix") == place:
-        cat = _catalog(st)
-        items = [{"svc": _by_code[c], "code": c, "price": v, "medicare": (cat.get(c) or {}).get("medicare_rate"),
+        items = [{"svc": _by_code[c], "code": c, "price": v, "medicare": (_result(c, st) or {}).get("medicare_rate"),
                   "url": f"/{place}/procedure/{c}"} for c, v in sorted(e["prices"].items(), key=lambda kv: kv[1])
                  if c in _by_code]
         return _page(request, "facility.html", f"{e['name']} prices | {BRAND['short']}",
@@ -1968,6 +1982,10 @@ def _warm():
     try:
         _cov()
         _hosp_stats()
+        _tiles(DEFAULT_STATE)                       # home page first: 13 codes, not 107
+        for m in STATE["metros"]["list"]:
+            if m["state"] == DEFAULT_STATE and m["promote"]:
+                _tiles(DEFAULT_STATE, m["key"])
         _catalog(DEFAULT_STATE)
         for m in STATE["metros"]["list"]:
             if m["state"] == DEFAULT_STATE and m["promote"]:
@@ -2020,20 +2038,20 @@ def _category_hub(request, st, mk, cat):
     middle-50% range and n (same numbers as the CPT pages), the lowest published prices for
     the anchor codes, and independent cash listings for the category."""
     slug, label, blurb, rep, codes = hubs.CAT_BY_SLUG[cat]
-    catalog, state_cat = _catalog(st, mk), (_catalog(st) if mk else None)
     m = next((x for x in STATE["metros"]["list"] if x["key"] == mk), None) if mk else None
     place = m["label"] if m else MARKETS[st]["name"]
     city = m["city"].split(",")[0] if m else MARKETS[st]["name"]
     proc_base = f"/{mk}/procedure/" if mk else f"{_state_path(st)}/procedure/"
     rows = []
     for c in codes:
-        d = catalog.get(c)
+        d = _result(c, st, mk) if c in _by_code else None
         if not d:
             continue
         sm = hubs.summarize(d)
+        sd = _result(c, st) if mk else None
         url = (f"/{MARKETS[st]['slug']}/{mk}/{CODE_TO_SLUG[c]}" if mk and c in CODE_TO_SLUG else f"{proc_base}{c}")
         rows.append({"svc": _by_code[c], "code": c, "sm": sm, "url": url,
-                     "state_typical": hubs.summarize(state_cat[c])["median"] if state_cat and c in state_cat else None})
+                     "state_typical": sd.get("neg_median") if sd else None})
     if not rows:
         raise HTTPException(status_code=404)
     lowest = [r for r in rows if r["sm"]["lowest"]][:3]
