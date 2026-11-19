@@ -53,7 +53,7 @@ POPULAR_CODES = ["73721", "74178", "70450", "77067", "45378", "27447",
 
 # When the hospital price dataset was last (re)ingested — surfaced for provenance/trust.
 # ponytail: hand-set on re-ingest; wire to the ingest timer only if it drifts in practice.
-DATA_REFRESHED = "September 2026"
+DATA_REFRESHED = "November 2026"
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # One codebase, two sites: APP_CONFIG=config (healthcare.traqqit.com, consumer) or
