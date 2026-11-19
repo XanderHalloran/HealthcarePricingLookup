@@ -10,6 +10,7 @@ dataset produced by the ingest pipeline (run src/pipeline.py first to populate i
 from __future__ import annotations
 
 import json
+import threading
 import os
 import sys
 import urllib.parse
@@ -93,7 +94,7 @@ def _load():
         multiplier = yaml.safe_load(f).get("target_multiplier", 2.0)
     services = load_services(os.path.join(CFG, "allowlist.yaml"))
     return {
-        "con": con,
+        "con_base": con,
         "templates": load_templates(os.path.join(CFG, "templates.yaml")),
         "services": services,
         "descriptions": {(s["code"], s["type"]): s["desc"] for s in services},
@@ -109,6 +110,19 @@ def _load():
 
 
 STATE = _load()
+_TLS = threading.local()
+
+
+def _con():
+    """Per-thread DuckDB handle. FastAPI runs sync routes in a threadpool, and one
+    shared DuckDBPyConnection is not thread-safe: concurrent requests read each
+    other's result sets. cursor() opens a new connection to the same in-memory DB."""
+    c = getattr(_TLS, "con", None)
+    if c is None:
+        c = _TLS.con = STATE["con_base"].cursor()
+    return c
+
+
 # Curated popular list (desc + code) for the footer, in POPULAR_CODES order.
 _by_code = {s["code"]: s for s in STATE["services"]}
 STATE["popular"] = [_by_code[c] for c in POPULAR_CODES if c in _by_code] or \
@@ -208,7 +222,7 @@ def _analyze(codes, state, payer=None, metro=None, lat=None, lon=None):
     metro_ids = STATE["metros"]["ids"].get(metro) if metro else None
     if metro_ids is not None:                      # a metro implies its state
         state = STATE["metros"]["state_of"][metro]
-    return analyze(STATE["con"], RATES_DIR, codes, (state or DEFAULT_STATE).strip(),
+    return analyze(_con(), RATES_DIR, codes, (state or DEFAULT_STATE).strip(),
                    STATE["templates"], STATE["descriptions"], STATE["multiplier"],
                    STATE["hospital_names"], STATE["hospital_stars"], PAYER_DIR,
                    payer or None, STATE["freestanding"], metro or None, metro_ids,
@@ -449,12 +463,12 @@ def rates(request: Request, code: str = "", metro: str = "", mine: str = ""):
     percentiles and where a given rate sits. Feature 2 of the ortho brief."""
     svc = _svc(code)
     state, metro, metro_ids = _area(metro)
-    m = payer_matrix(STATE["con"], RATES_DIR, PAYER_DIR, svc["code"], state,
+    m = payer_matrix(_con(), RATES_DIR, PAYER_DIR, svc["code"], state,
                      STATE["hospital_names"], metro_ids, PAYER_LIST)
     for r in m["rows"]:
         r["hip_knee"] = STATE["hip_knee"].get(r["id"])
     cols = ["cash", "median"] + m["payers"]
-    med_rate, med_src = get_medicare(STATE["con"], svc["code"], svc["type"])
+    med_rate, med_src = get_medicare(_con(), svc["code"], svc["type"])
     my = _money_in(mine)
     pct = {}
     if my:
@@ -479,7 +493,7 @@ def rates_csv(code: str = "", metro: str = ""):
     import io
     svc = _svc(code)
     state, metro, metro_ids = _area(metro)
-    m = payer_matrix(STATE["con"], RATES_DIR, PAYER_DIR, svc["code"], state,
+    m = payer_matrix(_con(), RATES_DIR, PAYER_DIR, svc["code"], state,
                      STATE["hospital_names"], metro_ids, PAYER_LIST)
     buf = io.StringIO()
     w = csv.writer(buf)
@@ -496,7 +510,7 @@ def site_of_care(request: Request, code: str = "", metro: str = ""):
     hospital's price, every ASC with a published price, and the per-case shift savings."""
     svc = _svc(code)
     state, metro, metro_ids = _area(metro)
-    d = lookup(STATE["con"], RATES_DIR, svc["code"], svc["type"], state, svc["desc"],
+    d = lookup(_con(), RATES_DIR, svc["code"], svc["type"], state, svc["desc"],
                STATE["multiplier"], STATE["hospital_names"], STATE["hospital_stars"], PAYER_DIR,
                None, STATE["freestanding"], metro or None, metro_ids, None, STATE["geo"], STATE["hip_knee"])
     hosp = [h for h in d["hospitals"] if h["type"] == "hospital" and h["price"] is not None]
@@ -506,7 +520,7 @@ def site_of_care(request: Request, code: str = "", metro: str = ""):
     # so they are not comparable to a facility rate (they stay in the table, labelled).
     sites = [a["price"] for a in asc if a["type"] in ("asc", "imaging", "office")]
     asc_median = statistics.median(sites) if sites else None
-    med = get_medicare_all(STATE["con"], svc["code"], svc["type"])
+    med = get_medicare_all(_con(), svc["code"], svc["type"])
     # No published site price? Give the business reader an explicit ESTIMATE: the hospital typical
     # price scaled by Medicare's own ASC/OPPS ratio, i.e. "an ASC contracted at the market multiple".
     implied = (d["neg_median"] * med["ASC"] / med["OPPS"]
@@ -533,14 +547,14 @@ def position(request: Request, facility: str = "", metro: str = ""):
     state, metro, metro_ids = _area(metro, HOSP_STATE.get(fac_id, DEFAULT_STATE))
     codes = []
     if _has_parquet(RATES_DIR):
-        codes = [c for (c,) in STATE["con"].execute(
+        codes = [c for (c,) in _con().execute(
             f"SELECT DISTINCT code FROM {rates_source(RATES_DIR)} WHERE hospital_id=? AND state=?",
             [fac_id, state]).fetchall()]
     rows, payers_seen = [], set()
     for svc in STATE["services"]:
         if svc["code"] not in codes:
             continue
-        m = payer_matrix(STATE["con"], RATES_DIR, PAYER_DIR, svc["code"], state,
+        m = payer_matrix(_con(), RATES_DIR, PAYER_DIR, svc["code"], state,
                          STATE["hospital_names"], (metro_ids | {fac_id}) if metro_ids is not None else None, PAYER_LIST)
         mine = next((r for r in m["rows"] if r["id"] == fac_id), None)
         if not mine:
@@ -557,7 +571,7 @@ def position(request: Request, facility: str = "", metro: str = ""):
         import statistics
         mkt_median = statistics.median(prices) if prices else None
         pct = round(100 * sum(1 for p in prices if p < ours) / len(prices)) if prices else None
-        med_rate, _ = get_medicare(STATE["con"], svc["code"], svc["type"])
+        med_rate, _ = get_medicare(_con(), svc["code"], svc["type"])
         pay = {}
         for p in m["payers"]:
             o = mine["rates"].get(p)
@@ -598,7 +612,7 @@ def _payer_table(state, metro, stamp):
         return out
     metro_ids = STATE["metros"]["ids"].get(metro) if metro else None
     acc = {}
-    for hid, code, payer, rate in STATE["con"].execute(
+    for hid, code, payer, rate in _con().execute(
             f"""SELECT hospital_id, code, payer, TRY_CAST(negotiated_rate AS DOUBLE)
                 FROM {rates_source(PAYER_DIR)} WHERE state=?""", [state]).fetchall():
         if rate is None or payer not in PAYER_LIST:
@@ -611,7 +625,7 @@ def _payer_table(state, metro, stamp):
     floors = {}
     for code in {c for c, _ in acc}:
         svc = _by_code.get(code)
-        med, _ = get_medicare(STATE["con"], code, svc["type"]) if svc else (None, None)
+        med, _ = get_medicare(_con(), code, svc["type"]) if svc else (None, None)
         floors[code] = med * 0.25 if med else 0
     for (code, payer), vals in acc.items():
         # Same plausibility floor as the typical price: a $10.62 "rate" for a knee replacement is a
@@ -628,7 +642,7 @@ def _payer_rows(state, metro):
     tbl = _payer_table(state, metro, stamp)
     rows = []
     for svc in STATE["services"]:
-        med, _ = get_medicare(STATE["con"], svc["code"], svc["type"])
+        med, _ = get_medicare(_con(), svc["code"], svc["type"])
         cells = {p: tbl[(svc["code"], p)] for p in PAYER_LIST if (svc["code"], p) in tbl}
         if cells:
             rows.append({"code": svc["code"], "type": svc["type"], "desc": svc["desc"], "medicare": med,
@@ -716,10 +730,10 @@ def bundles(request: Request, episode: str = "", metro: str = "", mine: str = ""
     # --- facility component ---
     fcode = ep["facility"]
     fs = svc_of(fcode)
-    d = lookup(STATE["con"], RATES_DIR, fcode, fs["type"], state, fs["desc"], STATE["multiplier"],
+    d = lookup(_con(), RATES_DIR, fcode, fs["type"], state, fs["desc"], STATE["multiplier"],
                STATE["hospital_names"], STATE["hospital_stars"], PAYER_DIR, None, STATE["freestanding"],
                metro or None, metro_ids, None, STATE["geo"], STATE["hip_knee"])
-    med_all = get_medicare_all(STATE["con"], fcode, fs["type"])
+    med_all = get_medicare_all(_con(), fcode, fs["type"])
     hosp_typ = d.get("neg_median")
     sites = [h["price"] for h in d["hospitals"] if h["type"] in ("asc", "imaging", "office") and h["price"] is not None]
     asc_pub = statistics.median(sites) if sites else None
@@ -727,7 +741,7 @@ def bundles(request: Request, episode: str = "", metro: str = "", mine: str = ""
                if (asc_pub is None and hosp_typ and med_all.get("ASC") and med_all.get("OPPS")) else None)
     own_fac = None
     if OWN_IDS:
-        m = payer_matrix(STATE["con"], RATES_DIR, PAYER_DIR, fcode, state, STATE["hospital_names"], None, PAYER_LIST)
+        m = payer_matrix(_con(), RATES_DIR, PAYER_DIR, fcode, state, STATE["hospital_names"], None, PAYER_LIST)
         mine_row = next((r for r in m["rows"] if r["id"] in OWN_IDS), None)
         if mine_row:
             own_fac = mine_row["median"] if mine_row["median"] is not None else mine_row["cash"]
@@ -741,7 +755,7 @@ def bundles(request: Request, episode: str = "", metro: str = "", mine: str = ""
               "est": {"asc": asc_pub is None and asc_est is not None}}]
 
     def pro_rate(code):
-        rates = get_medicare_all(STATE["con"], code, svc_of(code)["type"])
+        rates = get_medicare_all(_con(), code, svc_of(code)["type"])
         return rates.get("PFS")
 
     # --- surgeon ---
@@ -768,11 +782,11 @@ def bundles(request: Request, episode: str = "", metro: str = "", mine: str = ""
     # --- inpatient alternative ---
     drg_row = None
     if ep.get("drg"):
-        dm = payer_matrix(STATE["con"], RATES_DIR, PAYER_DIR, ep["drg"], state, STATE["hospital_names"], metro_ids, PAYER_LIST)
+        dm = payer_matrix(_con(), RATES_DIR, PAYER_DIR, ep["drg"], state, STATE["hospital_names"], metro_ids, PAYER_LIST)
         others = [(r["median"] if r["median"] is not None else r["cash"]) for r in dm["rows"] if r["id"] not in OWN_IDS]
         others = [x for x in others if x is not None]
         own_drg = next(((r["median"] if r["median"] is not None else r["cash"]) for r in dm["rows"] if r["id"] in OWN_IDS), None)
-        ipps, _ = get_medicare(STATE["con"], ep["drg"], "DRG")
+        ipps, _ = get_medicare(_con(), ep["drg"], "DRG")
         drg_row = {"market": statistics.median(others) if others else None, "n": len(others), "ipps": ipps, "own": own_drg}
     my = _money_in(mine)
     return templates.TemplateResponse(request, "bundles.html", {
@@ -795,7 +809,7 @@ def _coverage(stamp):
     from pricing import _has_parquet
     cov = {"hospitals": 0, "codes": len(STATE["services"]), "rows": 0, "payers": len(PAYER_LIST), "states": []}
     if _has_parquet(RATES_DIR):
-        for st, n, rows in STATE["con"].execute(
+        for st, n, rows in _con().execute(
                 f"SELECT state, count(distinct hospital_id), count(*) FROM {rates_source(RATES_DIR)} GROUP BY 1 ORDER BY 1").fetchall():
             if st in MARKETS:
                 cov["states"].append({"code": st, "name": MARKETS[st]["name"], "n": n})
@@ -921,7 +935,7 @@ def _near(svc, state, q, radius, payer=None, sort="price", pinned=True):
         else:
             rows.sort(key=lambda h: (h.get("outlier") == "low",
                                      h["price"] if h["price"] is not None else big) + tie(h))
-        med_rate, _ = get_medicare(STATE["con"], svc["code"], svc["type"])
+        med_rate, _ = get_medicare(_con(), svc["code"], svc["type"])
     return center, rows, err, rad, med_rate, state, moved
 
 
@@ -981,7 +995,7 @@ def methodology(request: Request):
     """Where every number comes from, with the data-flow diagram. Same page on both profiles."""
     with open(os.path.join(CFG, "medicare.yaml"), encoding="utf-8") as f:
         med = yaml.safe_load(f) or {}
-    med_sources = {s for (s,) in STATE["con"].execute("SELECT DISTINCT source FROM medicare_rates").fetchall()}
+    med_sources = {s for (s,) in _con().execute("SELECT DISTINCT source FROM medicare_rates").fetchall()}
     stamp = os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0
     return templates.TemplateResponse(request, "methodology.html", {
         "brand": BRAND, "base": BASE_URL, "nav": "method", "cov": _coverage(stamp),
