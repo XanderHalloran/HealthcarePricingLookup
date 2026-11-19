@@ -87,6 +87,10 @@ templates = Jinja2Templates(directory=os.path.join(ROOT, "src", "web", "template
 
 def _load():
     con = build_reference_db(":memory:", SCHEMA)
+    # Database-wide, so every per-thread cursor inherits them. The file cache kept the raw
+    # parquet bytes resident (hundreds of MB); the rate tables below make it pointless anyway.
+    con.execute("SET enable_external_file_cache=false")
+    con.execute("SET memory_limit='512MB'")
     with open(os.path.join(CFG, "medicare.yaml"), encoding="utf-8") as f:
         med_cfg = yaml.safe_load(f)
     build_reference(con, ROOT, med_cfg)
@@ -113,10 +117,97 @@ STATE = _load()
 _TLS = threading.local()
 
 
+# ---------- Rate tables: the parquet datasets, loaded once into con_base ----------
+# The ingest writes one tiny parquet file per (hospital, code), ~50k files. Globbing them on every
+# query held 1.5-2 GB (DuckDB file cache + per-scan readers) and cost ~0.3 s a page. The rows fit
+# in a few MB, so load them into tables and swap in a fresh copy when the files change.
+import time
+from pricing import set_rate_tables, _parquet_on_disk
+from ingest import rates_source as _parquet_source
+
+_TBL_LOCK = threading.Lock()
+_TBL = {"stamp": None, "gen": 0, "prev": [], "cur": [], "checked": 0.0}
+_TBL_CHECK_S = 60
+
+
+def _data_stamp():
+    """(dir count, newest mtime) over each dataset's top, state= and code= dirs: changes on the
+    pipeline's partition swap and on an --ids append into an existing code dir."""
+    out = []
+    for d in (RATES_DIR, PAYER_DIR):
+        if not os.path.isdir(d):
+            out.append(None)
+            continue
+        ms = [os.stat(d).st_mtime_ns]
+        for s in os.scandir(d):
+            if s.is_dir():
+                ms.append(s.stat().st_mtime_ns)
+                ms.extend(c.stat().st_mtime_ns for c in os.scandir(s.path) if c.is_dir())
+        out.append((len(ms), max(ms)))
+    return tuple(out)
+
+
+def _build_tables():
+    """Build the next generation of tables, then repoint the resolver in one assignment, so a
+    reader never sees a half-built table. The previous generation is kept for in-flight readers
+    and dropped on the following swap. Call with _TBL_LOCK held."""
+    stamp = _data_stamp()      # taken first: a change during the build triggers another one
+    gen = _TBL["gen"] + 1
+    con = STATE["con_base"].cursor()
+    new, made = {}, []
+    try:
+        for name, d in (("hospital_rates", RATES_DIR), ("payer_rates", PAYER_DIR)):
+            if not _parquet_on_disk(d):
+                continue
+            tbl = f"{name}_g{gen}"
+            con.execute(f"CREATE TABLE {tbl} AS SELECT * FROM {_parquet_source(d)} ORDER BY state, code")
+            made.append(tbl)
+            n = con.execute(f"SELECT count(*) FROM {tbl}").fetchone()[0]
+            new[os.path.normpath(d)] = (tbl, n > 0)
+    except Exception:
+        for tbl in made:
+            con.execute(f"DROP TABLE IF EXISTS {tbl}")
+        raise
+    set_rate_tables(new)
+    for tbl in _TBL["prev"]:
+        con.execute(f"DROP TABLE IF EXISTS {tbl}")
+    _TBL.update(stamp=stamp, gen=gen, prev=_TBL["cur"], cur=made)
+    print(f"rate tables: generation {gen} loaded ({', '.join(made) or 'no data'})", flush=True)
+
+
+def _refresh_tables():
+    if not _TBL_LOCK.acquire(blocking=False):
+        return
+    try:
+        if _data_stamp() != _TBL["stamp"]:
+            _build_tables()
+    except Exception as ex:     # keep serving the current tables; retry on the next check
+        print(f"rate tables: rebuild failed, keeping generation {_TBL['gen']}: {type(ex).__name__}: {ex}", flush=True)
+    finally:
+        _TBL_LOCK.release()
+
+
+def _maybe_refresh_tables():
+    """At most once a minute, look for new data off the request path."""
+    now = time.monotonic()
+    if now - _TBL["checked"] >= _TBL_CHECK_S:
+        _TBL["checked"] = now
+        threading.Thread(target=_refresh_tables, daemon=True).start()
+
+
+with _TBL_LOCK:
+    try:
+        _build_tables()
+    except Exception as _ex:    # no tables -> the resolver falls back to the parquet glob
+        print(f"rate tables: initial load failed, using parquet glob: {type(_ex).__name__}: {_ex}", flush=True)
+_TBL["checked"] = time.monotonic()
+
+
 def _con():
     """Per-thread DuckDB handle. FastAPI runs sync routes in a threadpool, and one
     shared DuckDBPyConnection is not thread-safe: concurrent requests read each
     other's result sets. cursor() opens a new connection to the same in-memory DB."""
+    _maybe_refresh_tables()
     c = getattr(_TLS, "con", None)
     if c is None:
         c = _TLS.con = STATE["con_base"].cursor()
@@ -538,7 +629,7 @@ def site_of_care(request: Request, code: str = "", metro: str = ""):
 def position(request: Request, facility: str = "", metro: str = ""):
     """Our facility vs the market: every tracked code we publish a price for, our price beside
     the competitors' median, Medicare multiples, percentile, and payer-by-payer pairs."""
-    from ingest import rates_source
+    from pricing import rates_source
     from pricing import _has_parquet
     own_list = [{"id": i, "name": STATE["hospital_names"].get(i, i)} for i in sorted(OWN_IDS)]
     if not own_list:
@@ -604,7 +695,7 @@ def position(request: Request, facility: str = "", metro: str = ""):
 @lru_cache(maxsize=16)
 def _payer_table(state, metro, stamp):
     """{ (code, payer): {'median': m, 'n': n}, ('own', code, payer): rate } over the market."""
-    from ingest import rates_source
+    from pricing import rates_source
     from pricing import _has_parquet
     import statistics
     out = {}
@@ -638,7 +729,7 @@ def _payer_table(state, metro, stamp):
 
 
 def _payer_rows(state, metro):
-    stamp = os.path.getmtime(PAYER_DIR) if os.path.isdir(PAYER_DIR) else 0
+    stamp = (os.path.getmtime(PAYER_DIR) if os.path.isdir(PAYER_DIR) else 0, _TBL["gen"])
     tbl = _payer_table(state, metro, stamp)
     rows = []
     for svc in STATE["services"]:
@@ -805,7 +896,7 @@ def _coverage(stamp):
     used to pin '0 facilities' until the next data refresh changed the stamp."""
     if stamp in _COV_CACHE:
         return _COV_CACHE[stamp]
-    from ingest import rates_source
+    from pricing import rates_source
     from pricing import _has_parquet
     cov = {"hospitals": 0, "codes": len(STATE["services"]), "rows": 0, "payers": len(PAYER_LIST), "states": []}
     if _has_parquet(RATES_DIR):
@@ -996,7 +1087,7 @@ def methodology(request: Request):
     with open(os.path.join(CFG, "medicare.yaml"), encoding="utf-8") as f:
         med = yaml.safe_load(f) or {}
     med_sources = {s for (s,) in _con().execute("SELECT DISTINCT source FROM medicare_rates").fetchall()}
-    stamp = os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0
+    stamp = (os.path.getmtime(RATES_DIR) if os.path.isdir(RATES_DIR) else 0, _TBL["gen"])
     return templates.TemplateResponse(request, "methodology.html", {
         "brand": BRAND, "base": BASE_URL, "nav": "method", "cov": _coverage(stamp),
         "state_name": MARKETS[DEFAULT_STATE]["name"], "n_hosp": MARKETS[DEFAULT_STATE].get("n", 0),

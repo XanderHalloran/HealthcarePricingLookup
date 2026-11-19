@@ -18,7 +18,7 @@ import statistics
 import duckdb
 import yaml
 
-from ingest import rates_source
+import ingest
 from normalize import normalize_lines, extract_amounts
 
 # Which Medicare source is the right benchmark per code type. For a HOSPITAL bill
@@ -52,10 +52,31 @@ def get_medicare(con, code, code_type):
 
 
 
-def _has_parquet(rates_dir):
+# Dataset dir -> (table name, has rows) for the copies the web app loads into DuckDB
+# (app._build_tables). Rebound whole by set_rate_tables, so a reader sees the old map or the new one.
+_RATE_TABLES = {}
+
+
+def set_rate_tables(tables):
+    global _RATE_TABLES
+    _RATE_TABLES = dict(tables)
+
+
+def rates_source(out_dir):
+    """The loaded table for a dataset dir, else the parquet glob (ingest, tests, CLI)."""
+    t = _RATE_TABLES.get(os.path.normpath(out_dir))
+    return t[0] if t else ingest.rates_source(out_dir)
+
+
+def _parquet_on_disk(rates_dir):
     return os.path.isdir(rates_dir) and any(
         f.endswith(".parquet") for _, _, fs in os.walk(rates_dir) for f in fs
     )
+
+
+def _has_parquet(rates_dir):
+    t = _RATE_TABLES.get(os.path.normpath(rates_dir))
+    return t[1] if t else _parquet_on_disk(rates_dir)
 
 
 def get_hospital_breakdown(con, rates_dir, code, state, payer=None, payer_dir=None):
