@@ -1,0 +1,26 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">{{ name }}</h1>
+  <p class="sub">Hospital · {{ m.label }}{% if stars %} · CMS {{ stars }}★{% endif %} · prices for {{ items|length }} tracked procedures from its {{ data_refreshed }} file</p></div>
+<div class="card">
+  <input id="hq" type="search" placeholder="Filter procedures (name or code)" aria-label="Filter procedures" style="width:100%;max-width:360px;border:1px solid var(--line);border-radius:9999px;padding:8px 14px;font:inherit">
+  <div style="overflow-x:auto;margin-top:10px"><table class="ptable" id="ht">
+    <thead><tr><th>Procedure</th><th class="r">Price</th><th class="r">Negotiated range</th><th class="r">vs Medicare</th><th></th></tr></thead>
+    <tbody>{% for i in items %}<tr data-q="{{ (i.svc.desc ~ ' ' ~ i.code ~ ' ' ~ cat_labels.get(i.cat, ''))|lower }}">
+      <td>{{ i.svc.desc }}<span class="sub">{{ i.svc.type }} {{ i.code }}{% if i.cat %} · {{ cat_labels[i.cat] }}{% endif %}</span></td>
+      <td class="r money">{% if i.price is not none %}${{ '{:,.0f}'.format(i.price) }}{% else %}—{% endif %}<span class="sub"><span class="kind {{ 'cash' if i.rate_type == 'cash' else 'neg' }}">{{ 'cash' if i.rate_type == 'cash' else 'negotiated median' }}</span>{% if i.outlier %} flagged {{ i.outlier }}{% endif %}</span></td>
+      <td class="r">{% if i.neg_lo is not none and i.neg_hi is not none %}${{ '{:,.0f}'.format(i.neg_lo) }} – ${{ '{:,.0f}'.format(i.neg_hi) }}{% else %}—{% endif %}</td>
+      <td class="r">{% if i.xm %}{{ '%.1f'|format(i.xm) }}×{% else %}—{% endif %}</td>
+      <td><a href="{{ i.url }}">Compare →</a></td></tr>{% endfor %}</tbody>
+  </table></div>
+</div>
+<div class="prose">
+  <p class="refreshed">Source: this hospital's CMS machine-readable price file{% if mrf %} (<a href="{{ mrf }}" rel="nofollow noopener">file link</a>){% endif %}{% if ccn %}, CMS certification number {{ ccn }}{% endif %}, as of our {{ data_refreshed }} rebuild. "Cash" is the hospital's published discounted cash price; where none is published we show the median negotiated (insurer) rate, labeled. Negotiated range = lowest to highest insurer rate in the file. Facility fee only; physician fees are often billed separately.</p>
+</div>
+{% endblock %}
+{% block scripts %}<script>
+  document.getElementById('hq').addEventListener('input', e => {
+    const q = e.target.value.trim().toLowerCase();
+    document.querySelectorAll('#ht tbody tr').forEach(tr => { tr.hidden = q && !tr.dataset.q.includes(q); });
+  });
+</script>{% endblock %}

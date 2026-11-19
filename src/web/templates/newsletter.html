@@ -1,0 +1,9 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">{% if ok %}You're on the list{% else %}Sign up for price updates{% endif %}</h1></div>
+<div class="card prose">
+  {% if ok %}<p>Thanks. We'll email {{ email }} occasionally when we add prices or areas. No spam, and we never sell or share your address.</p>
+  {% else %}<p>{{ error }}</p>{% endif %}
+  <p><a href="{{ back or '/' }}">← Back</a></p>
+</div>
+{% endblock %}

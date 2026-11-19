@@ -1,0 +1,10 @@
+{# Hospital list for hubs/index: priced first. Needs `hosp`. #}
+<div style="overflow-x:auto"><table class="ptable">
+  <thead><tr><th>Hospital</th><th>Area</th><th class="r">Procedures priced</th><th class="r">CMS stars</th></tr></thead>
+  <tbody>{% for h in hosp %}
+  <tr><td>{% if h.url and h.codes %}<a href="{{ h.url }}">{{ h.name }}</a>{% else %}{{ h.name }}{% endif %}</td>
+    <td>{{ h.metro_label }}</td>
+    <td class="r">{% if h.codes %}{{ h.codes }}{% else %}<span class="sub">no usable file this week</span>{% endif %}</td>
+    <td class="r">{{ h.stars ~ '★' if h.stars else '—' }}</td></tr>
+  {% endfor %}</tbody>
+</table></div>

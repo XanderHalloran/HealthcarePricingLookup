@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ meta_desc }}">
+<link rel="canonical" href="{{ canonical }}">
+{% if noindex %}<meta name="robots" content="noindex">{% endif %}
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ meta_desc }}">
+<meta property="og:url" content="{{ canonical }}">
+<meta property="og:site_name" content="{{ brand.name }}">
+<meta property="og:image" content="{{ base }}/static/og.png">
+{% if ld %}<script type="application/ld+json">{{ ld|tojson }}</script>{% endif %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+{% include "_styles.html" %}
+</head>
+<body>
+<main>
+{% include "_nav.html" %}
+{% if crumbs %}<nav class="crumb" aria-label="Breadcrumb">{% for c in crumbs %}{% if c.url %}<a href="{{ c.url }}">{{ c.name }}</a>{% else %}<span>{{ c.name }}</span>{% endif %}{% if not loop.last %} › {% endif %}{% endfor %}</nav>{% endif %}
+{% block content %}{% endblock %}
+{% include "_footer.html" %}
+</main>
+{% block scripts %}{% endblock %}
+</body>
+</html>

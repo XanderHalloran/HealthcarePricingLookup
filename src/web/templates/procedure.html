@@ -10,7 +10,7 @@
 <meta property="og:title" content="{{ title }}">
 <meta property="og:description" content="{{ meta_desc }}">
 <meta property="og:url" content="{{ canonical }}">
-<meta property="og:site_name" content="{% if brand and brand.profile == 'ortho' %}{{ brand.name }}{% else %}Medical Price & Bill Coach{% endif %}">
+<meta property="og:site_name" content="{{ brand.name }}">
 <meta property="og:image" content="{{ base }}/static/{% if brand and brand.profile == 'ortho' %}og-ortho.png{% else %}og.png{% endif %}">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -28,15 +28,46 @@
 <body>
 <main>
 {% include "_nav.html" %}
-  <nav class="crumb"><a href="/">Home</a> › {{ city }} › <span>{{ r.code }}</span></nav>
+  <nav class="crumb" aria-label="Breadcrumb">{% for c in crumbs %}{% if c.url %}<a href="{{ c.url }}">{{ c.name }}</a>{% else %}<span>{{ c.name }}</span>{% endif %}{% if not loop.last %} › {% endif %}{% endfor %}</nav>
   <div class="hero">
     <h1 id="content">How much does {{ phrase }} cost in {{ city }}?</h1>
-    <p class="sub">CPT {{ r.code }} — the fair price, every hospital's price, and the Medicare benchmark for {{ city }}.</p>
+    <p class="sub">CPT {{ r.code }} — the fair price, {{ counts.phrase }} compared, and the Medicare benchmark for {{ city }}.</p>
   </div>
   <div class="disclaimer"><strong>Estimates only.</strong> Educational estimates from public Medicare
     benchmarks and hospital-published prices — not a guarantee, and not legal, medical, or financial advice.</div>
 
   {{ c.card(r, 0) }}
+
+  {% if cash_rows %}
+  <div class="card" style="margin-top:16px;overflow-x:auto" id="cash">
+    <div class="fac-h">Independent cash-pay prices for CPT {{ r.code }}{% if metro %} in and around {{ city }}{% endif %} — {{ cash_rows|length }} {{ 'listing' if cash_rows|length == 1 else 'listings' }}, lowest first</div>
+    <p style="margin:0 0 8px;font-size:14px;color:var(--body)">Self-pay prices posted by independent providers (not hospitals). Compare them with the hospital <span class="kind cash">cash</span> and <span class="kind neg">negotiated</span> prices above. Ordered by price, then data quality; nobody pays to be listed.</p>
+    <table class="ptable"><thead><tr><th>Provider</th><th>Service as listed</th><th class="r">Price</th><th>Source</th></tr></thead>
+    <tbody>{% for r in cash_rows %}{% set show_provider = true %}{% include "_cash_row.html" %}{% endfor %}</tbody></table>
+    <p class="refreshed"><a href="/cash">All independent cash prices →</a></p>
+  </div>
+  {% endif %}
+
+  {% if detail %}{% set d = r.result %}
+  <div class="card" style="margin-top:16px">
+    <div class="fac-h">What the numbers mean, for {{ city }}</div>
+    <div class="tiles" style="grid-template-columns:repeat(auto-fill,minmax(180px,1fr))">
+      {% if d.neg_median is not none %}<div class="tile"><b>Typical</b><div class="amt">${{ '{:,.0f}'.format(d.neg_median) }}</div><small>median of {{ counts.in_range }} hospital prices: cash where published, else negotiated median</small></div>
+      <div class="tile"><b>Middle 50%</b><div class="amt" style="font-size:18px">${{ '{:,.0f}'.format(d.neg_low) }} – ${{ '{:,.0f}'.format(d.neg_high) }}</div><small>25th to 75th percentile, n = {{ counts.in_range }}</small></div>{% endif %}
+      {% if detail.state_typical is not none %}<div class="tile"><b>{{ detail.state_name }} typical</b><div class="amt">${{ '{:,.0f}'.format(detail.state_typical) }}</div><small>statewide, n = {{ detail.state_n }} hospitals</small></div>{% endif %}
+      {% if not d.medicare_missing %}<div class="tile"><b>Medicare</b><div class="amt">${{ '{:,.0f}'.format(d.medicare_rate) }}</div><small>{{ d.medicare_source }} national rate, the negotiation floor</small></div>{% endif %}
+      {% if d.target_ask %}<div class="tile"><b>Ask</b><div class="amt">${{ '{:,.0f}'.format(d.target_ask) }}</div><small>lower of 2× Medicare or the local cash price</small></div>{% endif %}
+    </div>
+    <p class="refreshed">In the table, <span class="kind cash">cash</span> is a facility's published self-pay price and <span class="kind neg">negotiated</span> is its median insurer rate, shown when no cash price is published; a negotiated figure is not a cash quote. Facility fee only: radiologist, surgeon, and anesthesia fees are often billed separately, so ask for a written Good Faith Estimate.</p>
+    {% if detail.payers %}
+    <div class="fac-h" style="margin-top:14px">Insurer medians in {{ city }}</div>
+    <div style="overflow-x:auto"><table class="ptable"><thead><tr><th>Insurer</th><th class="r">Median negotiated rate</th><th class="r">Hospitals</th></tr></thead>
+      <tbody>{% for p in detail.payers %}<tr><td>{{ p.payer }}</td><td class="r money">${{ '{:,.0f}'.format(p.median) }}</td><td class="r">{{ p.n }}</td></tr>{% endfor %}</tbody></table></div>
+    {% endif %}
+    {% if detail.cat %}<p style="margin:12px 0 0"><a href="{{ detail.cat_url }}">All {{ detail.cat }} prices in {{ city }} →</a></p>
+      {% if detail.related %}<div class="linkgrid" style="margin-top:6px">{% for p in detail.related %}<a class="pill" href="{{ p.url }}">{{ p.desc }}</a>{% endfor %}</div>{% endif %}{% endif %}
+  </div>
+  {% endif %}
 
   {# Sibling areas — internal links + lets a visitor jump to their own metro #}
   <div class="card" style="margin-top:16px">
@@ -49,14 +80,14 @@
   <div class="prose">
     <h2>What should {{ r.code }} cost in {{ city }}?</h2>
     <p>For <b>{{ phrase }}</b> (CPT {{ r.code }}) in {{ city }},
-      {% if r.result.neg_median is not none %}a fair self-pay price is around
+      {% if r.result.neg_median is not none %}the typical {% if brand and brand.profile == 'ortho' %}price{% else %}hospital price (cash where published, otherwise the negotiated insurer median){% endif %} is about
         <b>${{ '{:,.0f}'.format(r.result.neg_median) }}</b>,
-        with hospitals ranging from ${{ '{:,.0f}'.format(r.result.neg_low) }} to
-        ${{ '{:,.0f}'.format(r.result.neg_high) }} across {{ r.result.n_hospitals }} facilities.{% else %}hospital prices vary widely — compare each facility above.{% endif %}
+        and the middle half of the {{ counts.in_range }} hospital prices runs from ${{ '{:,.0f}'.format(r.result.neg_low) }} to
+        ${{ '{:,.0f}'.format(r.result.neg_high) }}. The table compares {{ counts.phrase }}.{% else %}hospital prices vary widely — compare all {{ counts.phrase }} above.{% endif %}
       {% if not r.result.medicare_missing %}Medicare's benchmark rate is
         <b>${{ '{:,.0f}'.format(r.result.medicare_rate) }}</b>{% if brand and brand.profile == 'ortho' %}, the benchmark every
         published rate is measured against.{% else %}, the floor to negotiate toward.{% endif %}{% endif %}
-      The card above lists each hospital's price, cheapest first, with CMS quality stars.</p>
+      The card above lists each facility's price, cheapest first, with CMS quality stars for hospitals.</p>
 
     <h2>Frequently asked questions</h2>
     {% for f in faqs %}
@@ -81,6 +112,7 @@
     </div>
     <p class="refreshed">Prices last refreshed {{ data_refreshed }} from each hospital's official CMS machine-readable file. Medicare rate: CY2025 OPPS/PFS/CLFS. Estimates only — not a guarantee.</p>
   </div>
+{% include "_footer.html" %}
 </main>
 <script>
   function flash(btn, msg){ if(!btn) return; const t=btn.textContent; btn.textContent=msg; setTimeout(()=>btn.textContent=t, 1400); }

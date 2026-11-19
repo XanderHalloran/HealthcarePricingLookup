@@ -97,6 +97,20 @@
     </div>
     {% endif %}
   </div>
+  {% if brand.profile != 'ortho' and not rows and guide %}
+  <section class="guide" aria-labelledby="guide-h">
+    <form class="card filters" action="/search" method="get" role="search" style="margin-top:4px">
+      <label style="flex:1 1 260px">Procedure or CPT code<input name="q" type="search" placeholder="e.g. knee MRI, colonoscopy, 80053" required></label>
+      <label>Area<select name="area"><option value="">All {{ state_name }}</option>{% for m in metro_list %}<option value="{{ m.key }}">{{ m.label }}</option>{% endfor %}</select></label>
+      <button class="btn" type="submit">Find prices</button>
+    </form>
+    <h2 id="guide-h" style="margin:22px 0 0">Browse {{ state_name }} prices</h2>
+    <div class="tiles">{% for t in guide.tiles %}{% include "_tile.html" %}{% endfor %}</div>
+    <div class="tstrip"><span>🏥 {% if n_hosp and guide.n_priced != n_hosp %}{{ guide.n_priced }} of {{ n_hosp }} hospitals publish usable prices{% else %}{{ guide.n_priced }} hospitals with prices{% endif %}</span>{% if guide.n_cash %}<span>💵 {{ guide.n_cash }} independent cash-pay providers</span>{% endif %}<span>🗓 Updated {{ data_refreshed }}</span><span>✓ No paid placement</span>
+      <span><a href="/{{ guide.state_slug }}">{{ state_name }} hub</a> · <a href="/cash">Cash prices</a> · <a href="/procedures">All procedures</a></span></div>
+    <p style="margin:18px 0 0;color:var(--body)"><b>Have a bill, or want a price with your insurance?</b> Use the tools below: pick procedures and your plan, or paste an itemized bill for an appeal letter.</p>
+  </section>
+  {% endif %}
   {% if brand.profile == 'ortho' %}
   <div class="disclaimer"><strong>Benchmarking data.</strong> Facility-published rates from CMS machine-readable files and
     Medicare fee schedules; a payer figure is a facility's median across that insurer's plans, not a specific contract.
@@ -335,6 +349,7 @@
     </div>
     <p class="refreshed">Hospital prices last refreshed {{ data_refreshed }} from official CMS machine-readable files. Medicare rates: CY2025 OPPS/PFS/CLFS. <a href="/methodology">How these numbers are built →</a> · <a href="https://traqqit.com/accessibility.html">Accessibility</a></p>
   </footer>
+{% include "_footer.html" %}
 </main>
 <script type="application/json" id="svc-data">{{ services|tojson }}</script>
 <script>

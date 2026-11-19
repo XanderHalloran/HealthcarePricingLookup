@@ -1,0 +1,16 @@
+{# Consumer (healthcare) global header. Every page includes _nav.html, which renders this
+   on the consumer profile and the ortho nav on ortho. #}
+<header class="gnav">
+  <a class="gnav-brand" href="/">{{ brand.short }}</a>
+  <form class="gnav-search" action="/search" method="get" role="search">
+    <input name="q" type="search" placeholder="Procedure or CPT code (e.g. knee MRI, 73721)" aria-label="Search procedures by name or code" value="{{ search_q or '' }}">
+    <button type="submit">Search</button>
+  </form>
+  <nav class="gnav-links" aria-label="Site">
+    <a href="/" {% if nav == 'home' %}class="on"{% endif %}>Compare</a>
+    <a href="/procedures" {% if nav in ('procedures', 'compare', 'category') %}class="on"{% endif %}>Procedures</a>
+    <a href="/cash" {% if nav == 'cash' %}class="on"{% endif %}>Cash prices</a>
+    <a href="/arizona/hospitals" {% if nav in ('hospitals', 'facility') %}class="on"{% endif %}>Hospitals</a>
+    <a href="/methodology" {% if nav == 'method' %}class="on"{% endif %}>Methodology</a>
+  </nav>
+</header>

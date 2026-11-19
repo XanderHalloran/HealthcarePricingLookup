@@ -1,0 +1,8 @@
+{% extends "_layout.html" %}
+{% block content %}
+<div class="hero"><h1 id="content">{{ state_name }} hospitals and facilities</h1>
+  <p class="sub">{{ n_priced }} of {{ hosp|length }} tracked hospitals published usable prices in the {{ data_refreshed }} rebuild. Open one to see every procedure it prices.</p></div>
+<div class="card">{% include "_hosp_table.html" %}</div>
+{% if indep %}<div class="card" style="margin-top:16px"><div class="fac-h">Independent imaging &amp; surgery centers in hospital comparisons</div>
+  <ul>{% for f in indep %}<li>{{ f.name }} ({{ f.city }}) · {{ f.codes }} procedures priced</li>{% endfor %}</ul></div>{% endif %}
+{% endblock %}

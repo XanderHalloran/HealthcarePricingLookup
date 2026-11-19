@@ -1,0 +1,9 @@
+{# One independent cash-price row. Needs `r` (cashpay row) and optional `show_provider`. #}
+<tr>
+  {% if show_provider %}<td><a href="{{ cash_url(r.provider) }}">{{ r.provider.name }}</a><span class="sub">{{ r.provider.type_label }} · {{ r.provider.city }}</span></td>{% endif %}
+  <td>{{ r.name }}{% if r.cpt %}<span class="sub">CPT as listed: {{ r.cpt }}</span>{% endif %}{% if r.match is defined and r.match == 2 %}<span class="sub">Flat rate covering several codes</span>{% endif %}</td>
+  <td class="r money">{% if r.price is not none %}{% if r.from %}from {% endif %}${{ '{:,.0f}'.format(r.price) if r.price == r.price|round else '{:,.2f}'.format(r.price) }}{% else %}<span class="sub">Call for price</span>{% endif %}
+    <span class="sub"><span class="kind {{ r.kind }}">{{ r.kind_label }}</span></span></td>
+  <td><span class="sub">{% if r.source_url %}<a href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">Source</a> · {% endif %}checked {{ r.checked_fmt }}{% if r.doc_date %} · <b>source document dated {{ r.doc_date }}</b>{% endif %}</span>
+    {% if r.includes %}<span class="sub">Includes: {{ r.includes }}</span>{% endif %}</td>
+</tr>

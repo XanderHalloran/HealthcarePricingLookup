@@ -1,0 +1,31 @@
+{% extends "_layout.html" %}
+{% block content %}
+{% if kind == 'cash' %}
+<div class="hero"><h1 id="content">{{ p.name }}</h1>
+  <p class="sub">{{ p.type_label }}{% if p.chain and p.chain not in p.name %} · {{ p.chain }}{% endif %} · {{ p.city }}, {{ p.state }}</p></div>
+<div class="card">
+  <div class="kv" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+    <div><div class="fac-h">Address</div>{{ p.address or 'Not listed' }}{% if p.zip %} {{ p.zip }}{% endif %}</div>
+    <div><div class="fac-h">Area</div>{{ p.metro_text }}</div>
+    <div><div class="fac-h">Prices listed</div>{{ p.n_priced }} published{% if p.rows|length > p.n_priced %}, {{ p.rows|length - p.n_priced }} call for price{% endif %}</div>
+    <div><div class="fac-h">Provider's price page</div>{% if p.price_page %}<a href="{{ p.price_page }}" rel="nofollow noopener" target="_blank">Open source ↗</a>{% else %}—{% endif %}</div>
+  </div>
+  {% if p.notes %}<p class="refreshed">{{ p.notes }}</p>{% endif %}
+</div>
+<div class="card" style="margin-top:16px;overflow-x:auto"><div class="fac-h">Published prices, lowest first</div>
+  <table class="ptable"><thead><tr><th>Service</th><th class="r">Price</th><th>Source</th></tr></thead>
+  <tbody>{% for r in rows %}{% set show_provider = false %}{% include "_cash_row.html" %}{% endfor %}</tbody></table>
+  {% for r in rows if r.notes %}{% if loop.first %}<div class="fac-h" style="margin-top:14px">Notes from the source</div><ul class="refreshed">{% endif %}<li><b>{{ r.name }}:</b> {{ r.notes }}</li>{% if loop.last %}</ul>{% endif %}{% endfor %}
+</div>
+<p class="refreshed">Independent provider, not a hospital: not covered by the hospital price-transparency rule, so these are the prices it chose to publish. Confirm before booking and ask what's included. Listed for free; nobody can pay to appear or rank here. <a href="/corrections?facility={{ p.name|urlencode }}&page={{ request.url.path|urlencode }}#form">Correct this listing</a>.</p>
+{% else %}
+<div class="hero"><h1 id="content">{{ e.name }}</h1>
+  <p class="sub">Independent {{ 'imaging center' if e.type == 'imaging' else 'surgery center' }} · {{ e.city }}</p></div>
+<div class="card" style="overflow-x:auto"><div class="fac-h">Prices in our hospital comparisons</div>
+  <table class="ptable"><thead><tr><th>Procedure</th><th class="r">Cash price</th><th class="r">vs Medicare</th><th></th></tr></thead>
+  <tbody>{% for i in items %}<tr><td>{{ i.svc.desc }}<span class="sub">CPT {{ i.code }}</span></td><td class="r money">${{ '{:,.0f}'.format(i.price) }}</td>
+    <td class="r">{% if i.medicare %}{{ '%.1f'|format(i.price / i.medicare) }}×{% else %}—{% endif %}</td><td><a href="{{ i.url }}">Compare →</a></td></tr>{% endfor %}</tbody></table>
+  <p class="refreshed">Published self-pay prices compiled June 2026 (MDsave prepaid bundles, RadiologyAssist program rates, and posted surgery-center bundles); not from a hospital price file. Confirm before booking.</p>
+</div>
+{% endif %}
+{% endblock %}
